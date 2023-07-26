@@ -31,7 +31,8 @@ import net.datafaker.Faker;
 @Component
 public class VueloFactory {
 	
-	private Faker faker;	
+	private Faker faker;
+	@Autowired
 	private CiudadFactory ciudadFactory;
 	private ClienteFactory clienteFactory;
 	private Ciudad origen;
@@ -50,10 +51,8 @@ public class VueloFactory {
 	
 	@Autowired
 	public VueloFactory(CiudadDAO ciudadDAO) {
-		this.faker = new Faker(new Locale("es") );
-		this.ciudadFactory = new CiudadFactory();
-		this.clienteFactory = new ClienteFactory();
-		this.ciudadDAO = ciudadDAO;
+		this.faker = new Faker(new Locale("es") );		
+		this.clienteFactory = new ClienteFactory();		
 	}
 	
 	public void crearVueloPorDTO(){
@@ -111,8 +110,8 @@ public class VueloFactory {
 		//System.out.println(vuelo.getPasajeros().toString());
 		System.out.println(vuelo.toString());				
 		
-		vuelo = vueloDAO.save(vuelo);
-		vuelo.setNroVuelo();
+		//vuelo = vueloDAO.save(vuelo);
+		
 		vueloDAO.save(vuelo);
 		
 	}

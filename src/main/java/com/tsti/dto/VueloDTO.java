@@ -23,8 +23,7 @@ import com.tsti.serializer.CiudadSerializer;
 public class VueloDTO {
 
 	private Long nroVuelo;
-	private String aerolinea;
-	
+	private String aerolinea;	
 	private Ciudad destino;
 	private LocalDate fechaPartida;
 	private LocalTime horaPartida;
@@ -32,8 +31,7 @@ public class VueloDTO {
 	private int nroColumnasAsientos;
 	private BigDecimal precioNeto;
 	private TipoVuelo tipoVuelo;
-	private EstadoVuelo estadoVuelo;
-	private List<String> errors;
+	private EstadoVuelo estadoVuelo;	
 	
 	public VueloDTO() {
 		// TODO Auto-generated constructor stub
@@ -42,7 +40,7 @@ public class VueloDTO {
 	
 	public VueloDTO(Vuelo pojo) {
 		super();
-		this.nroVuelo = pojo.getId();
+		this.nroVuelo = pojo.getNroVuelo();
 		this.aerolinea = pojo.getAerolinea();
 		this.destino = pojo.getDestino();
 		this.fechaPartida = pojo.getFechaPartida();
@@ -156,14 +154,6 @@ public class VueloDTO {
 	public void setEstadoVuelo(EstadoVuelo estadoVuelo) {
 		this.estadoVuelo = estadoVuelo;
 	}
-	
-    // Otros atributos y métodos
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }
-
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(aerolinea, destino, fechaPartida, horaPartida, nroVuelo);

@@ -14,7 +14,7 @@ import com.tsti.dto.PasajeDTO;
 import com.tsti.entidades.Clientes;
 import com.tsti.entidades.Pasaje;
 import com.tsti.entidades.Vuelo;
-
+import com.tsti.excepcion.CostoPasajeException;
 import com.tsti.excepcion.ValidacionFallidaEnPasajeException;
 
 import com.tsti.entidades.Vuelo.EstadoVuelo;
@@ -43,7 +43,7 @@ public class PasajeServiceImpl implements IPasajeService {
         this.vueloDAO = vueloDAO;
     }
 	@Override
-	public Pasaje crearPasaje(Vuelo vuelo, Clientes pasajero, Integer nroAsiento) {
+	public Pasaje crearPasaje(Vuelo vuelo, Clientes pasajero, Integer nroAsiento) throws ValidacionFallidaEnPasajeException {
 		/*
 		 * METODO DISEÑADO PARA SER CONTENIDO EN UN BLOQUE TRY-CATCH A LA HORA 
 		 * DE LLAMARLO, ESTO PARA MANEJO DE ERRORES DE UNA FORMA MAS SENCILLA. :D
@@ -125,8 +125,13 @@ public class PasajeServiceImpl implements IPasajeService {
 				CotizacionServiceImpl cotizacionService = new CotizacionServiceImpl();
 				
 				//multiplicamos y redondeamos a un numero de dos cifras despues de la coma
-				precioFinal =  precioFinal.multiply(cotizacionService.getCotizacionDolarOficial())
-														.setScale(2, RoundingMode.HALF_DOWN);			
+				try {
+					precioFinal =  precioFinal.multiply(cotizacionService.getCotizacionDolarOficial())
+															.setScale(2, RoundingMode.HALF_DOWN);
+				} catch (CostoPasajeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
 				
 			}
 			

@@ -6,7 +6,7 @@ package com.tsti.excepcion;
  *
  */
 
-public class Excepcion extends Exception{
+public class PasajeroException extends SistemaGestionComercialAeropuertoException{
 
 	private static final long serialVersionUID = 3941221036411842318L;
 
@@ -14,12 +14,12 @@ public class Excepcion extends Exception{
 	
 	private int statusCode;
 
-	public Excepcion() {
+	public PasajeroException() {
 		super();
 		
 	}
 
-	public Excepcion(String mensaje,int statusCode) {
+	public PasajeroException(String mensaje,int statusCode) {
 		super();
 		this.mensaje = mensaje;
 		this.statusCode = statusCode;

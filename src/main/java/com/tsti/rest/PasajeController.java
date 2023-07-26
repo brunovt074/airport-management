@@ -78,7 +78,7 @@ public class PasajeController {
                 entityModel.add(selfLink);
 
                 Link vueloLink = WebMvcLinkBuilder.linkTo(
-                        WebMvcLinkBuilder.methodOn(VueloController.class).getVueloById(pasaje.getVuelo().getId(), null))
+                        WebMvcLinkBuilder.methodOn(VueloController.class).getVueloById(pasaje.getVuelo().getNroVuelo(), null))
                         .withRel("vuelo");
                 entityModel.add(vueloLink);
 

@@ -4,7 +4,7 @@ package com.tsti.excepcion;
  * @author JOA
  *
  */
-public class ValidacionFallidaEnPasajeException extends RuntimeException {
+public class ValidacionFallidaEnPasajeException extends SistemaGestionComercialAeropuertoException {
 	/**
 	 * 
 	 */

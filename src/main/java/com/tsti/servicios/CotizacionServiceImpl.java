@@ -28,9 +28,9 @@ public class CotizacionServiceImpl {
 		this.restTemplate = new RestTemplate();        
     }	
     
-	public BigDecimal getCotizacionDolarOficial(){
+	public BigDecimal getCotizacionDolarOficial() throws CostoPasajeException{
 		
-		try {
+		//try {
 			
 			ResponseEntity<CotizacionDolarDTO[]> response = restTemplate.getForEntity(URL_COTIZACION_DOLAR, CotizacionDolarDTO[].class);
 			
@@ -51,15 +51,20 @@ public class CotizacionServiceImpl {
 						
 						
 					}
+					
+					throw new CostoPasajeException("No se pudo obtener la cotización del dólar oficial");
 				}
 					//throw new CostoPasajeException("No se pudo obtener la cotizacion del dolar oficial");	
-			}
-		} catch (RestClientException e) {
-            // Error de conexión con la API de cotización
-            throw new CostoPasajeException("Error al obtener la cotización del dólar oficial");
+			
+//		} catch (RestClientException e) {
+//            // Error de conexión con la API de cotización
+//            throw new CostoPasajeException("Error al obtener la cotización del dólar oficial");
+        }else {
+        	// No se pudo obtener la cotización del dólar oficial
+            throw new CostoPasajeException("No se pudo obtener la cotización del dólar oficial");
         }
-		// No se pudo obtener la cotización del dólar oficial
-        throw new CostoPasajeException("No se pudo obtener la cotización del dólar oficial");
+			return null;
+		
 	}
 	
 }

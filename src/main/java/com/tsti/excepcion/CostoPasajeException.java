@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatusCode;
  * @author Bruno
  *
  */
-public class CostoPasajeException extends RuntimeException{
+public class CostoPasajeException extends SistemaGestionComercialAeropuertoException{
 	
 	private static final long serialVersionUID = 9876543219876543L;
 	

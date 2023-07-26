@@ -37,8 +37,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "vuelos")
 public class Vuelo {	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	@Column(name = "nro_vuelo")
 	private Long nroVuelo;	
 	@Column(name = "fecha_partida")
@@ -109,14 +108,9 @@ public class Vuelo {
 	public Long getNroVuelo() {
 		return nroVuelo;
 	}
-	
 
-	public void setNroVuelo() {
-		this.nroVuelo = this.getId();
-	}
-
-	public void setNroVuelo(Long l) {
-		this.nroVuelo = l;
+	public void setNroVuelo(Long nroVuelo ) {
+		this.nroVuelo = nroVuelo ;
 
 	}
 	
@@ -284,10 +278,6 @@ public class Vuelo {
 			return false;
 		Vuelo other = (Vuelo) obj;
 		return Objects.equals(nroVuelo, other.nroVuelo);
-	}
-
-	public Long getId() {
-		return this.id;
 	}
 
 	public boolean asientoOcupado(Integer nroAsiento) {

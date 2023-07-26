@@ -49,9 +49,9 @@ public class FactoryInitializer {
 //		nuevaCiudad.setPais("Argentina");
 //		ciudadDAO.save(nuevaCiudad);
 //		
-//    	//ciudadFactory.getCiudadSauceViejo();
+//    	ciudadFactory.getCiudadSauceViejo();
 //    	creadorVuelos();
-//    	crearClientes();
+    	crearClientes();
 //    	//crearDomicilios();
 //    	crearCiudades();
     	

@@ -35,7 +35,7 @@ import jakarta.validation.Valid;
 import com.tsti.dto.ClienteResponseDTO;
 import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Clientes;
-import com.tsti.excepcion.Excepcion;
+import com.tsti.excepcion.PasajeroException;
 import com.tsti.excepcion.MensajeError;
 import com.tsti.presentacion.ClienteForm;
 import com.tsti.servicios.ICiudadService;
@@ -53,12 +53,12 @@ public class ClienteController {
 	 * @param apellido
 	 * @param nombre
 	 * @return Lista de clietes que conincidan con el apellido o nombre buscado por parametro
-	 * @throws Excepcion
+	 * @throws PasajeroException
 	 */
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public List<ClienteResponseDTO> filtrar(@RequestParam(name = "apellido", required = false) String apellido,
 			@RequestParam(name = "nombre", required = false) @jakarta.validation.constraints.Size(min = 1, max = 20) String nombre)
-			throws Excepcion {
+			throws PasajeroException {
 
 		List<Clientes> clientes = service.filtrar(apellido, nombre);
 		List<ClienteResponseDTO> dtos = new ArrayList<ClienteResponseDTO>();
@@ -73,11 +73,11 @@ public class ClienteController {
 	 * curl --location 'http://localhost:8081/clientes/400'
 	 * @param id
 	 * @return Devuelve un solo cliente que coicida con el id buscado
-	 * @throws Excepcion
+	 * @throws PasajeroException
 	 */
 
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<ClienteResponseDTO> getById(@PathVariable Long id) throws Excepcion
+	public ResponseEntity<ClienteResponseDTO> getById(@PathVariable Long id) throws PasajeroException
 	{
 			
 			Optional<Clientes> rta = service.getById(id);
@@ -101,11 +101,11 @@ public class ClienteController {
 	 * Busca el cliente por dni. el path para buscar es http://localhost:8081/clientes/dni/nroDNIaBuscar
 	 * @param dni
 	 * @return Busca cliente por numero de dni  
-	 * @throws Excepcion
+	 * @throws PasajeroException
 	 */
 
 	@GetMapping(value = "/dni/{dni}", produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<ClienteResponseDTO> getByDni(@PathVariable("dni") Long dni) throws Excepcion
+	public ResponseEntity<ClienteResponseDTO> getByDni(@PathVariable("dni") Long dni) throws PasajeroException
 	{
 			
 			Optional<Clientes> rta = service.filtrarPorDni(dni);
@@ -269,7 +269,7 @@ public class ClienteController {
 	}
 
 
-	private ClienteResponseDTO buildResponse(Clientes pojo) throws Excepcion {
+	private ClienteResponseDTO buildResponse(Clientes pojo) throws PasajeroException {
 		try {
 			ClienteResponseDTO dto = new ClienteResponseDTO(pojo);
 			
@@ -279,7 +279,7 @@ public class ClienteController {
 			
 			return dto;
 		} catch (Exception e) {
-			throw new Excepcion(e.getMessage(), 500);
+			throw new PasajeroException(e.getMessage(), 500);
 		}
 	}
 }

@@ -63,21 +63,12 @@ public class CrearVueloForm {
     //Constructor de vuelo.
     public CrearVueloForm() {
 		// TODO Auto-generated constructor stub
-	}
-
-    public Vuelo toPojoNroVuelo(){
-		
-    	Vuelo vuelo = new Vuelo();
-		
-		vuelo.setNroVuelo();
-		
-		return vuelo;
-	}
+	}   
     
     public Vuelo toPojo(){
-		Vuelo vuelo = new Vuelo();
+		Vuelo vuelo = new Vuelo();		
 		
-		vuelo.setNroVuelo();
+		vuelo.setNroVuelo(this.getNroVuelo());
 		vuelo.setAerolinea(this.getAerolinea());
 		vuelo.setAvion(this.getAvion());
 		vuelo.setFechaPartida(this.getFechaPartida());
@@ -92,7 +83,7 @@ public class CrearVueloForm {
 	public Vuelo toPojoConCiudad(Ciudad origen, Ciudad destino){
 		Vuelo vuelo = new Vuelo();
 		
-		vuelo.setNroVuelo();
+		vuelo.setNroVuelo(this.getNroVuelo());
 		vuelo.setAerolinea(this.getAerolinea());
 		vuelo.setAvion(this.getAvion());
 		vuelo.setFechaPartida(this.getFechaPartida());

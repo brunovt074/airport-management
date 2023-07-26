@@ -129,8 +129,7 @@ public class VueloServiceImpl implements IVueloService{
 		
 		try {
 			
-		vuelo = vueloDAO.save(vuelo);
-		vuelo.setNroVuelo();
+		vuelo = vueloDAO.save(vuelo);		
 		
 		vueloDAO.save(vuelo);
 		
@@ -139,9 +138,7 @@ public class VueloServiceImpl implements IVueloService{
 			throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 				
-		vueloDTO = new VueloDTO(vuelo);
-		
-		vueloDTO.setNroVuelo(vuelo.getId());
+		vueloDTO = new VueloDTO(vuelo);		
 		
 		return vueloDTO;
 				

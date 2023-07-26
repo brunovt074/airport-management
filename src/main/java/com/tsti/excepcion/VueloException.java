@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatusCode;
  * @author Bruno
  *
  */
-public class VueloException extends Exception{
+public class VueloException extends SistemaGestionComercialAeropuertoException{
 	
 	private static final long serialVersionUID = 6285496079638261754L;
 
