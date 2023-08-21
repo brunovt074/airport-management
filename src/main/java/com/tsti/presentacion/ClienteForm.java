@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 public class ClienteForm {
 	@NotNull
 	private long dni; 
+	@NotNull
 	private String nombre;
 	@NotNull
 	private String apellido;
@@ -20,6 +21,12 @@ public class ClienteForm {
 	private Long idCiudad;
 	
 	
+	
+	
+	public ClienteForm() {
+		super();
+	}
+
 	public Long getIdCiudad() {
 		return idCiudad;
 	}

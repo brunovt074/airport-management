@@ -51,7 +51,7 @@ public class FactoryInitializer {
 //		
 //    	ciudadFactory.getCiudadSauceViejo();
 //    	creadorVuelos();
-    	crearClientes();
+//    	crearClientes();
 //    	//crearDomicilios();
 //    	crearCiudades();
     	

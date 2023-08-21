@@ -1,14 +1,9 @@
 
 package com.tsti.entidades;
 
-import java.util.Date;
-
 import java.time.LocalDate;
-
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.HashSet;
@@ -20,18 +15,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 
 /**
 *
-* @author cecilia Establece/Actualiza/Retorna los datos de cliente
+* @author bruno         
 * 
-*         LAS RESTRICCIONES UNIQUE ESTAN DESACTIVADAS PARA FACILITAR LA
-*         POBLACION DE LA BD CON FAKER.
-*@author cecilia retorna un cliente por Id, Dni, apellido y/o por nombre. 
 */
 @Entity
 public class Clientes {
