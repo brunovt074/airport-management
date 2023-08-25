@@ -44,8 +44,14 @@ public interface VueloDAO extends JpaRepository<Vuelo, Long> {
     		+ "ON V.destino_id = c.id WHERE v.fecha_partida=:fecha_partida", nativeQuery = true )
     public List<Vuelo> findByFechaPartida(@Param("fecha_partida") LocalDate fechaPartida);
 	    
+    public List<Vuelo> findByAerolinea(String aerolinea);
+    
 	public List<Vuelo>findByTipoVuelo(TipoVuelo tipoVuelo);
 	
 	public List<Vuelo> findAllByEstadoVuelo(EstadoVuelo estadoVuelo);
+	
+	public boolean existsById(Long id);
+	
+	
     
 }

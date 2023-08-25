@@ -1,12 +1,15 @@
 package com.tsti.views;
 
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.text.Normalizer;
 import java.util.List;
 
 import com.tsti.dao.VueloDAO;
@@ -20,6 +23,9 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 
 @Route(value="/flights-index", layout = MainLayout.class)
@@ -31,8 +37,8 @@ public class ShowVuelosView extends VerticalLayout{
 	private final AppI18NProvider i18NProvider;
 	private VueloDAO vueloDAO;
 	
-	Grid<Vuelo> grid = new Grid<>(Vuelo.class,false);
-	TextField filterText = new TextField();
+	Grid<Vuelo> grid = new Grid<>(Vuelo.class,false);	
+	TextField searchField = new TextField();
 	
 	public ShowVuelosView(AppI18NProvider i18NProvider, VueloDAO vueloDAO) {
 	    this.i18NProvider = i18NProvider;
@@ -40,7 +46,8 @@ public class ShowVuelosView extends VerticalLayout{
 
 	    addClassName("show-vuelos-view");
 	    setSizeFull();
-	    configureGrid();	    
+	    //add(getToolbar());
+	    configureGrid();    
 	    
 	}
 
@@ -60,7 +67,9 @@ public class ShowVuelosView extends VerticalLayout{
 		String hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
 		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
-				
+		String searchPlaceholder = i18NProvider.getTranslation("search", getLocale());
+		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
+		
 		grid.addClassName("show-vuelos-view");		
     	grid.setSizeFull();
     	
@@ -100,8 +109,40 @@ public class ShowVuelosView extends VerticalLayout{
 //        		.addColumn(Vuelo::getNroAsientos).setHeader(seatsLabel)
 //        						.setSortable(true);
         
-      //Create Show Hide Menu
-        Button menuButton = new Button (i18NProvider.getTranslation("sh-menu-title", getLocale()));
+        grid.getColumns().forEach(column -> column.setAutoWidth(true)); 
+        
+        GridListDataView<Vuelo> dataView = grid.setItems(vuelos);
+        
+        searchField.setWidth("100%");
+        searchField.setPlaceholder(searchPlaceholder);
+        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.addValueChangeListener(e -> dataView.refreshAll());
+        
+        dataView.addFilter(vuelo -> {
+        	String searchTerm = searchField.getValue().trim();
+        	searchTerm = searchTerm.replace("","");
+        	
+        	if(searchTerm.isEmpty())
+        		return true;
+        	
+        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
+        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
+        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
+        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
+        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
+        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
+        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
+        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
+        	
+        	
+        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
+        			|| matchesStatus || matchesId 
+        			|| matchesFechaPartida || matchesHoraPartida;
+        }); 
+                
+        //Create Show Hide Menu
+        Button menuButton = new Button (showHideMenuLabel);
 		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 		ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(menuButton);
 		
@@ -113,15 +154,34 @@ public class ShowVuelosView extends VerticalLayout{
 		columnToggleContextMenu.addColumnToggleItem(aircraftLabel, aircraftColumn);
 		//columnToggleContextMenu.addColumnToggleItem(seatsLabel, seatsColumn);
                 
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));       
-        grid.setItems(vuelos);        
+		HorizontalLayout toolbar = new HorizontalLayout(searchField, menuButton);        
 		
-		add(grid);
+		
+		add(toolbar, grid);
         
         
 		
 	}
 	
+	private boolean matchesTerm(String value, String searchTerm) {
+		
+		String normalizedValue = value.toLowerCase()
+	            .replaceAll("[á]", "a")
+	            .replaceAll("[é]", "e")
+	            .replaceAll("[í]", "i")
+	            .replaceAll("[ó]", "o")
+	            .replaceAll("[ú]", "u");
+		
+		String normalizedSearchTerm = searchTerm.toLowerCase()
+	            .replaceAll("[á]", "a")
+	            .replaceAll("[é]", "e")
+	            .replaceAll("[í]", "i")
+	            .replaceAll("[ó]", "o")
+	            .replaceAll("[ú]", "u");
+				
+		return normalizedValue.contains(normalizedSearchTerm);
+	}
+
 	private String createFooterText(List<Vuelo> vuelos){
 		String totalFlightsLabel = i18NProvider.getTranslation("total-flights", getLocale());
 		
@@ -129,8 +189,6 @@ public class ShowVuelosView extends VerticalLayout{
 		
 		return String.format(totalFlightsLabel + "%s", flightCount);
 	}
-	
-	
 	
 	private static class ColumnToggleContextMenu extends ContextMenu {
 				
@@ -151,5 +209,6 @@ public class ShowVuelosView extends VerticalLayout{
 			menuItem.setCheckable(true);
 			menuItem.setChecked(column.isVisible());			
 		}		
-	} 
+	}
+
 }
