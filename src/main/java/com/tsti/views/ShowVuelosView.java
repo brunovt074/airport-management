@@ -22,6 +22,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.icon.Icon;
@@ -156,6 +157,7 @@ public class ShowVuelosView extends VerticalLayout{
                 
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, menuButton);        
 		
+		grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 		
 		add(toolbar, grid);
         
