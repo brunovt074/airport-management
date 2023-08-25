@@ -3,15 +3,18 @@ package com.tsti.views;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
 import com.tsti.dao.VueloDAO;
+import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Vuelo;
 import com.tsti.i18n.AppI18NProvider;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 
 
 @Route(value="/flights-index", layout = MainLayout.class)
@@ -32,48 +35,67 @@ public class ShowVuelosView extends VerticalLayout{
 
 	    addClassName("show-vuelos-view");
 	    setSizeFull();
-	    configureGrid();
+	    configureGrid();	    
 	    
-	    getUI().ifPresent(ui -> ui.getPage().setTitle(this.i18NProvider.getTranslation("page-title", getLocale())));
 	}
 
 	private void configureGrid() {
-	    
+		List<Vuelo> vuelos = vueloDAO.findAll();
+		
 		String flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
 		String airlineLabel = i18NProvider.getTranslation("airline", getLocale());
 		String aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
 		String departureLabel = i18NProvider.getTranslation("departure", getLocale());
 		String arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
 		String typeLabel = i18NProvider.getTranslation("type", getLocale());
-		String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
+		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
 		String dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
 		String hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
 		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
-		
-		Grid<Vuelo> grid = new Grid<>(Vuelo.class);
+				
 		grid.addClassName("show-vuelos-view");		
     	grid.setSizeFull();
     	
-    	grid.setColumns();    	
-    	grid.addColumn(Vuelo::getNroVuelo).setHeader(flightIdLabel);    	
-        grid.addColumn(Vuelo::getAerolinea).setHeader(airlineLabel);
-        grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel);
-        grid.addColumn(Vuelo::getFechaPartida).setHeader(departureLabel);
-        grid.addColumn(Vuelo::getDestino).setHeader(arrivalLabel);
-        grid.addColumn(Vuelo::getTipoVuelo).setHeader(typeLabel);
-        grid.addColumn(Vuelo::getFechaPartida).setHeader(dateHourLabel);
+    	grid.setColumns();
+    	grid.setColumnReorderingAllowed(true);
+    	
+    	grid.addColumn(Vuelo::getNroVuelo).setHeader(flightIdLabel)
+    							.setFrozen(true)
+    							.setFooter(createFooterText(vuelos));    									      	
+    	Grid.Column<Vuelo> airlineColumn = grid 
+    			.addColumn(Vuelo::getAerolinea).setHeader(airlineLabel);       
+        //grid.addColumn(Vuelo::getFechaPartida).setHeader(dateHourLabel);
         grid.addColumn(Vuelo::getFechaPartida).setHeader(dateLabel);
         grid.addColumn(Vuelo::getHoraPartida).setHeader(hourLabel);
-        grid.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel);
-        grid.addColumn(Vuelo::getNroAsientos).setHeader(seatsLabel);
+        Grid.Column<Vuelo> departureColumn = grid
+        	.addColumn(vuelo -> vuelo.getOrigen().getNombreCiudad()
+        	+ ", " + vuelo.getOrigen().getPais()).setHeader(departureLabel);
+        grid.addColumn(vuelo -> vuelo.getDestino().getNombreCiudad()
+        	+ ", " + vuelo.getOrigen().getPais()).setHeader(arrivalLabel);
+        Grid.Column<Vuelo> typeColumn = 
+        grid.addColumn(Vuelo::getTipoVuelo).setHeader(typeLabel);
+        Grid.Column<Vuelo> statusColumn = grid
+        		.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel);
+        Grid.Column<Vuelo> aircraftColumn = grid
+        		.addColumn(Vuelo::getAvion).setHeader(aircraftLabel);
+        Grid.Column<Vuelo> seatsColumn = grid
+        		.addColumn(Vuelo::getNroAsientos).setHeader(seatsLabel);        								
+                
+        grid.getColumns().forEach(column -> column.setAutoWidth(true));       
         
-        List<Vuelo> vuelos = vueloDAO.findAll();
+        
         grid.setItems(vuelos);
 
-        add(grid);	
-        
+        add(grid);        
 		
 	}
 	
+	private String createFooterText(List<Vuelo> vuelos){
+		String totalFlightsLabel = i18NProvider.getTranslation("total-flights", getLocale());
+		
+		long flightCount = vuelos.stream().count();
+		
+		return String.format(totalFlightsLabel + "%s", flightCount);
+	}	
 }
