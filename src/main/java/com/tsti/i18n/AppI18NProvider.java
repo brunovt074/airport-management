@@ -22,8 +22,8 @@ public class AppI18NProvider implements I18NProvider{
 	@Override
 	public String getTranslation(String key, Locale locale, Object... params) {
 		
-		ResourceBundle bundle = ResourceBundle.getBundle("lang.messages", locale); 
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale); 
 		return bundle.getString(key);
-	}
+	}	
 
 }

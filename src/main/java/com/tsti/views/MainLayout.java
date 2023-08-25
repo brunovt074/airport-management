@@ -34,10 +34,11 @@ public class MainLayout extends AppLayout{
 		logo.addClassNames(LumoUtility.FontSize.LARGE,
 				   LumoUtility.Margin.MEDIUM);
 		
-		Tabs tabs = createTabs();
+		Tabs tabs = createTabs();		
 
 		HorizontalLayout header = new HorizontalLayout(logo,tabs);
 		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+		//header.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		header.expand(logo);
 		header.setWidthFull();
 		header.addClassNames(LumoUtility.Padding.Vertical.NONE,
@@ -52,7 +53,7 @@ public class MainLayout extends AppLayout{
 		String passengersLabel= i18NProvider.getTranslation("passengers-tab", getLocale());
 		String citiesLabel= i18NProvider.getTranslation("cities-tab", getLocale());
 		
-		Tab vuelos = new Tab(vuelosLabel/*new RouterLink("Vuelos", VuelosListView.class)*/);
+		Tab vuelos = new Tab(vuelosLabel/*new RouterLink("Vuelos", ShowVuelosView.class)*/);
 		Tab pasajeros = new Tab(passengersLabel);
 		Tab ciudades = new Tab(citiesLabel);
 		//Tab pasajes = new Tab("Pasajes");

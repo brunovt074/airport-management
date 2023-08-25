@@ -16,11 +16,8 @@ import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
 
 import com.tsti.dao.CiudadDAO;
-import com.tsti.dao.VueloDAO;
 import com.tsti.dto.VueloDTO;
-import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.EstadoVuelo;
-import com.tsti.entidades.Vuelo.TipoVuelo;
 import com.tsti.excepcion.VueloException;
 import com.tsti.entidades.Ciudad;
 import com.tsti.faker.CiudadFactory;
