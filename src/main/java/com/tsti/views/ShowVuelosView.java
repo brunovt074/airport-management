@@ -93,19 +93,26 @@ public class ShowVuelosView extends VerticalLayout{
         Grid.Column<Vuelo> departureColumn = grid
         	.addColumn(vuelo -> vuelo.getOrigen().getNombreCiudad()
         	+ ", " + vuelo.getOrigen().getPais()).setHeader(departureLabel)
-        						.setSortable(true);
+        						.setSortable(true)
+        						.setResizable(true);        
         Grid.Column<Vuelo> arrivalColumn = grid.addColumn(vuelo -> vuelo.getDestino().getNombreCiudad()
         	+ ", " + vuelo.getOrigen().getPais()).setHeader(arrivalLabel)
         						.setSortable(true);
         Grid.Column<Vuelo> typeColumn = grid 
         		.addColumn(Vuelo::getTipoVuelo).setHeader(typeLabel)
-        						.setSortable(true);
+        						.setSortable(true)
+        						.setResizable(true);
         Grid.Column<Vuelo> statusColumn = grid
         		.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel)
-        						.setSortable(true);
+        						.setSortable(true)
+        						.setResizable(true);
         Grid.Column<Vuelo> aircraftColumn = grid
         		.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
-        						.setSortable(true);
+        						.setSortable(true)
+        						.setResizable(true);
+        departureColumn.setVisible(false);
+        typeColumn.setVisible(false);
+        aircraftColumn.setVisible(false);
 //        Grid.Column<Vuelo> seatsColumn = grid
 //        		.addColumn(Vuelo::getNroAsientos).setHeader(seatsLabel)
 //        						.setSortable(true);
@@ -147,12 +154,12 @@ public class ShowVuelosView extends VerticalLayout{
 		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 		ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(menuButton);
 		
-		columnToggleContextMenu.addColumnToggleItem(airlineLabel, airlineColumn);
-		columnToggleContextMenu.addColumnToggleItem(departureLabel, departureColumn);
-		columnToggleContextMenu.addColumnToggleItem(arrivalLabel, arrivalColumn);
-		columnToggleContextMenu.addColumnToggleItem(typeLabel, typeColumn);
-		columnToggleContextMenu.addColumnToggleItem(statusLabel, statusColumn);
-		columnToggleContextMenu.addColumnToggleItem(aircraftLabel, aircraftColumn);
+		columnToggleContextMenu.addColumnToggleItem(airlineLabel, airlineColumn, true);
+		columnToggleContextMenu.addColumnToggleItem(departureLabel, departureColumn, false);
+		columnToggleContextMenu.addColumnToggleItem(arrivalLabel, arrivalColumn, true);
+		columnToggleContextMenu.addColumnToggleItem(typeLabel, typeColumn,false);
+		columnToggleContextMenu.addColumnToggleItem(statusLabel, statusColumn,true);
+		columnToggleContextMenu.addColumnToggleItem(aircraftLabel, aircraftColumn, false);
 		//columnToggleContextMenu.addColumnToggleItem(seatsLabel, seatsColumn);
                 
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, menuButton);        
@@ -163,6 +170,40 @@ public class ShowVuelosView extends VerticalLayout{
         
         
 		
+	}
+	
+	private static class ColumnToggleContextMenu extends ContextMenu {
+				
+		private static final long serialVersionUID = -5617802348824382034L;
+
+		public ColumnToggleContextMenu(Component target) {
+			
+			super(target);
+			setOpenOnClick(true);
+			
+			
+		}
+		
+		void addColumnToggleItem(String label, Grid.Column<Vuelo> column, boolean setVisibility) {
+			
+			MenuItem menuItem = this.addItem(label, e -> {
+					column.setVisible(e.getSource().isChecked());
+					column.setAutoWidth(true);
+			});
+			
+			menuItem.setCheckable(true);
+			menuItem.setChecked(setVisibility);	
+			
+						
+		}		
+	}
+	
+	private String createFooterText(List<Vuelo> vuelos){
+		String totalFlightsLabel = i18NProvider.getTranslation("total-flights", getLocale());
+		
+		long flightCount = vuelos.stream().count();
+		
+		return String.format(totalFlightsLabel + "%s", flightCount);
 	}
 	
 	private boolean matchesTerm(String value, String searchTerm) {
@@ -182,35 +223,6 @@ public class ShowVuelosView extends VerticalLayout{
 	            .replaceAll("[ú]", "u");
 				
 		return normalizedValue.contains(normalizedSearchTerm);
-	}
-
-	private String createFooterText(List<Vuelo> vuelos){
-		String totalFlightsLabel = i18NProvider.getTranslation("total-flights", getLocale());
-		
-		long flightCount = vuelos.stream().count();
-		
-		return String.format(totalFlightsLabel + "%s", flightCount);
-	}
-	
-	private static class ColumnToggleContextMenu extends ContextMenu {
-				
-		private static final long serialVersionUID = -5617802348824382034L;
-
-		public ColumnToggleContextMenu(Component target) {
-			
-			super(target);
-			setOpenOnClick(true);
-			
-		}
-		
-		void addColumnToggleItem(String label, Grid.Column<Vuelo> column) {
-			
-			MenuItem menuItem = this.addItem(label, e -> {
-					column.setVisible(e.getSource().isChecked());
-			});
-			menuItem.setCheckable(true);
-			menuItem.setChecked(column.isVisible());			
-		}		
 	}
 
 }
