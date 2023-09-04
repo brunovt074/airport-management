@@ -63,9 +63,9 @@ public class FlightForm extends FormLayout{
 		String timeLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
 		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
-		String saveButtonLabel = "save";
-		String deleteButtonLabel = "delete";
-		String cancelButtonLabel = "cancel";
+		String saveButtonLabel = i18NProvider.getTranslation("save", getLocale());
+		String deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
+		String cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
 		
 		//Buttons
 		save = new Button(saveButtonLabel);
@@ -87,7 +87,10 @@ public class FlightForm extends FormLayout{
 										+ ", " + ciudad.getPais());
 		destino.addValueChangeListener(event -> {
 		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
-		    vuelo.setDestino(event.getValue()); // Actualizar la propiedad destino con la ciudad seleccionada
+		    if(vuelo != null) {
+		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
+		    }
+		    
 		});
 
 		

@@ -72,7 +72,7 @@ public class ShowFlightsView extends VerticalLayout{
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
     	form.addCloseListener(e -> closeEditor());
-		
+    	form.setVisible(false);		
 	}
 
 	private void configureGrid(List<Vuelo> vuelos) {
@@ -155,14 +155,15 @@ public class ShowFlightsView extends VerticalLayout{
 		try {
 			
 			service.cancelarVuelo(event.getVuelo().getNroVuelo());
+			updateList();
+			closeEditor();
 		
 		} catch (VueloException e) {
-			e.setMensaje("No se pudo completar la operacion");
+			e.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
 			System.out.println(e.getMessage());
 			
-		}
-		updateList();
-		closeEditor();
+		}	
+		
 	}
 	
 	private void editFlight(Vuelo vuelo) {
@@ -252,7 +253,7 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 
 	private void updateList() {
-		vueloDao.findAll();		
+		grid.setItems(vueloDao.findAll());		
 	}
 
 	private void updateList(List<Vuelo> vuelos) {
@@ -278,8 +279,7 @@ public class ShowFlightsView extends VerticalLayout{
         	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
         			|| matchesStatus || matchesId 
         			|| matchesFechaPartida || matchesHoraPartida;
-        });
-		//grid.setItems(service.findByDestino(filterText.getValue()));
+        });		
 	}
 	
 }
