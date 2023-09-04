@@ -30,7 +30,7 @@ public interface VueloDAO extends JpaRepository<Vuelo, Long> {
 	@Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
     		+ "ON V.destino_id = c.id WHERE c.nombre_ciudad =:destino AND v.fecha_partida=:fecha_partida", nativeQuery = true )
 	public List<Vuelo> findByDestinoAndFechaPartida(@Param("destino") String destino, @Param("fecha_partida") LocalDate fechaPartida);
-	
+	//public List<Vuelo> findByNroVueloOrAerolineaOrDestino(String busqueda);
 	//ESTE ES EL METODO UTILIZADO EN LA APP
 		@Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
 	    		+ "ON V.destino_id = c.id WHERE c.nombre_ciudad =:destino AND v.fecha_partida=:fecha_partida AND v.hora_partida=:hora_partida", nativeQuery = true )

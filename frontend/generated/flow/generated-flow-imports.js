@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+import '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/app-layout/src/vaadin-app-layout.js';
 import '@vaadin/vertical-layout/src/vaadin-vertical-layout.js';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
@@ -35,7 +36,6 @@ import 'Frontend/generated/jar-resources/vaadin-time-picker/timepickerConnector.
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import 'Frontend/generated/jar-resources/dndConnector.js';
 import '@vaadin/field-highlighter/src/vaadin-field-highlighter.js';
-import '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/form-layout/src/vaadin-form-item.js';
 import '@vaadin/grid/src/vaadin-grid-column-group.js';
 import '@vaadin/grid/src/vaadin-grid.js';

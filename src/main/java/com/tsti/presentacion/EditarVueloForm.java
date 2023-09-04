@@ -39,6 +39,12 @@ public class EditarVueloForm {
 	
 	
 	
+	public EditarVueloForm(Long nroVuelo, LocalDate fechaPartida, LocalTime horaPartida) {
+		this.nroVuelo = nroVuelo;
+		this.fechaPartida = fechaPartida;
+		this.horaPartida = horaPartida;
+	}
+
 	public Long getNroVuelo() {
 		return nroVuelo;
 	}

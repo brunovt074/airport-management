@@ -98,7 +98,7 @@ public class Vuelo {
 		}
 	}
 	
-	//ENUM para tipo de vuelo. Se puede acceder por getTipoVuelo(int tipoVuelo)
+	//ENUM para tipo de vuelo. Se puede   por getTipoVuelo(int tipoVuelo)
 	public enum TipoVuelo {
 		NACIONAL,
 		INTERNACIONAL

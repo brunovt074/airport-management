@@ -26,6 +26,8 @@ public interface CiudadDAO extends JpaRepository<Ciudad, Long> {
 	
 	public boolean existsByNombreCiudadAndProvincia(String nombreCiudad, String provincia);
 	
+	public Ciudad findByNombreCiudad(String nombreCiudad);
+	
 	public Ciudad findByCodAeropuertoAndNombreCiudad(String codAeropuerto, String nombreCiudad);
 	
 	public Ciudad findFirstByCodAeropuertoAndNombreCiudad(String codAeropuerto, String nombreCiudad);
