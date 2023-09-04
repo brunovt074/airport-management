@@ -162,10 +162,7 @@ public class VueloFactory {
 					//System.out.println(vuelo.getPasajeros().toString());
 					System.out.println(vuelo.toString());	
 				}
-			}
-						
+			}						
 		}		
-		
 	}
-
 }
