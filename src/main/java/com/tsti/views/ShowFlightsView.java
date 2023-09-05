@@ -52,7 +52,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    
 	    add(getToolbar(vuelos), getContent());
 	    
-	    updateList(vuelos);
+	    updateList(filterText.getValue());
 	    closeEditor();
 	    
 	}
@@ -88,8 +88,7 @@ public class ShowFlightsView extends VerticalLayout{
 		String dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
 		String hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
-		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
-		String searchPlaceholder = i18NProvider.getTranslation("search", getLocale());
+		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
 		String editLabel = i18NProvider.getTranslation("edit", getLocale());
 		
@@ -155,7 +154,7 @@ public class ShowFlightsView extends VerticalLayout{
 		try {
 			
 			service.cancelarVuelo(event.getVuelo().getNroVuelo());
-			updateList();
+			updateList(filterText.getValue());
 			closeEditor();
 		
 		} catch (VueloException e) {
@@ -204,7 +203,7 @@ public class ShowFlightsView extends VerticalLayout{
 		filterText.setPlaceholder(searchPlaceholder);
 		filterText.setClearButtonVisible(true);
 		filterText.setValueChangeMode(ValueChangeMode.LAZY);
-		filterText.addValueChangeListener(e->updateList(vuelos));
+		filterText.addValueChangeListener(e->updateList(filterText.getValue()));
 		
 		//Add Contact Button
 		Button newFlightButton = new Button(newFlightLabel);
@@ -248,38 +247,47 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
 		vueloDao.save(event.getVuelo());
-		updateList();
+		updateList(filterText.getValue());
 		closeEditor();
 	}
 
-	private void updateList() {
-		grid.setItems(vueloDao.findAll());		
-	}
-
-	private void updateList(List<Vuelo> vuelos) {
-		GridListDataView<Vuelo> dataView = grid.setItems(vuelos);
+//	private void updateList() {
+//		grid.setItems(vueloDao.findAll());		
+//	}
+//
+//	private void updateList(List<Vuelo> vuelos) {
+//		GridListDataView<Vuelo> dataView = grid.setItems(vuelos);
+//		
+//		dataView.addFilter(vuelo -> {
+//        	String searchTerm = filterText.getValue().trim();
+//        	searchTerm = searchTerm.replace("","");
+//        	
+//        	if(searchTerm.isEmpty())
+//        		return true;
+//        	
+//        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
+//        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
+//        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
+//        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
+//        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
+//        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
+//        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
+//        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
+//        	
+//        	
+//        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
+//        			|| matchesStatus || matchesId 
+//        			|| matchesFechaPartida || matchesHoraPartida;
+//        });		
+//	}
+	private void updateList(String searchTerm) {
+		if(searchTerm == null || searchTerm.equals("") || searchTerm.equals(" ")) {
+			grid.setItems(vueloDao.findAll());
+		}
 		
-		dataView.addFilter(vuelo -> {
-        	String searchTerm = filterText.getValue().trim();
-        	searchTerm = searchTerm.replace("","");
-        	
-        	if(searchTerm.isEmpty())
-        		return true;
-        	
-        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
-        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
-        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
-        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
-        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
-        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
-        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
-        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
-        	
-        	
-        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
-        			|| matchesStatus || matchesId 
-        			|| matchesFechaPartida || matchesHoraPartida;
-        });		
+		else {
+			grid.setItems(vueloDao.searchFlights(searchTerm));
+		}
+				
 	}
-	
 }

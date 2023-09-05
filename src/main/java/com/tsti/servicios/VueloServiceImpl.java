@@ -24,6 +24,8 @@ import com.tsti.faker.CiudadFactory;
 import com.tsti.faker.GenerarPrecioNeto;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
 
 /**
  * @author Bruno
@@ -305,5 +307,50 @@ public class VueloServiceImpl implements IVueloService{
 		return vuelosPorEstadoDTO;
 		
 	}
+	
+//	private boolean matchesTerm(String value, String searchTerm) {
+//		
+//		String normalizedValue = value.toLowerCase()
+//	            .replaceAll("[á]", "a")
+//	            .replaceAll("[é]", "e")
+//	            .replaceAll("[í]", "i")
+//	            .replaceAll("[ó]", "o")
+//	            .replaceAll("[ú]", "u");
+//		
+//		String normalizedSearchTerm = searchTerm.toLowerCase()
+//	            .replaceAll("[á]", "a")
+//	            .replaceAll("[é]", "e")
+//	            .replaceAll("[í]", "i")
+//	            .replaceAll("[ó]", "o")
+//	            .replaceAll("[ú]", "u");
+//				
+//		return normalizedValue.contains(normalizedSearchTerm);
+//	}
+//	
+//	private List<Vuelo> searchFlights(String searchTerm) {
+//		List<Vuelo> dataView = grid.setItems(vuelos);
+//		
+//		dataView.addFilter(vuelo -> {
+//        	String searchTerm = filterText.getValue().trim();
+//        	searchTerm = searchTerm.replace("","");
+//        	
+//        	if(searchTerm.isEmpty())
+//        		return true;
+//        	
+//        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
+//        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
+//        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
+//        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
+//        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
+//        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
+//        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
+//        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
+//        	
+//        	
+//        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
+//        			|| matchesStatus || matchesId 
+//        			|| matchesFechaPartida || matchesHoraPartida;
+//        });		
+//	}
 
 }

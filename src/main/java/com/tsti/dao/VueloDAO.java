@@ -50,6 +50,14 @@ public interface VueloDAO extends JpaRepository<Vuelo, Long> {
 	
 	public List<Vuelo> findAllByEstadoVuelo(EstadoVuelo estadoVuelo);
 	
+	@Query(value="SELECT v.* "
+			+ "FROM vuelos v JOIN ciudades c ON v.destino_id = c.id " +
+		   "WHERE LOWER(v.aerolinea) LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
+		   + "OR LOWER(c.nombre_ciudad) LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
+		   + "OR LOWER(c.pais) LIKE LOWER(CONCAT('%', :searchTerm, '%')) ", nativeQuery=true)
+	
+	public List<Vuelo> searchFlights(@Param("searchTerm") String searchTerm);
+	
 	public boolean existsById(Long id);
 	
 	
