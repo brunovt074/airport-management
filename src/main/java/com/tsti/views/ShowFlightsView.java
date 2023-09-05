@@ -13,6 +13,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.grid.editor.Editor;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -32,7 +35,8 @@ public class ShowFlightsView extends VerticalLayout{
 	private VueloServiceImpl service;	
 	
 	Grid<Vuelo> grid = new Grid<>(Vuelo.class,false);
-	TextField filterText = new TextField();
+	Editor<Vuelo> editor = grid.getEditor();
+	TextField searchField = new TextField();
 	FlightForm form;
 	LocalDate nowDate = LocalDate.now();
 	
@@ -41,20 +45,53 @@ public class ShowFlightsView extends VerticalLayout{
 		this.i18NProvider = i18NProvider;
 	    this.vueloDao = vueloDao;
 	    this.ciudadDao = ciudadDao;
-	    this.service = service;
-	    
-	    List<Vuelo> vuelos = vueloDao.findAll();
+	    this.service = service;	    
 	    
 	    addClassName("show-flights-view");
 	    setSizeFull();
-	    configureGrid(vuelos);
+	    configureGrid();
 	    configureForm();
 	    
-	    add(getToolbar(vuelos), getContent());
+	    add(getToolbar(), getContent());
 	    
-	    updateList(filterText.getValue());
+	    //updateList();
+	    //updateList(filterText.getValue());
 	    closeEditor();
 	    
+	}
+	
+	private void addCustomFilters(GridListDataView<Vuelo> dataView) {
+		
+		String searchPlaceholder = i18NProvider.getTranslation("search", getLocale());
+        
+        searchField.setWidth("100%");
+        searchField.setPlaceholder(searchPlaceholder);
+        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.addValueChangeListener(e -> dataView.refreshAll());
+        
+        dataView.addFilter(vuelo -> {
+        	String searchTerm = searchField.getValue().trim();
+        	searchTerm = searchTerm.replace("","");
+        	
+        	if(searchTerm.isEmpty())
+        		return true;
+        	
+        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
+        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
+        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
+        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
+        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
+        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
+        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
+        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
+        	
+        	
+        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
+        			|| matchesStatus || matchesId 
+        			|| matchesFechaPartida || matchesHoraPartida;
+        });
+		
 	}
 	
 	private void closeEditor() {
@@ -66,7 +103,7 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	private void configureForm() {
-		//INCONCLUSO
+
 		form = new FlightForm(i18NProvider, ciudadDao);
 		form.setWidth("25em");
 		form.addSaveListener(this::saveFlight);
@@ -75,22 +112,23 @@ public class ShowFlightsView extends VerticalLayout{
     	form.setVisible(false);		
 	}
 
-	private void configureGrid(List<Vuelo> vuelos) {
-		
+	private void configureGrid() {
+		List<Vuelo> vuelos = vueloDao.findAll();
 		//Labels
 		String flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
 		String airlineLabel = i18NProvider.getTranslation("airline", getLocale());
 		String aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
-		String departureLabel = i18NProvider.getTranslation("departure", getLocale());
+		//String departureLabel = i18NProvider.getTranslation("departure", getLocale());
 		String arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
+		String priceLabel = i18NProvider.getTranslation("price", getLocale());
 		String typeLabel = i18NProvider.getTranslation("type", getLocale());
 		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
 		String dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
 		String hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
-		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
-		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
-		String editLabel = i18NProvider.getTranslation("edit", getLocale());
+		//String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
+		//String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
+		//String editLabel = i18NProvider.getTranslation("edit", getLocale());
 		
 		grid.addClassName("flights-grid");		
     	grid.setSizeFull();
@@ -108,12 +146,12 @@ public class ShowFlightsView extends VerticalLayout{
     							.setSortable(true);    	
     	//Date
     	grid.addColumn(Vuelo::getFechaPartida).setHeader(dateLabel)
-    			  		.setSortable(true);
+    			  		.setSortable(true)
+    			  		.setComparator((vuelo1, vuelo2) ->
+    					vuelo1.getFechaPartida().compareTo(vuelo2.getFechaPartida()));
 		//Hora config
     	grid.addColumn(Vuelo::getHoraPartida)
-    			.setHeader(hourLabel)
-    			.setSortable(true);
-        
+    			.setHeader(hourLabel);        
     	//Departure
 //    	grid.addColumn(vuelo -> vuelo.getOrigen().getNombreCiudad()
 //        	+ ", " + vuelo.getOrigen().getPais()).setHeader(departureLabel)
@@ -122,15 +160,21 @@ public class ShowFlightsView extends VerticalLayout{
         //Arrival
     	grid.addColumn(vuelo -> vuelo.getDestino().getNombreCiudad()
         	+ ", " + vuelo.getDestino().getPais()).setHeader(arrivalLabel)
-        						.setSortable(true);
+        						.setSortable(true)
+    							.setResizable(true);
+    	//Price
+    	grid.addColumn(Vuelo::getPrecioNeto).setHeader(priceLabel)
+    										.setSortable(true)
+    										.setResizable(true)
+    										.setAutoWidth(true);
+    	//Status
+    	grid.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel)
+        						.setSortable(true)
+        						.setResizable(true);    	
         //Type
     	grid.addColumn(Vuelo::getTipoVuelo).setHeader(typeLabel)
         						.setSortable(true)
-        						.setResizable(true);
-        //Status
-    	grid.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel)
-        						.setSortable(true)
-        						.setResizable(true);       
+        						.setResizable(true);               
         //Aircraft
     	grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
         						.setSortable(true)
@@ -140,6 +184,8 @@ public class ShowFlightsView extends VerticalLayout{
     			editFlight(event.getValue()));
     	
     	grid.getColumns().forEach(column -> column.setAutoWidth(true));
+                
+        add(grid);
 		
 	}
 
@@ -154,7 +200,7 @@ public class ShowFlightsView extends VerticalLayout{
 		try {
 			
 			service.cancelarVuelo(event.getVuelo().getNroVuelo());
-			updateList(filterText.getValue());
+			updateList();			
 			closeEditor();
 		
 		} catch (VueloException e) {
@@ -195,23 +241,18 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	
-	private HorizontalLayout getToolbar(List<Vuelo> vuelos) {
+	private HorizontalLayout getToolbar() {
 		//Filter
-		String searchPlaceholder = i18NProvider.getTranslation("search", getLocale());
-		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
-		
-		filterText.setPlaceholder(searchPlaceholder);
-		filterText.setClearButtonVisible(true);
-		filterText.setValueChangeMode(ValueChangeMode.LAZY);
-		filterText.addValueChangeListener(e->updateList(filterText.getValue()));
+		GridListDataView<Vuelo> dataView = grid.setItems(vueloDao.findAll());        
+		addCustomFilters(dataView);		
 		
 		//Add Contact Button
+		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
 		Button newFlightButton = new Button(newFlightLabel);
 		newFlightButton.addClickListener(e -> newFlight());
 		
 		//Layout
-		HorizontalLayout toolbar = new HorizontalLayout(filterText,
-				newFlightButton);
+		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton);
 		toolbar.addClassName("toolbar");
 		
 		return toolbar;
@@ -247,47 +288,12 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
 		vueloDao.save(event.getVuelo());
-		updateList(filterText.getValue());
+		updateList();		
 		closeEditor();
 	}
 
-//	private void updateList() {
-//		grid.setItems(vueloDao.findAll());		
-//	}
-//
-//	private void updateList(List<Vuelo> vuelos) {
-//		GridListDataView<Vuelo> dataView = grid.setItems(vuelos);
-//		
-//		dataView.addFilter(vuelo -> {
-//        	String searchTerm = filterText.getValue().trim();
-//        	searchTerm = searchTerm.replace("","");
-//        	
-//        	if(searchTerm.isEmpty())
-//        		return true;
-//        	
-//        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
-//        	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
-//        	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
-//        	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
-//        	boolean matchesStatus = matchesTerm(vuelo.getEstadoVuelo().toString(), searchTerm);
-//        	boolean matchesId = matchesTerm(vuelo.getNroVuelo().toString(), searchTerm);
-//        	boolean matchesFechaPartida = matchesTerm(vuelo.getFechaPartida().toString(), searchTerm);
-//        	boolean matchesHoraPartida = matchesTerm(vuelo.getHoraPartida().toString(), searchTerm);
-//        	
-//        	
-//        	return matchesDestino || matchesAerolinea || matchesAeronave ||matchesTipo 
-//        			|| matchesStatus || matchesId 
-//        			|| matchesFechaPartida || matchesHoraPartida;
-//        });		
-//	}
-	private void updateList(String searchTerm) {
-		if(searchTerm == null || searchTerm.equals("") || searchTerm.equals(" ")) {
-			grid.setItems(vueloDao.findAll());
-		}
-		
-		else {
-			grid.setItems(vueloDao.searchFlights(searchTerm));
-		}
-				
+	private void updateList() {
+		grid.setItems(vueloDao.findAll());		
 	}
+
 }
