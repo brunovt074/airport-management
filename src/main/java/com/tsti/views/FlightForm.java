@@ -1,5 +1,7 @@
 package com.tsti.views;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.tsti.dao.CiudadDAO;
@@ -31,6 +33,7 @@ public class FlightForm extends FormLayout{
 	TextField nroVuelo = new TextField("Flight Number");
 	TextField aerolinea = new TextField("Airline");	
 	DatePicker fechaPartida = new DatePicker("Date");
+	LocalDate now = LocalDate.now();
 	TimePicker horaPartida = new TimePicker("Hour");	
 	ComboBox<Ciudad> destino = new ComboBox<>("Arrival");
 	//ComboBox<Ciudad> estadoVuelo = new ComboBox<>("Status");	
@@ -67,6 +70,11 @@ public class FlightForm extends FormLayout{
 		String deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
 		String cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
 		
+		this.fechaPartida.setMin(now);
+		this.fechaPartida.setMax(now.plusDays(330));
+		this.fechaPartida.setInitialPosition(now);
+		this.horaPartida.setStep(Duration.ofMinutes(1));
+		
 		//Buttons
 		save = new Button(saveButtonLabel);
 		delete = new Button(deleteButtonLabel);
@@ -75,7 +83,7 @@ public class FlightForm extends FormLayout{
 		//setear labels
 		nroVuelo.setLabel(flightIdLabel);
 		nroVuelo.setReadOnly(true);
-		aerolinea.setLabel(airlineLabel);
+		aerolinea.setLabel(airlineLabel);		
 		avion.setLabel(aircraftLabel);
 		destino.setLabel(arrivalLabel);		
 		//estadoVuelo.setLabel(statusLabel);

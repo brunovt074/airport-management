@@ -300,7 +300,7 @@ public class ShowVuelosView extends VerticalLayout{
 		//columnToggleContextMenu.addColumnToggleItem(seatsLabel, seatsColumn);
                 
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, menuButton);        
-		
+		 
 		grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 		
 		add(toolbar, grid);
@@ -330,7 +330,6 @@ public class ShowVuelosView extends VerticalLayout{
 			
 			menuItem.setCheckable(true);
 			menuItem.setChecked(setVisibility);	
-			
 						
 		}		
 	}
