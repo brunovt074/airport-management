@@ -30,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * Establece/Actualiza/Retorna los datos de un vuelo
- * @author cecilia
+ * @author Bruno
  *
  */
 @Entity
@@ -229,7 +229,7 @@ public class Vuelo {
 	//ej de parametro: EstadoVuelo.CANCELADO
 	public void setEstadoVuelo(EstadoVuelo estado) {
 		this.estadoVuelo = estado;
-	}
+	}	
 	
 	public Set<Pasaje> getPasajeros(){
 		

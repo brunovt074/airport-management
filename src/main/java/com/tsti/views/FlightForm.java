@@ -18,6 +18,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -28,16 +29,32 @@ import com.vaadin.flow.shared.Registration;
 public class FlightForm extends FormLayout{
 		
 	private static final long serialVersionUID = 5593602849999149819L;
-	
-	private final AppI18NProvider i18NProvider;	
+	private final AppI18NProvider i18NProvider;
+	private final CiudadDAO ciudadDAO;
 	TextField nroVuelo = new TextField("Flight Number");
 	TextField aerolinea = new TextField("Airline");	
 	DatePicker fechaPartida = new DatePicker("Date");
 	LocalDate now = LocalDate.now();
 	TimePicker horaPartida = new TimePicker("Hour");	
 	ComboBox<Ciudad> destino = new ComboBox<>("Arrival");
-	//ComboBox<Ciudad> estadoVuelo = new ComboBox<>("Status");	
-	TextField avion = new TextField("Aircraft");	
+	//ComboBox<Ciudad> estadoVuelo = new ComboBox<>("Status");
+	BigDecimalField precioNeto = new BigDecimalField();  
+	TextField avion = new TextField("Aircraft");
+	
+	String flightIdLabel;
+	String airlineLabel;
+	String aircraftLabel;
+	String departureLabel;
+	String arrivalLabel;
+	String typeLabel;
+	String dateLabel;
+	String timeLabel;
+	String priceLabel;
+	String statusLabel;
+	String seatsLabel;
+	String saveButtonLabel;
+	String deleteButtonLabel;
+	String cancelButtonLabel;
 	
 	Button save;
 	Button delete;
@@ -47,61 +64,20 @@ public class FlightForm extends FormLayout{
 	
 	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO) {
 		super();
-		this.i18NProvider = i18nProvider;
-		
-		List<Ciudad> ciudadesDisponibles = ciudadDAO.findAll();
+		this.i18NProvider = i18nProvider;		
+		this.ciudadDAO = ciudadDAO;
 		
 		addClassName("flight-form");
 		binder.bindInstanceFields(this);
 		
 		//Labels
-		String flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
-		String airlineLabel = i18NProvider.getTranslation("airline", getLocale());
-		String aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
-		String departureLabel = i18NProvider.getTranslation("departure", getLocale());
-		String arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
-		String typeLabel = i18NProvider.getTranslation("type", getLocale());
-		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
-		String dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
-		String timeLabel = i18NProvider.getTranslation("departure-hour", getLocale());
-		String statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
-		String seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
-		String saveButtonLabel = i18NProvider.getTranslation("save", getLocale());
-		String deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
-		String cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
-		
-		this.fechaPartida.setMin(now);
-		this.fechaPartida.setMax(now.plusDays(330));
-		this.fechaPartida.setInitialPosition(now);
-		this.horaPartida.setStep(Duration.ofMinutes(1));
-		
+		initializeLabels();	
+		//
+		configureDateTimePickers(); 
 		//Buttons
 		save = new Button(saveButtonLabel);
 		delete = new Button(deleteButtonLabel);
-		close = new Button(cancelButtonLabel);
-		
-		//setear labels
-		nroVuelo.setLabel(flightIdLabel);
-		nroVuelo.setReadOnly(true);
-		aerolinea.setLabel(airlineLabel);		
-		avion.setLabel(aircraftLabel);
-		destino.setLabel(arrivalLabel);		
-		//estadoVuelo.setLabel(statusLabel);
-		fechaPartida.setLabel(dateLabel);
-		horaPartida.setLabel(timeLabel);
-		
-		destino.setItems(ciudadesDisponibles);
-		destino.setItemLabelGenerator(ciudad -> ciudad.getNombreCiudad() 
-										+ ", " + ciudad.getPais());
-		destino.addValueChangeListener(event -> {
-		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
-		    if(vuelo != null) {
-		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
-		    }
-		    
-		});
-
-		
+		close = new Button(cancelButtonLabel);		
 		
 		add(nroVuelo,
 			aerolinea,			
@@ -109,8 +85,15 @@ public class FlightForm extends FormLayout{
 			//estadoVuelo,
 			fechaPartida,
 			horaPartida,
-			avion,
+			precioNeto,
 			createButtonsLayout());
+	}
+	
+	private void configureDateTimePickers() {
+		this.fechaPartida.setMin(now);
+		this.fechaPartida.setMax(now.plusDays(330));
+		this.fechaPartida.setInitialPosition(now);
+		this.horaPartida.setStep(Duration.ofMinutes(1));
 	}
 	
 	private Component createButtonsLayout() {
@@ -129,6 +112,42 @@ public class FlightForm extends FormLayout{
 		binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
 		
 		return new HorizontalLayout(save, delete, close);
+	}
+	
+	private void initializeLabels(){
+		flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
+		airlineLabel = i18NProvider.getTranslation("airline", getLocale());		
+		departureLabel = i18NProvider.getTranslation("departure", getLocale());
+		arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
+		typeLabel = i18NProvider.getTranslation("type", getLocale());
+		dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
+		timeLabel = i18NProvider.getTranslation("departure-hour", getLocale());
+		priceLabel = i18NProvider.getTranslation("price", getLocale());
+		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
+		seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
+		saveButtonLabel = i18NProvider.getTranslation("save", getLocale());
+		deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
+		cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
+		
+		//setear labels
+		nroVuelo.setLabel(flightIdLabel);
+		nroVuelo.setReadOnly(true);
+		aerolinea.setLabel(airlineLabel);		
+		destino.setLabel(arrivalLabel);
+		fechaPartida.setLabel(dateLabel);
+		horaPartida.setLabel(timeLabel);
+		precioNeto.setLabel(priceLabel);	
+		
+		destino.setItems(ciudadDAO.findAll());
+		destino.setItemLabelGenerator(ciudad -> ciudad.getNombreCiudad() 
+										+ ", " + ciudad.getPais());
+		destino.addValueChangeListener(event -> {
+		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
+		    if(vuelo != null) {
+		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
+		    }
+		    
+		});
 	}
 
 	private void validateAndSave() {
@@ -198,5 +217,23 @@ public class FlightForm extends FormLayout{
 	public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
 		return addListener(CloseEvent.class, listener);		
 	}
+	
+//	private static class NumberFieldBigDecimal extends Div {
+//				
+//		private static final long serialVersionUID = -8869950694414073667L;
+//		
+//		
+//		public NumberFieldBigDecimal() {
+//			
+//			BigDecimalField bigDecimalField = new BigDecimalField();
+//			bigDecimalField.setWidth("240px");
+//			
+//			add(bigDecimalField);
+//			
+//		}
+//		
+//	}
+	
+	
 
 }

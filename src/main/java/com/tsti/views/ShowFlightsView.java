@@ -54,8 +54,7 @@ public class ShowFlightsView extends VerticalLayout{
 	//private String departureLabel;
 	private String arrivalLabel;
 	private String priceLabel;
-	private String typeLabel;
-	//private String dateHourLabelle;
+	private String typeLabel;	
 	private String dateLabel;
 	private String hourLabel;
 	private String statusLabel;
@@ -70,33 +69,17 @@ public class ShowFlightsView extends VerticalLayout{
 	    this.ciudadDao = ciudadDao;
 	    this.service = service;
 	    this.flights = new ArrayList<>(vueloDao.findAll());
-	    this.dataView = grid.setItems(flights);
-	    
-	  //Labels
-		flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
-		airlineLabel = i18NProvider.getTranslation("airline", getLocale());
-		aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
-		//departureLabel = i18NProvider.getTranslation("departure", getLocale());
-		arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
-		priceLabel = i18NProvider.getTranslation("price", getLocale());
-		typeLabel = i18NProvider.getTranslation("type", getLocale());
-		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
-		dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
-		hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
-		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
-		//seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
-		//showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
-		//editLabel = i18NProvider.getTranslation("edit"
+	    this.dataView = grid.setItems(flights);  
 	    
 	    addClassName("show-flights-view");
 	    setSizeFull();
+	    
+	    initializeLabels();
 	    configureGrid();
 	    configureForm();
 	    
 	    add(getToolbar(), getContent());
 	    
-	    //updateList();
-	    //updateList(filterText.getValue());
 	    closeEditor();
 	    
 	}
@@ -146,11 +129,11 @@ public class ShowFlightsView extends VerticalLayout{
 	private void configureForm() {
 
 		form = new FlightForm(i18NProvider, ciudadDao);
-		form.setWidth("25em");
+		form.setWidth("30rem");
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
     	form.addCloseListener(e -> closeEditor());
-    	form.setVisible(false);		
+    	//form.setVisible(false);		
 	}
 
 	private void configureGrid() {
@@ -211,12 +194,12 @@ public class ShowFlightsView extends VerticalLayout{
         						.setResizable(true)        						
         						.setKey("typeColumn")
         						.setVisible(false);               
-        //Aircraft
-    	grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
-        						.setSortable(true)
-        						.setResizable(true)
-        						.setKey("aircraftColumn")
-        						.setVisible(false);
+//        //Aircraft
+//    	grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
+//        						.setSortable(true)
+//        						.setResizable(true)
+//        						.setKey("aircraftColumn")
+//        						.setVisible(false);
     	    	
     	grid.asSingleSelect().addValueChangeListener(event ->
     			editFlight(event.getValue()));
@@ -302,7 +285,7 @@ public class ShowFlightsView extends VerticalLayout{
 		columnToggleContextMenu.addColumnToggleItem(priceLabel, grid.getColumnByKey("priceColumn"), true);
 		columnToggleContextMenu.addColumnToggleItem(statusLabel, grid.getColumnByKey("statusColumn"),true);
 		columnToggleContextMenu.addColumnToggleItem(typeLabel, grid.getColumnByKey("typeColumn"),false);		
-		columnToggleContextMenu.addColumnToggleItem(aircraftLabel, grid.getColumnByKey("aircraftColumn"), false);
+		//columnToggleContextMenu.addColumnToggleItem(aircraftLabel, grid.getColumnByKey("aircraftColumn"), false);
 		
 		//Layout
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton, menuButton);
@@ -339,6 +322,24 @@ public class ShowFlightsView extends VerticalLayout{
 		});
 		
 		grid.addDragEndListener(e -> draggedItem = null);
+		
+	}
+	private void initializeLabels() {
+		//Labels
+		flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
+		airlineLabel = i18NProvider.getTranslation("airline", getLocale());
+		aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
+		//departureLabel = i18NProvider.getTranslation("departure", getLocale());
+		arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
+		priceLabel = i18NProvider.getTranslation("price", getLocale());
+		typeLabel = i18NProvider.getTranslation("type", getLocale());
+		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
+		dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
+		hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
+		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
+		//seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
+		//showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
+		
 		
 	}
 	
