@@ -9,6 +9,7 @@ public class PasajeForm {
     //CONSTRUCTORES
     public PasajeForm() {
     }
+    
     public PasajeForm(Long vueloId, Long clienteId, Integer numeroAsiento) {
         this.vueloId = vueloId;
         this.clienteId = clienteId;
@@ -25,8 +26,7 @@ public class PasajeForm {
     }
 	public Integer getNumeroAsiento() {
 		return this.numeroAsiento;
-	}
-	
+	}	
 	
 	//	SETTERS
     public void setVueloId(Long vueloId) {

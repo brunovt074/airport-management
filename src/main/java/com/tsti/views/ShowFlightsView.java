@@ -344,7 +344,9 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	private boolean matchesTerm(String value, String searchTerm) {
-		
+		if(value == null)
+			return false;
+					
 		String normalizedValue = value.toLowerCase()
 	            .replaceAll("[á]", "a")
 	            .replaceAll("[é]", "e")
@@ -370,7 +372,19 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
-		vueloDao.save(event.getVuelo());
+		String errorMessage = i18NProvider.getTranslation("save-error", getLocale());
+		
+		try {
+			
+			service.crearVuelo(event.getSource());
+			
+		} catch(VueloException e) {
+						
+			System.out.println(errorMessage);
+			
+		}
+		
+		//vueloDao.save(event.getVuelo());		
 		updateList();		
 		closeEditor();
 	}

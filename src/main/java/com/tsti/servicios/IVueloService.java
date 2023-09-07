@@ -15,6 +15,7 @@ import com.tsti.entidades.Vuelo.TipoVuelo;
 import com.tsti.excepcion.VueloException;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
+import com.tsti.views.FlightForm;
 
 
 /**
@@ -25,6 +26,12 @@ import com.tsti.presentacion.EditarVueloForm;
 
 @Service
 public interface IVueloService{
+	/**
+	 *Metodo creado para la utilizacion con Vaadin 
+	 * 
+	 * 
+	 **/
+	public void crearVuelo(FlightForm flightForm) throws VueloException;
 	
 	/**
 	 *Recibe un formulario con todos los datos necesarios del vuelo.

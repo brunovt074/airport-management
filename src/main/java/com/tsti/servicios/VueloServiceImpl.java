@@ -23,6 +23,7 @@ import com.tsti.faker.CiudadFactory;
 import com.tsti.faker.GenerarPrecioNeto;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
+import com.tsti.views.FlightForm;
 /**
  * @author Bruno
  * 
@@ -39,6 +40,88 @@ public class VueloServiceImpl implements IVueloService{
 		this.ciudadDAO = ciudadDAO;
 		this.ciudadFactory = ciudadFactory;		
 	}
+	
+	@Override
+	public void crearVuelo(FlightForm vueloForm) throws VueloException{
+		Vuelo vuelo = new Vuelo();
+		Ciudad origen = new Ciudad();
+		Ciudad destino = new Ciudad();
+		
+		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getDestinoValue().getNombreCiudad(), vueloForm.getFechaPartidaValue(), vueloForm.getHoraPartidaValue());
+		
+		if(!vuelos.isEmpty()) {
+			
+			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() +" ya existe para la:" 
+										+" Fecha: "+vueloForm.getFechaPartidaValue()+", Hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
+		}
+		
+		if(vueloForm.getNroVueloValue() != null && vueloDAO.existsById(vueloForm.getNroVueloValue())) {	
+			
+			throw new VueloException ("Vuelo con numero de vuelo: "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
+			
+		}
+		
+		if(ciudadDAO.existsByCodAeropuerto("SAAV")){
+				
+				origen = ciudadDAO.findFirstByCodAeropuertoAndNombreCiudad
+														("SAAV", "Sauce Viejo");				
+			
+		} else{
+				
+				origen = ciudadFactory.getCiudadSauceViejo();
+				
+				throw new VueloException ("No se pudo obtener ciudad de origen "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
+				
+		}
+		
+		if(vueloForm.getDestinoValue().getId() != null){
+			
+			Optional<Ciudad>ciudadOptional = ciudadDAO.findById(vueloForm.getDestinoValue().getId());
+			
+			if(ciudadOptional.isPresent()) {
+				
+				destino = ciudadOptional.get();
+			}				
+		
+			}else{
+							
+				destino.setcodAeropuerto(vueloForm.getDestinoValue().getcodAeropuerto());
+				destino.setNombreCiudad(vueloForm.getNombreCiudadValue());
+				destino.setProvincia(vueloForm.getDestinoValue().getProvincia());
+				destino.setPais(vueloForm.getDestinoValue().getPais());
+				destino.setCodPostal(vueloForm.getDestinoValue().getCodPostal());			
+				
+			}
+			
+			try {
+			    ciudadDAO.save(origen);
+			    ciudadDAO.save(destino);
+			
+			} catch (Exception e) {
+			    
+				throw new VueloException("Error en la Base de Datos, no se pudieron guardar las ciudades " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			vuelo.setAerolinea(vueloForm.getAerolineaValue());
+			vuelo.setDestino(vueloForm.getDestinoValue());
+			vuelo.setFechaPartida(vueloForm.getFechaPartidaValue());
+			vuelo.setHoraPartida(vueloForm.getHoraPartidaValue());
+			vuelo.setPrecioNeto(vueloForm.getPrecioNetoValue());
+			vuelo.setEstadoVuelo(EstadoVuelo.REGISTRADO);
+			vuelo.setTipoVuelo();
+			
+			try {
+				
+				vueloDAO.save(vuelo);
+				System.out.println("Se ha creado un nuevo registro:" + vuelo.toString());
+				
+			} catch (Exception e) {
+			    throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+	}
+	
+	//API REST
 	@Override
 	public VueloDTO crearVuelo(CrearVueloForm vueloForm) throws VueloException {
 		
@@ -46,6 +129,8 @@ public class VueloServiceImpl implements IVueloService{
 		VueloDTO vueloDTO; 
 		Ciudad origen = new Ciudad();
 		Ciudad destino = new Ciudad();
+		
+		//Verificar si no existe vuelo con mismo destino y fecha-hora
 		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getNombreCiudad(), vueloForm.getFechaPartida(), vueloForm.getHoraPartida());
 		
 		if(!vuelos.isEmpty()) {
@@ -63,8 +148,7 @@ public class VueloServiceImpl implements IVueloService{
 		if(ciudadDAO.existsByCodAeropuerto("SAAV")){
 				
 				origen = ciudadDAO.findFirstByCodAeropuertoAndNombreCiudad
-														("SAAV", "Sauce Viejo");
-				
+														("SAAV", "Sauce Viejo");				
 			
 		} else{
 				
@@ -72,7 +156,7 @@ public class VueloServiceImpl implements IVueloService{
 				
 				throw new VueloException ("No se pudo obtener ciudad de origen "+ vueloForm.getNroVuelo() + " ya existe.", HttpStatus.BAD_REQUEST.value());
 				
-			}			
+		}			
 					
 		if(vueloForm.getIdDestino() != null){
 						
@@ -112,7 +196,7 @@ public class VueloServiceImpl implements IVueloService{
 			
 				vuelo.setPrecioNeto(GenerarPrecioNeto.generarPrecioNetoPesos());
 			
-			}else {			
+			} else {			
 				
 				vuelo.setPrecioNeto(GenerarPrecioNeto.generarPrecioNetoDolares());
 			

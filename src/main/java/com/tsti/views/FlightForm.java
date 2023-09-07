@@ -1,7 +1,9 @@
 package com.tsti.views;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.tsti.dao.CiudadDAO;
@@ -19,6 +21,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -217,22 +220,76 @@ public class FlightForm extends FormLayout{
 	public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
 		return addListener(CloseEvent.class, listener);		
 	}
+
+	public Long getNroVueloValue() {
+		try {
+		
+			return Long.parseLong(nroVuelo.getValue());
+					
+		} catch(NumberFormatException e) {
+			
+		  return null;
+		  
+		}		
+		
+	}
+
+	public void setNroVuelo(TextField nroVuelo) {
+		this.nroVuelo = nroVuelo;
+	}
+
+	public String getAerolineaValue() {
+		return aerolinea.getValue();
+	}
+
+	public void setAerolinea(TextField aerolinea) {
+		this.aerolinea = aerolinea;
+	}
+
+	public LocalDate getFechaPartidaValue() {
+		return fechaPartida.getValue();
+	}
+
+	public void setFechaPartida(DatePicker fechaPartida) {
+		this.fechaPartida = fechaPartida;
+	}
+
+	public LocalTime getHoraPartidaValue() {
+		return horaPartida.getValue();
+	}
+
+	public void setHoraPartida(TimePicker horaPartida) {
+		this.horaPartida = horaPartida;
+	}
+
+	public Ciudad getDestinoValue() {
+		return destino.getValue();
+	}
 	
-//	private static class NumberFieldBigDecimal extends Div {
-//				
-//		private static final long serialVersionUID = -8869950694414073667L;
-//		
-//		
-//		public NumberFieldBigDecimal() {
-//			
-//			BigDecimalField bigDecimalField = new BigDecimalField();
-//			bigDecimalField.setWidth("240px");
-//			
-//			add(bigDecimalField);
-//			
-//		}
-//		
-//	}
+	public String getNombreCiudadValue() {
+		
+		return destino.getValue().getNombreCiudad();
+	}
+
+	public void setDestino(ComboBox<Ciudad> destino) {
+		this.destino = destino;
+	}
+
+	public BigDecimal getPrecioNetoValue() {
+		return precioNeto.getValue();
+	}
+
+	public void setPrecioNeto(BigDecimalField precioNeto) {
+		this.precioNeto = precioNeto;
+	}
+
+	public String getAvionValue() {
+		return avion.getValue();
+	}
+
+	public void setAvion(TextField avion) {
+		this.avion = avion;
+	}	
 	
 	
 
