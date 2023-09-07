@@ -2,8 +2,10 @@ package com.tsti.servicios;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.tsti.excepcion.VueloException;
 import com.tsti.entidades.Ciudad;
 import com.tsti.faker.CiudadFactory;
 import com.tsti.faker.GenerarPrecioNeto;
+import com.tsti.i18n.AppI18NProvider;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
 import com.tsti.views.FlightForm;
@@ -33,12 +36,16 @@ public class VueloServiceImpl implements IVueloService{
 	
 	private VueloDAO vueloDAO;	
 	private CiudadDAO ciudadDAO;
-	private CiudadFactory ciudadFactory;	
+	private CiudadFactory ciudadFactory;
+	private final AppI18NProvider i18NProvider;
+	private final Locale locale = Locale.getDefault();
+	
 	@Autowired
-	public VueloServiceImpl(VueloDAO vueloDAO, CiudadDAO ciudadDAO, CiudadFactory ciudadFactory) {
+	public VueloServiceImpl(VueloDAO vueloDAO, CiudadDAO ciudadDAO, CiudadFactory ciudadFactory, AppI18NProvider i18NProvider) {
 		this.vueloDAO = vueloDAO;	
 		this.ciudadDAO = ciudadDAO;
 		this.ciudadFactory = ciudadFactory;		
+		this.i18NProvider = i18NProvider;		
 	}
 	
 	@Override
@@ -46,19 +53,37 @@ public class VueloServiceImpl implements IVueloService{
 		Vuelo vuelo = new Vuelo();
 		Ciudad origen = new Ciudad();
 		Ciudad destino = new Ciudad();
-		
+				
 		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getDestinoValue().getNombreCiudad(), vueloForm.getFechaPartidaValue(), vueloForm.getHoraPartidaValue());
+		
+		String datePattern = i18NProvider.getTranslation("date-pattern", locale);
+		String timePattern = i18NProvider.getTranslation("time-pattern", locale);
+					
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
+		
+		String formatedDate = vueloForm.getFechaPartidaValue().format(dateFormatter);
+		String formatedHour = vueloForm.getHoraPartidaValue().format(timeFormatter);
 		
 		if(!vuelos.isEmpty()) {
 			
-			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() 
-			+" ya existe para la fecha: "+vueloForm.getFechaPartidaValue()
-			+"- hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
+			String vueloExiste= i18NProvider.getTranslation("flight-exists", locale);
+			
+			String mensaje = String.format(vueloExiste, vueloForm.getNombreCiudadValue(),formatedDate,formatedHour);
+			
+			throw new VueloException(mensaje, HttpStatus.BAD_REQUEST.value());
+//			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() 
+//			+" ya existe para la fecha: "+vueloForm.getFechaPartidaValue()
+//			+"- hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
 		}
 		
 		if(vueloForm.getNroVueloValue() != null && vueloDAO.existsById(vueloForm.getNroVueloValue())) {	
 			
-			throw new VueloException ("Vuelo con numero de vuelo: "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
+			String idExiste= i18NProvider.getTranslation("flight-id-exists", locale);
+			String mensaje = String.format(idExiste, vueloForm.getNroVueloValue());
+			
+			throw new VueloException (mensaje , HttpStatus.BAD_REQUEST.value());
+			//throw new VueloException ("Vuelo con numero de vuelo: "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
 			
 		}
 		

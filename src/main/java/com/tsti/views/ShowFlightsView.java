@@ -86,7 +86,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    
 	}
 	
-	private void addCustomFilters(/*GridListDataView<Vuelo> dataView*/) {
+	private void addCustomFilters() {
 		
 		String searchPlaceholder = i18NProvider.getTranslation("search", getLocale());
         
@@ -244,6 +244,11 @@ public class ShowFlightsView extends VerticalLayout{
 		} else {
 			
 			form.setFlight(vuelo);
+			form.aerolinea.setReadOnly(true);
+			form.avion.setReadOnly(true);
+			form.destino.setReadOnly(true);
+			form.precioNeto.setReadOnly(true);
+			
 			form.setVisible(true);
 			addClassName("editing");
 			
@@ -374,7 +379,7 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
-		String errorMessage = i18NProvider.getTranslation("save-error", getLocale());
+		//String errorMessage = i18NProvider.getTranslation("save-error", getLocale());
 		String successMessage = i18NProvider.getTranslation("save-success", getLocale());
 		Notification notification;
 		
