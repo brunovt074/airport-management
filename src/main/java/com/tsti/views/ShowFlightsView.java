@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
@@ -183,7 +184,9 @@ public class ShowFlightsView extends VerticalLayout{
     										.setSortable(true)
     										.setResizable(true)
     										.setAutoWidth(true)
+    										.setTextAlign(ColumnTextAlign.END)
     										.setKey("priceColumn");
+    	
     	//Status
     	grid.addColumn(Vuelo::getEstadoVuelo).setHeader(statusLabel)
         						.setSortable(true)
@@ -201,9 +204,16 @@ public class ShowFlightsView extends VerticalLayout{
 //        						.setResizable(true)
 //        						.setKey("aircraftColumn")
 //        						.setVisible(false);
-    	    	
-    	grid.asSingleSelect().addValueChangeListener(event ->
-    			editFlight(event.getValue()));
+    	//Abrir editor con un solo click    	
+//    	grid.asSingleSelect().addValueChangeListener(event ->
+//    			editFlight(event.getValue()));
+    	
+    	//Abrir editor con boton reschedule
+//    	grid.addItemDoubleClickListener();
+    	//grid.addSelectionListener(null);
+    	//grid.getTabIndex();    	
+    	//grid.
+    	
     	
     	grid.getColumns().forEach(column -> column.setAutoWidth(true));
     	grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES); 
@@ -282,13 +292,17 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private HorizontalLayout getToolbar() {
 		//Filter
-		//GridListDataView<Vuelo> dataView = grid.setItems(vueloDao.findAll());        
-		addCustomFilters(/*dataView*/);		
+		addCustomFilters();		
 		
 		//Add Contact Button
 		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
 		Button newFlightButton = new Button(newFlightLabel);
 		newFlightButton.addClickListener(e -> newFlight());
+		
+		//Reschedule flight button
+		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		Button rescheduleFlightButton = new Button(rescheduleFlightLabel);
+		rescheduleFlightButton.addClickListener(e -> rescheduleFlight());
 		
 		//Add Show Hide Toggle Menu
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
@@ -305,7 +319,7 @@ public class ShowFlightsView extends VerticalLayout{
 		//columnToggleContextMenu.addColumnToggleItem(aircraftLabel, grid.getColumnByKey("aircraftColumn"), false);
 		
 		//Layout
-		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton, menuButton);
+		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton,rescheduleFlightButton, menuButton);
 		toolbar.addClassName("toolbar");
 		
 		return toolbar;
@@ -388,6 +402,15 @@ public class ShowFlightsView extends VerticalLayout{
 		
 	}
 	
+	private void rescheduleFlight() {
+		Vuelo selectedVuelo = grid.asSingleSelect().getValue();
+		
+		if(selectedVuelo  != null) {
+			
+			editFlight(selectedVuelo);
+		}
+	}
+	
 	private void saveFlight(FlightForm.SaveEvent event) {
 		
 		FlightForm vueloForm = event.getSource();
@@ -459,6 +482,7 @@ public class ShowFlightsView extends VerticalLayout{
 			
 			menuItem.setCheckable(true);
 			menuItem.setChecked(setVisibility);
+			//column.getParent().get().recalculateColumnWidths();
 		}		
 		
 	}
