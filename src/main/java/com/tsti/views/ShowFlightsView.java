@@ -22,6 +22,8 @@ import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -373,18 +375,28 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
 		String errorMessage = i18NProvider.getTranslation("save-error", getLocale());
+		String successMessage = i18NProvider.getTranslation("save-success", getLocale());
+		Notification notification;
 		
 		try {
 			
 			service.crearVuelo(event.getSource());
 			
-		} catch(VueloException e) {
-						
-			System.out.println(errorMessage);
+			notification = Notification
+					.show(successMessage);
+			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
 			
-		}
-		
-		//vueloDao.save(event.getVuelo());		
+		} catch(VueloException e) {
+			notification = Notification
+					.show(e.getMessage());
+			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
+			
+		}		
+				
 		updateList();		
 		closeEditor();
 	}

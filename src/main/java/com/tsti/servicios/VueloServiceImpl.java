@@ -51,8 +51,9 @@ public class VueloServiceImpl implements IVueloService{
 		
 		if(!vuelos.isEmpty()) {
 			
-			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() +" ya existe para la:" 
-										+" Fecha: "+vueloForm.getFechaPartidaValue()+", Hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
+			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() 
+			+" ya existe para la fecha: "+vueloForm.getFechaPartidaValue()
+			+"- hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
 		}
 		
 		if(vueloForm.getNroVueloValue() != null && vueloDAO.existsById(vueloForm.getNroVueloValue())) {	
