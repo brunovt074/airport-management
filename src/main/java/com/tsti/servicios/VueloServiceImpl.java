@@ -39,13 +39,19 @@ public class VueloServiceImpl implements IVueloService{
 	private CiudadFactory ciudadFactory;
 	private final AppI18NProvider i18NProvider;
 	private final Locale locale = Locale.getDefault();
+	private final String databaseCreateError;
+	private final String databaseUpdateError;
+	private final String databaseDeleteError;
 	
 	@Autowired
 	public VueloServiceImpl(VueloDAO vueloDAO, CiudadDAO ciudadDAO, CiudadFactory ciudadFactory, AppI18NProvider i18NProvider) {
 		this.vueloDAO = vueloDAO;	
 		this.ciudadDAO = ciudadDAO;
 		this.ciudadFactory = ciudadFactory;		
-		this.i18NProvider = i18NProvider;		
+		this.i18NProvider = i18NProvider;
+		this.databaseCreateError = i18NProvider.getTranslation("database-create-error", locale);
+		this.databaseUpdateError = i18NProvider.getTranslation("database-update-error", locale);
+		this.databaseDeleteError = i18NProvider.getTranslation("delete-error", locale);
 	}
 	
 	@Override
@@ -96,7 +102,7 @@ public class VueloServiceImpl implements IVueloService{
 				
 				origen = ciudadFactory.getCiudadSauceViejo();
 				
-				throw new VueloException ("No se pudo obtener ciudad de origen "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
+				throw new VueloException ("No se pudo obtener ciudad de origen ", HttpStatus.BAD_REQUEST.value());
 				
 		}
 		
@@ -125,7 +131,10 @@ public class VueloServiceImpl implements IVueloService{
 			
 			} catch (Exception e) {
 			    
-				throw new VueloException("Error en la Base de Datos, no se pudieron guardar las ciudades " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new VueloException(databaseUpdateError 
+						+ ": " + origen.getNombreCiudad() 
+						+ "or :" + destino.getNombreCiudad(),
+						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 			vuelo.setAerolinea(vueloForm.getAerolineaValue());
@@ -142,7 +151,7 @@ public class VueloServiceImpl implements IVueloService{
 				System.out.println("Se ha creado un nuevo registro:" + vuelo.toString());
 				
 			} catch (Exception e) {
-			    throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			    throw new VueloException(databaseCreateError, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 	}
@@ -240,7 +249,8 @@ public class VueloServiceImpl implements IVueloService{
 		
 		} catch (Exception e) {
 		    
-			throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new VueloException(databaseCreateError, HttpStatus.INTERNAL_SERVER_ERROR);
+			
 		}
 				
 		vueloDTO = new VueloDTO(vuelo);		
@@ -269,14 +279,55 @@ public class VueloServiceImpl implements IVueloService{
 			
 			} catch (Exception e) {
 			    
-				throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new VueloException(databaseDeleteError, HttpStatus.INTERNAL_SERVER_ERROR);
 			}		
 		
 		}		
 				
 		return new VueloDTO(vuelo);
 	}
+	
+	/**
+	 *Version del metodo para Vaadin 
+	 **/
+	@Override
+	public void reprogramarVuelo(FlightForm vueloForm) throws VueloException{
+		
+		Vuelo vuelo = new Vuelo();		
+		Optional <Vuelo> vueloOptional;
+		
+		
+		vueloOptional = vueloDAO.findById(vueloForm.getNroVueloValue());
+        
+        if (vueloOptional.isPresent()) {
+            
+        	vuelo = vueloOptional.get();
+                       		
+	        vuelo.setFechaPartida(vueloForm.getFechaPartidaValue());
+	        vuelo.setHoraPartida(vueloForm.getHoraPartidaValue());
+	        vuelo.setPrecioNeto(vueloForm.getPrecioNetoValue());
+        
+        // Cambiar estado a reprogramado
+        vuelo.setEstadoVuelo(EstadoVuelo.REPROGRAMADO);
+        
+	        try {
+	        	
+	        	vueloDAO.save(vuelo);
+	        
+	        	} catch (Exception e) {
+			    
+				throw new VueloException(databaseUpdateError+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+				
+	        	}  
+        
+        }		
+		           
+                
+    }
 
+	/**
+	 *Version del metodo para la API REST 
+	 **/
 
 	@Override
 	public VueloDTO reprogramarVuelo(Long nroVuelo, EditarVueloForm vueloForm) throws VueloException{
@@ -303,7 +354,7 @@ public class VueloServiceImpl implements IVueloService{
 	        
 	        	} catch (Exception e) {
 			    
-				throw new VueloException("Error en la Base de Datos, no se pudieron crear el vuelo." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new VueloException(databaseUpdateError, HttpStatus.INTERNAL_SERVER_ERROR);
 	        	}  
         
         } 

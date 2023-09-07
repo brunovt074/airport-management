@@ -124,8 +124,7 @@ public class ShowFlightsView extends VerticalLayout{
 		
 		form.setFlight(null);
 		form.setVisible(false);
-		removeClassName("editing");
-		
+		removeClassName("editing");		
 	}
 	
 	private void configureForm() {
@@ -241,14 +240,25 @@ public class ShowFlightsView extends VerticalLayout{
 			
 			closeEditor();
 			
-		} else {
+		} else if (vuelo.getNroVuelo() == null){
+		
+			form.setFlight(vuelo);
+			form.aerolinea.setReadOnly(false);
+			form.avion.setReadOnly(false);
+			form.destino.setReadOnly(false);
+			form.precioNeto.setReadOnly(false);
+			//form.save.setEnabled(true);
+			//form.save.setVisible(true);
+			form.setVisible(true);
+			addClassName("editing");
 			
+		} else {
 			form.setFlight(vuelo);
 			form.aerolinea.setReadOnly(true);
 			form.avion.setReadOnly(true);
 			form.destino.setReadOnly(true);
 			form.precioNeto.setReadOnly(true);
-			
+			//form.save.setVisible(false);
 			form.setVisible(true);
 			addClassName("editing");
 			
@@ -379,19 +389,38 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 	
 	private void saveFlight(FlightForm.SaveEvent event) {
-		//String errorMessage = i18NProvider.getTranslation("save-error", getLocale());
+		
+		FlightForm vueloForm = event.getSource();
+		
 		String successMessage = i18NProvider.getTranslation("save-success", getLocale());
+		String updateMessage = i18NProvider.getTranslation("update-success", getLocale());
 		Notification notification;
 		
 		try {
 			
-			service.crearVuelo(event.getSource());
+			if(vueloForm.getNroVueloValue() == null) {
+				
+				service.crearVuelo(event.getSource());
+				
+				notification = Notification
+						.show(successMessage);
+				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+				notification.setPosition(Notification.Position.TOP_END);
+				notification.setDuration(5000);
+				
+			} else {
+				
+				service.reprogramarVuelo(vueloForm);
+				
+				notification = Notification
+						.show(updateMessage);
+				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+				notification.setPosition(Notification.Position.TOP_END);
+				notification.setDuration(5000);
+				
+			}
+		
 			
-			notification = Notification
-					.show(successMessage);
-			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-			notification.setPosition(Notification.Position.TOP_END);
-			notification.setDuration(5000);
 			
 		} catch(VueloException e) {
 			notification = Notification

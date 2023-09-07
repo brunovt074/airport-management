@@ -52,6 +52,7 @@ public interface IVueloService{
 	 * @throws VueloException 
 	 * */
 	public VueloDTO cancelarVuelo(Long nroVuelo) throws VueloException;
+		
 	
 	/**
 	 *Recibe un formulario con todos los datos necesarios para actualizar
@@ -63,6 +64,15 @@ public interface IVueloService{
 	 * @throws VueloException 
 	 **/
 	public VueloDTO reprogramarVuelo(Long nroVuelo, EditarVueloForm vueloForm) throws VueloException;
+	
+	
+	/**
+	 *
+	 *Version de reprogramarVuelo para la demostracion en Vaadin
+	 *
+	 **/
+	public void reprogramarVuelo(FlightForm vueloForm) throws VueloException;
+	
 	
 	/**
 	 *Busca al vuelo por nroVuelo 
@@ -123,6 +133,8 @@ public interface IVueloService{
 	 * 
 	 * @return List<Vuelo> con todos los resultados que coincidan con los parametros
 	 * */
-	public List<VueloDTO> findAllByEstadoVuelo(EstadoVuelo estadoVuelo);	
+	public List<VueloDTO> findAllByEstadoVuelo(EstadoVuelo estadoVuelo);
+
+		
 
 }

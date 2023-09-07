@@ -34,6 +34,7 @@ public class FlightForm extends FormLayout{
 	private static final long serialVersionUID = 5593602849999149819L;
 	private final AppI18NProvider i18NProvider;
 	private final CiudadDAO ciudadDAO;
+	
 	TextField nroVuelo = new TextField("Flight Number");
 	TextField aerolinea = new TextField("Airline");	
 	DatePicker fechaPartida = new DatePicker("Date");
