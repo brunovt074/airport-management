@@ -233,13 +233,17 @@ public class ShowFlightsView extends VerticalLayout{
 	private void deleteFlight(FlightForm.DeleteEvent event) {
 		try {
 			
-			service.cancelarVuelo(event.getVuelo().getNroVuelo());
-			updateList();			
-			closeEditor();
+			service.cancelarVuelo(event.getVuelo().getNroVuelo());			
 		
 		} catch (VueloException e) {
 			e.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
 			System.out.println(e.getMessage());
+			
+		} finally {
+			
+			updateList();
+			addCustomFilters();
+			closeEditor();
 			
 		}	
 		
@@ -436,11 +440,7 @@ public class ShowFlightsView extends VerticalLayout{
 				notification.setPosition(Notification.Position.TOP_END);
 				notification.setDuration(5000);
 				
-			}
-			
-			updateList();
-		
-			
+			}					
 			
 		} catch(VueloException e) {
 			notification = Notification
@@ -449,10 +449,15 @@ public class ShowFlightsView extends VerticalLayout{
 			notification.setPosition(Notification.Position.TOP_END);
 			notification.setDuration(5000);
 			
+		} finally {
+			
+			updateList();
+			addCustomFilters();
+			closeEditor();
+			
 		}		
 				
-		updateList();		
-		closeEditor();
+		
 	}
 	
 	private void setColumnToggleMenu(Button menuButton) {
@@ -468,7 +473,7 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 
 	private void updateList() {
-		grid.setItems(vueloDao.findAll());		
+		grid.setItems(vueloDao.findAll());				
 	}
 	
 	private static class ColumnToggleContextMenu extends ContextMenu {
