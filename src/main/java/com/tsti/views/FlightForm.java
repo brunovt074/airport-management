@@ -65,6 +65,7 @@ public class FlightForm extends FormLayout{
 	Button close;
 
 	Binder<Vuelo> binder = new BeanValidationBinder<>(Vuelo.class);
+	//Binder<Vuelo> binder = new Binder<>(Vuelo.class);
 	
 	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO) {
 		super();
@@ -149,9 +150,7 @@ public class FlightForm extends FormLayout{
 		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
 		    if(vuelo != null) {
 		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
-		    }    
-		
-	    
+		    }		
 		    
 		});
 	}

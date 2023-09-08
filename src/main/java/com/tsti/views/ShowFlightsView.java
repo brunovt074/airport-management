@@ -153,7 +153,7 @@ public class ShowFlightsView extends VerticalLayout{
     	//NroVuelo
     	grid.addColumn(Vuelo::getNroVuelo).setHeader(flightIdLabel)
     							.setFrozen(true)
-    							.setFooter(createFooterText(vuelos))
+    							//.setFooter(createFooterText(vuelos))
     							.setSortable(true).setKey("idColumn");
     	//Airline
     	grid.addColumn(Vuelo::getAerolinea).setHeader(airlineLabel)
@@ -241,9 +241,10 @@ public class ShowFlightsView extends VerticalLayout{
 			
 		} finally {
 			
+			closeEditor();
 			updateList();
 			addCustomFilters();
-			closeEditor();
+			
 			
 		}	
 		

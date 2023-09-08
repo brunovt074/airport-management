@@ -57,7 +57,10 @@ public class MainLayout extends AppLayout{
 		Tab pasajeros = new Tab(passengersLabel);
 		Tab ciudades = new Tab(citiesLabel);
 		//Tab pasajes = new Tab("Pasajes");
-				
+		vuelos.setVisible(false);
+		pasajeros.setVisible(false);
+		ciudades.setVisible(false);
+		
 		return new Tabs(vuelos, pasajeros, ciudades);
 		
 	}

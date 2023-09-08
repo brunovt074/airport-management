@@ -26,6 +26,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -47,9 +48,10 @@ public class Vuelo {
 	@Column(name = "hora_partida")	
 	@NotNull
 	private LocalTime horaPartida;	
-	@NotNull	
-	private String aerolinea;
 	private String avion;
+	@NotNull
+	@NotEmpty
+	private String aerolinea;
 	@Transient
 	private int nroFilas;
 	@Transient
@@ -57,16 +59,18 @@ public class Vuelo {
 	//@Transient
 	//private Clientes plazas[][];
 	@Column(name = "nro_asientos")
-	@NotNull
+	//@NotNull
 	private int nroAsientos;	
 	@Column(name = "tipo_vuelo")
-	@NotNull
+	//@NotNull
 	private TipoVuelo tipoVuelo;
+	@NotNull
 	private BigDecimal precioNeto;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "origen_id")
 	private Ciudad origen;
+	@NotNull
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "destino_id")	
