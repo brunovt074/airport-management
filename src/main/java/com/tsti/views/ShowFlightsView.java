@@ -12,6 +12,7 @@ import com.tsti.i18n.AppI18NProvider;
 import com.tsti.servicios.VueloServiceImpl;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -287,13 +288,13 @@ public class ShowFlightsView extends VerticalLayout{
 		content.setSizeFull();
 		
 		return content;
-	}
-	
+	}	
 	
 	private HorizontalLayout getToolbar() {
 		//Filter
 		addCustomFilters();		
 		
+		//Create buttons
 		//Add Contact Button
 		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
 		Button newFlightButton = new Button(newFlightLabel);
@@ -307,16 +308,10 @@ public class ShowFlightsView extends VerticalLayout{
 		//Add Show Hide Toggle Menu
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
 		Button menuButton = new Button (showHideMenuLabel);		
-		ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(menuButton);
+		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);	
 		
-		columnToggleContextMenu.addColumnToggleItem(airlineLabel, grid.getColumnByKey("airlineColumn"), true);
-		columnToggleContextMenu.addColumnToggleItem(dateLabel, grid.getColumnByKey("dateColumn"), true);
-		columnToggleContextMenu.addColumnToggleItem(hourLabel, grid.getColumnByKey("hourColumn"), true);
-		columnToggleContextMenu.addColumnToggleItem(arrivalLabel, grid.getColumnByKey("arrivalColumn"), true);
-		columnToggleContextMenu.addColumnToggleItem(priceLabel, grid.getColumnByKey("priceColumn"), true);
-		columnToggleContextMenu.addColumnToggleItem(statusLabel, grid.getColumnByKey("statusColumn"),true);
-		columnToggleContextMenu.addColumnToggleItem(typeLabel, grid.getColumnByKey("typeColumn"),false);		
-		//columnToggleContextMenu.addColumnToggleItem(aircraftLabel, grid.getColumnByKey("aircraftColumn"), false);
+		//Create show/hide menu
+		setColumnToggleMenu(menuButton);
 		
 		//Layout
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton,rescheduleFlightButton, menuButton);
@@ -442,6 +437,8 @@ public class ShowFlightsView extends VerticalLayout{
 				notification.setDuration(5000);
 				
 			}
+			
+			updateList();
 		
 			
 			
@@ -456,6 +453,18 @@ public class ShowFlightsView extends VerticalLayout{
 				
 		updateList();		
 		closeEditor();
+	}
+	
+	private void setColumnToggleMenu(Button menuButton) {
+		
+		ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(menuButton);
+		columnToggleContextMenu.addColumnToggleItem(airlineLabel, grid.getColumnByKey("airlineColumn"), true);
+		columnToggleContextMenu.addColumnToggleItem(dateLabel, grid.getColumnByKey("dateColumn"), true);
+		columnToggleContextMenu.addColumnToggleItem(hourLabel, grid.getColumnByKey("hourColumn"), true);
+		columnToggleContextMenu.addColumnToggleItem(arrivalLabel, grid.getColumnByKey("arrivalColumn"), true);
+		columnToggleContextMenu.addColumnToggleItem(priceLabel, grid.getColumnByKey("priceColumn"), true);
+		columnToggleContextMenu.addColumnToggleItem(statusLabel, grid.getColumnByKey("statusColumn"),true);
+		columnToggleContextMenu.addColumnToggleItem(typeLabel, grid.getColumnByKey("typeColumn"),false);
 	}
 
 	private void updateList() {
