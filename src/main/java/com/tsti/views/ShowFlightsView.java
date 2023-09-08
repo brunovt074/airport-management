@@ -451,9 +451,10 @@ public class ShowFlightsView extends VerticalLayout{
 			
 		} finally {
 			
+			closeEditor();
 			updateList();
 			addCustomFilters();
-			closeEditor();
+			
 			
 		}		
 				
