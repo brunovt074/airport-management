@@ -75,7 +75,7 @@ public class FlightForm extends FormLayout{
 		binder.bindInstanceFields(this);
 		
 		//Labels
-		initializeLabels();	
+		initializeFields();	
 		//
 		configureDateTimePickers(); 
 		//Buttons
@@ -118,7 +118,7 @@ public class FlightForm extends FormLayout{
 		return new HorizontalLayout(save, delete, close);
 	}
 	
-	private void initializeLabels(){
+	private void initializeFields(){
 		flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
 		airlineLabel = i18NProvider.getTranslation("airline", getLocale());		
 		departureLabel = i18NProvider.getTranslation("departure", getLocale());
@@ -149,7 +149,9 @@ public class FlightForm extends FormLayout{
 		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
 		    if(vuelo != null) {
 		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
-		    }
+		    }    
+		
+	    
 		    
 		});
 	}
