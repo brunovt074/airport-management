@@ -132,7 +132,7 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void configureForm() {
 
-		form = new FlightForm(i18NProvider, ciudadDao);
+		form = new FlightForm(i18NProvider, ciudadDao, service);
 		form.setWidth("25rem");
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);

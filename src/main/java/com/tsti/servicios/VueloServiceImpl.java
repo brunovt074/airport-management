@@ -431,6 +431,21 @@ public class VueloServiceImpl implements IVueloService{
 		
 		return vuelos; 
 	}
+	public List<String> getAerolineas(){
+		
+		List<String> aerolineas = new ArrayList<>();
+		
+		List<VueloDTO> vuelos = getAll();
+		
+		for(VueloDTO vuelo : vuelos) {
+			
+			aerolineas.add(vuelo.getAerolinea());
+		}
+		
+		return aerolineas;		
+		
+	}
+	
 	@Override
 	public List<VueloDTO> getAll() {
 		
