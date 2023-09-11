@@ -1,5 +1,7 @@
 package com.tsti.views;
 
+import org.springframework.hateoas.Link;
+
 import com.tsti.i18n.AppI18NProvider;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.H1;
@@ -9,6 +11,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 
@@ -22,6 +25,7 @@ public class MainLayout extends AppLayout{
 	
 	public MainLayout(AppI18NProvider i18NProvider) {
 		this.i18NProvider = i18NProvider;
+		
 		
 		createNavBar();		
 		

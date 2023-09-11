@@ -7,10 +7,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.theme.Theme;
+
 @SpringBootApplication
 @ComponentScan("com.tsti")
 @ComponentScan(basePackages = {"com.tsti.faker"})
-public class Daos2023Application implements WebMvcConfigurer{
+@Theme(value="airportmanagement")
+public class Daos2023Application implements WebMvcConfigurer, AppShellConfigurator{
 	
 	/*
 	 * private final LocaleChangeInterceptor localeChangeInterceptor;

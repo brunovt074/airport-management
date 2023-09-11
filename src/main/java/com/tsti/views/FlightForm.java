@@ -88,9 +88,9 @@ public class FlightForm extends FormLayout{
 			aerolinea,			
 			destino,			
 			//estadoVuelo,
-			fechaPartida,
-			horaPartida,
 			precioNeto,
+			fechaPartida,
+			horaPartida,			
 			createButtonsLayout());
 	}
 	
@@ -98,7 +98,7 @@ public class FlightForm extends FormLayout{
 		this.fechaPartida.setMin(now);
 		this.fechaPartida.setMax(now.plusDays(330));
 		this.fechaPartida.setInitialPosition(now);
-		this.horaPartida.setStep(Duration.ofMinutes(1));
+		this.horaPartida.setStep(Duration.ofMinutes(15));
 	}
 	
 	private Component createButtonsLayout() {
@@ -115,6 +115,7 @@ public class FlightForm extends FormLayout{
 		close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 		
 		binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
+		//binder.addValueChangeListener(e -> save.setEnabled(binder.isValid()));
 		
 		return new HorizontalLayout(save, delete, close);
 	}
@@ -150,7 +151,12 @@ public class FlightForm extends FormLayout{
 		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
 		    if(vuelo != null) {
 		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
-		    }		
+		    }
+		
+//		precioNeto.addValueChangeListener(e -> {
+//			binder.validate();
+//		});
+		    
 		    
 		});
 	}

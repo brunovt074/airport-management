@@ -1,0 +1,11 @@
+@media all and (max-width: 800px) {
+  .show-flights-view.editing .toolbar,
+  .show-flights-view.editing .flights-grid {
+    display: none;
+  }
+}
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}

@@ -16,6 +16,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
@@ -132,7 +133,7 @@ public class ShowFlightsView extends VerticalLayout{
 	private void configureForm() {
 
 		form = new FlightForm(i18NProvider, ciudadDao);
-		form.setWidth("30rem");
+		form.setWidth("25rem");
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
     	form.addCloseListener(e -> closeEditor());
@@ -152,7 +153,7 @@ public class ShowFlightsView extends VerticalLayout{
     	
     	//NroVuelo
     	grid.addColumn(Vuelo::getNroVuelo).setHeader(flightIdLabel)
-    							.setFrozen(true)
+    							//.setFrozen(true)
     							//.setFooter(createFooterText(vuelos))
     							.setSortable(true).setKey("idColumn");
     	//Airline
@@ -317,9 +318,11 @@ public class ShowFlightsView extends VerticalLayout{
 		
 		//Create show/hide menu
 		setColumnToggleMenu(menuButton);
+		Div spacer = new Div();
 		
 		//Layout
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton,rescheduleFlightButton, menuButton);
+		
 		toolbar.addClassName("toolbar");
 		
 		return toolbar;
