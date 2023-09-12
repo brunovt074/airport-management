@@ -10,6 +10,7 @@ import com.tsti.dao.CiudadDAO;
 import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Vuelo;
 import com.tsti.i18n.AppI18NProvider;
+import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.Component;
@@ -35,7 +36,8 @@ public class FlightForm extends FormLayout{
 	private static final long serialVersionUID = 5593602849999149819L;
 	private final AppI18NProvider i18NProvider;
 	private final CiudadDAO ciudadDAO;
-	private final VueloServiceImpl service;
+	private final VueloServiceImpl vueloService;
+	private final CiudadServiceImpl ciudadService;
 	
 	TextField nroVuelo = new TextField("Flight Number");
 	//TextField aerolinea = new TextField("Airline");	
@@ -70,11 +72,12 @@ public class FlightForm extends FormLayout{
 	Binder<Vuelo> binder = new BeanValidationBinder<>(Vuelo.class);
 	//Binder<Vuelo> binder = new Binder<>(Vuelo.class);
 	
-	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO, VueloServiceImpl service) {
+	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO, VueloServiceImpl service, CiudadServiceImpl ciudadService) {
 		super();
 		this.i18NProvider = i18nProvider;		
 		this.ciudadDAO = ciudadDAO;
-		this.service = service;
+		this.vueloService = service;
+		this.ciudadService = ciudadService;
 		
 		addClassName("flight-form");
 		binder.bindInstanceFields(this);
@@ -147,8 +150,10 @@ public class FlightForm extends FormLayout{
 		horaPartida.setLabel(timeLabel);
 		precioNeto.setLabel(priceLabel);	
 		
-		aerolinea.setItems(service.getAerolineas());
-		destino.setItems(ciudadDAO.findAll());
+		aerolinea.setItems(vueloService.getAerolineas());
+		
+		//destino.setItems(ciudadDAO.findAll());
+		destino.setItems(ciudadService.getAllDistinctCities());		
 		destino.setItemLabelGenerator(ciudad -> ciudad.getNombreCiudad() 
 										+ ", " + ciudad.getPais());
 		destino.addValueChangeListener(event -> {

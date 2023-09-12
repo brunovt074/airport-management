@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -431,9 +432,9 @@ public class VueloServiceImpl implements IVueloService{
 		
 		return vuelos; 
 	}
-	public List<String> getAerolineas(){
+	public TreeSet<String> getAerolineas(){
 		
-		List<String> aerolineas = new ArrayList<>();
+		TreeSet<String> aerolineas = new TreeSet<>();		
 		
 		List<VueloDTO> vuelos = getAll();
 		

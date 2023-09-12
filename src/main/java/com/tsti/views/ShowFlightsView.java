@@ -9,6 +9,7 @@ import com.tsti.dao.VueloDAO;
 import com.tsti.entidades.Vuelo;
 import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
+import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -40,9 +41,10 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private static final long serialVersionUID = -7236223778352535392L;
 	private final AppI18NProvider i18NProvider;
+	private final VueloServiceImpl vueloService;
+	private final CiudadServiceImpl ciudadService;
 	private VueloDAO vueloDao;
-	private CiudadDAO ciudadDao;
-	private VueloServiceImpl service;
+	private CiudadDAO ciudadDao;	
 	private Vuelo draggedItem;
 	
 	Grid<Vuelo> grid = new Grid<>(Vuelo.class,false);
@@ -67,14 +69,15 @@ public class ShowFlightsView extends VerticalLayout{
 	//private String showHideMenuLabelLocale());
 	//private String editLabel;
 	
-	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, CiudadDAO ciudadDao, VueloServiceImpl service) {
+	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, CiudadDAO ciudadDao, VueloServiceImpl vueloService, CiudadServiceImpl ciudadService) {
 	    
 		this.i18NProvider = i18NProvider;
 	    this.vueloDao = vueloDao;
 	    this.ciudadDao = ciudadDao;
-	    this.service = service;
+	    this.vueloService = vueloService;
 	    this.flights = new ArrayList<>(vueloDao.findAll());
-	    this.dataView = grid.setItems(flights);  
+	    this.dataView = grid.setItems(flights);
+		this.ciudadService = ciudadService;  
 	    
 	    addClassName("show-flights-view");
 	    setSizeFull();
@@ -132,7 +135,7 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void configureForm() {
 
-		form = new FlightForm(i18NProvider, ciudadDao, service);
+		form = new FlightForm(i18NProvider, ciudadDao, vueloService, ciudadService);
 		form.setWidth("25rem");
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
@@ -234,7 +237,7 @@ public class ShowFlightsView extends VerticalLayout{
 	private void deleteFlight(FlightForm.DeleteEvent event) {
 		try {
 			
-			service.cancelarVuelo(event.getVuelo().getNroVuelo());			
+			vueloService.cancelarVuelo(event.getVuelo().getNroVuelo());			
 		
 		} catch (VueloException e) {
 			e.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
@@ -426,7 +429,7 @@ public class ShowFlightsView extends VerticalLayout{
 			
 			if(vueloForm.getNroVueloValue() == null) {
 				
-				service.crearVuelo(event.getSource());
+				vueloService.crearVuelo(event.getSource());
 				
 				notification = Notification
 						.show(successMessage);
@@ -436,7 +439,7 @@ public class ShowFlightsView extends VerticalLayout{
 				
 			} else {
 				
-				service.reprogramarVuelo(vueloForm);
+				vueloService.reprogramarVuelo(vueloForm);
 				
 				notification = Notification
 						.show(updateMessage);

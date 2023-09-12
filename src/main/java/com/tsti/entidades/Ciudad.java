@@ -18,7 +18,7 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "ciudades")
-public class Ciudad {
+public class Ciudad implements Comparable<Ciudad>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;	
@@ -139,6 +139,17 @@ public class Ciudad {
 		Ciudad other = (Ciudad) obj;
 		return Objects.equals(codAeropuerto, other.codAeropuerto) && Objects.equals(nombreCiudad, other.nombreCiudad)
 				&& Objects.equals(pais, other.pais) && Objects.equals(provincia, other.provincia);
+	}
+
+	@Override
+	public int compareTo(Ciudad c) {
+		int compararCiudad = this.nombreCiudad.compareTo(c.nombreCiudad);
+		
+		if(compararCiudad == 0)
+			return this.pais.compareTo(c.pais);
+		
+		else
+			return compararCiudad;		
 	}	
 	
 }
