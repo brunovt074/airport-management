@@ -3,20 +3,26 @@ package com.tsti.views;
 import org.springframework.hateoas.Link;
 
 import com.tsti.i18n.AppI18NProvider;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 
 
-@Route("/lista-vuelos")
+@Route("")
 public class MainLayout extends AppLayout{
 
 	private static final long serialVersionUID = 2007966093366404191L;
@@ -26,6 +32,7 @@ public class MainLayout extends AppLayout{
 	public MainLayout(AppI18NProvider i18NProvider) {
 		this.i18NProvider = i18NProvider;
 		
+		Button darkLightToggleButton;
 		
 		createNavBar();		
 		
@@ -40,7 +47,9 @@ public class MainLayout extends AppLayout{
 		
 		Tabs tabs = createTabs();		
 
-		HorizontalLayout header = new HorizontalLayout(logo,tabs);
+		Button darkLightToggleButton = createDarkLightToggleButton();
+		
+		HorizontalLayout header = new HorizontalLayout(logo, darkLightToggleButton/*tabs*/);
 		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 		//header.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		header.expand(logo);
@@ -66,6 +75,25 @@ public class MainLayout extends AppLayout{
 		ciudades.setVisible(false);
 		
 		return new Tabs(vuelos, pasajeros, ciudades);
+		
+	}
+	
+	private Button createDarkLightToggleButton() {
+		String tooltipText = i18NProvider.getTranslation("dark-light-button", getLocale());
+		Button toggleButton = new Button(new Icon(VaadinIcon.ADJUST), click -> {
+			ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+			
+			if(themeList.contains(Lumo.DARK)) {
+				themeList.remove(Lumo.DARK);				
+			} else {
+				themeList.add(Lumo.DARK);				
+			}			
+			
+		});
+		toggleButton.setAriaLabel(tooltipText);
+		toggleButton.setTooltipText(tooltipText);
+		
+		return toggleButton;		
 		
 	}
 
