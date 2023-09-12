@@ -6,6 +6,7 @@ import com.tsti.i18n.AppI18NProvider;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.icon.Icon;
@@ -23,6 +24,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 
 @Route("")
+//@JsModule("prefers-color-scheme.js")
 public class MainLayout extends AppLayout{
 
 	private static final long serialVersionUID = 2007966093366404191L;
@@ -31,8 +33,6 @@ public class MainLayout extends AppLayout{
 	
 	public MainLayout(AppI18NProvider i18NProvider) {
 		this.i18NProvider = i18NProvider;
-		
-		Button darkLightToggleButton;
 		
 		createNavBar();		
 		
@@ -80,6 +80,7 @@ public class MainLayout extends AppLayout{
 	
 	private Button createDarkLightToggleButton() {
 		String tooltipText = i18NProvider.getTranslation("dark-light-button", getLocale());
+		
 		Button toggleButton = new Button(new Icon(VaadinIcon.ADJUST), click -> {
 			ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 			
@@ -87,7 +88,9 @@ public class MainLayout extends AppLayout{
 				themeList.remove(Lumo.DARK);				
 			} else {
 				themeList.add(Lumo.DARK);				
-			}			
+			}
+			
+			
 			
 		});
 		toggleButton.setAriaLabel(tooltipText);
