@@ -76,6 +76,7 @@ public class ShowFlightsView extends VerticalLayout{
 	private String newFlightLabel;
 	private String rescheduleFlightLabel;
 	private String deleteFlightLabel;
+	private String nullFlightErrorMessage;
 	//private String seatsLabelocale());		
 	//private String showHideMenuLabelLocale());
 	//private String editLabel;
@@ -145,6 +146,10 @@ public class ShowFlightsView extends VerticalLayout{
 		Vuelo selectedVuelo = grid.asSingleSelect().getValue();
 		
 		if(selectedVuelo == null) {
+			Notification notification = Notification.show(nullFlightErrorMessage);
+			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
 			
 			closeEditor();
 			
@@ -375,6 +380,7 @@ public class ShowFlightsView extends VerticalLayout{
 		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
 		
+		
 		//MenuBar optionsBar = getMenuBar();		
 		
 //		optionsBar.addItem(newFlightLabel, e -> newFlight());
@@ -383,18 +389,20 @@ public class ShowFlightsView extends VerticalLayout{
 		//Create buttons
 		//Add Contact Button		
 		Button newFlightButton = new Button(newFlightLabel);
-		newFlightButton.addClickListener(e -> newFlight());
+		newFlightButton.addClickListener(e -> newFlight());		
 		newFlightButton.setIcon(new Icon(VaadinIcon.FLIGHT_TAKEOFF));
+		//nullFlightErrorMessage
+		newFlightButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
 		newFlightButton.addClassName("options-nav-button");
 		//Reschedule flight button		
 		Button rescheduleFlightButton = new Button(rescheduleFlightLabel);
-		
 		rescheduleFlightButton.addClickListener(e -> rescheduleFlight());
 		rescheduleFlightButton.setIcon(new Icon(VaadinIcon.CALENDAR_CLOCK));
+		rescheduleFlightButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
 		rescheduleFlightButton.addClassName("options-nav-button");
 		
 		Button cancelFlightButton = new Button(cancelFlightLabel);
-		cancelFlightButton.addClickListener(e -> cancelFlight());
+		cancelFlightButton.addClickListener(e -> cancelFlight());		
 		cancelFlightButton.setIcon(new Icon("lumo","cross"));
 		cancelFlightButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 		cancelFlightButton.addClassName("options-nav-button");
@@ -402,7 +410,7 @@ public class ShowFlightsView extends VerticalLayout{
 		//Add Show Hide Toggle Menu		
 		Button menuButton = new Button (showHideMenuLabel);
 		menuButton.setIcon(new Icon("lumo", "menu"));
-		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);		
+		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SUCCESS);		
 				
 		//Create show/hide menu
 		setColumnToggleMenu(menuButton);
@@ -469,6 +477,7 @@ public class ShowFlightsView extends VerticalLayout{
 		newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
 		rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
 		deleteFlightLabel = i18NProvider.getTranslation("delete", getLocale());
+		nullFlightErrorMessage = i18NProvider.getTranslation("null-flight", getLocale());
 		//seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
 		//showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
 		
@@ -509,6 +518,12 @@ public class ShowFlightsView extends VerticalLayout{
 		if(selectedVuelo  != null) {
 			
 			editFlight(selectedVuelo);
+		} else {
+			Notification notification = Notification.show(nullFlightErrorMessage);
+			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
+			
 		}
 	}
 	
