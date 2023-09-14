@@ -10,18 +10,16 @@ a[highlight] {
     text-decoration: underline;
     
 }
-@media(min-width: 801px){
-	.options-bar{
-		display:inline;
-	}	
-}
 
-@media(max-width: 800px){
+@media(max-width: 960px){
 	.options-nav{
-		display:grid;		
+		display:inline;				
 	}
-	.options-nav.vaadin-button{
-		display:grid;		
+	.options-nav-button{		
+		margin-left:5px;					
+	}
+	.flights-search-field{
+		max-width: 70%;
 	}
 	.toolbar {
 				
@@ -29,8 +27,25 @@ a[highlight] {
 		
 	}	
 }
+@media(max-width: 537px){
+	.flights-search-field{
+		max-width: 100%;
+	}
+		
+}
 
-
+@media(max-width: 417px){
+			
+	.options-nav-button{
+		display:flex;						
+	}
+	
+	.toolbar{		
+		align-self: center;
+	}
+		
+}
+	
 /*.toolbar-vertical-layout{
 	display: flex;
   	flex-direction: column;auto/

@@ -352,11 +352,14 @@ public class ShowFlightsView extends VerticalLayout{
 	 private MenuBar getMenuBar() { 
 		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
 		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
 		
 		MenuBar optionsBar = new MenuBar();		
 		
 		optionsBar.addItem(newFlightLabel, e -> newFlight());
 		optionsBar.addItem(rescheduleFlightLabel, e -> rescheduleFlight());
+		optionsBar.addItem(cancelFlightLabel, e -> cancelFlight());
+		
 		optionsBar.addThemeVariants(MenuBarVariant.LUMO_END_ALIGNED);
 		optionsBar.addClassName("options-bar"); 
 		 
@@ -371,6 +374,7 @@ public class ShowFlightsView extends VerticalLayout{
 		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
 		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
+		
 		//MenuBar optionsBar = getMenuBar();		
 		
 //		optionsBar.addItem(newFlightLabel, e -> newFlight());
@@ -381,19 +385,23 @@ public class ShowFlightsView extends VerticalLayout{
 		Button newFlightButton = new Button(newFlightLabel);
 		newFlightButton.addClickListener(e -> newFlight());
 		newFlightButton.setIcon(new Icon(VaadinIcon.FLIGHT_TAKEOFF));
-		
+		newFlightButton.addClassName("options-nav-button");
 		//Reschedule flight button		
 		Button rescheduleFlightButton = new Button(rescheduleFlightLabel);
 		
 		rescheduleFlightButton.addClickListener(e -> rescheduleFlight());
 		rescheduleFlightButton.setIcon(new Icon(VaadinIcon.CALENDAR_CLOCK));
+		rescheduleFlightButton.addClassName("options-nav-button");
 		
 		Button cancelFlightButton = new Button(cancelFlightLabel);
 		cancelFlightButton.addClickListener(e -> cancelFlight());
 		cancelFlightButton.setIcon(new Icon("lumo","cross"));
-		//Add Show Hide Toggle Menu
+		cancelFlightButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+		cancelFlightButton.addClassName("options-nav-button");
 		
-		Button menuButton = new Button (showHideMenuLabel);		
+		//Add Show Hide Toggle Menu		
+		Button menuButton = new Button (showHideMenuLabel);
+		menuButton.setIcon(new Icon("lumo", "menu"));
 		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);		
 				
 		//Create show/hide menu
@@ -403,8 +411,9 @@ public class ShowFlightsView extends VerticalLayout{
 		//optionsBar.addItem(menuButton);
 		HorizontalLayout optionsNav =  new HorizontalLayout(newFlightButton,
 				rescheduleFlightButton,
-				cancelFlightButton
-				/*menuButton*/);
+				cancelFlightButton,
+				menuButton);
+		
 		optionsNav.addClassName("options-nav");
 		//Layout		
 		HorizontalLayout toolbar = new HorizontalLayout(searchField, optionsNav);//, newFlightButton,rescheduleFlightButton, menuButton);
