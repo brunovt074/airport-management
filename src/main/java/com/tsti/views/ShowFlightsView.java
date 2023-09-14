@@ -11,6 +11,7 @@ import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -20,20 +21,27 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoIcon;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 @Route(value="/flights", layout = MainLayout.class)
 @PageTitle("Flights")
@@ -65,6 +73,9 @@ public class ShowFlightsView extends VerticalLayout{
 	private String dateLabel;
 	private String hourLabel;
 	private String statusLabel;
+	private String newFlightLabel;
+	private String rescheduleFlightLabel;
+	private String deleteFlightLabel;
 	//private String seatsLabelocale());		
 	//private String showHideMenuLabelLocale());
 	//private String editLabel;
@@ -86,7 +97,9 @@ public class ShowFlightsView extends VerticalLayout{
 	    configureGrid();
 	    configureForm();
 	    
-	    add(getToolbar(), getContent());
+	    add(//optionsBarDiv(),
+	    	getToolbar(),
+	    	getContent());
 	    
 	    closeEditor();
 	    
@@ -101,6 +114,7 @@ public class ShowFlightsView extends VerticalLayout{
         searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.addValueChangeListener(e -> dataView.refreshAll());
+        searchField.addClassName("flights-search-field");
         
         dataView.addFilter(vuelo -> {
         	String searchTerm = searchField.getValue().trim();
@@ -123,6 +137,29 @@ public class ShowFlightsView extends VerticalLayout{
         			|| matchesStatus || matchesId 
         			|| matchesFechaPartida || matchesHoraPartida;
         });
+		
+	}
+	
+	private void cancelFlight() {
+		
+		Vuelo selectedVuelo = grid.asSingleSelect().getValue();
+		
+		if(selectedVuelo == null) {
+			
+			closeEditor();
+			
+		} else {
+			form.setFlight(selectedVuelo);
+			form.destino.setReadOnly(true);
+			form.fechaPartida.setReadOnly(true);
+			form.horaPartida.setReadOnly(true);
+			form.precioNeto.setReadOnly(true);
+			form.aerolinea.setReadOnly(true);			
+			form.save.setVisible(false);
+			form.setVisible(true);
+			addClassName("editing");
+			
+		}
 		
 	}
 	
@@ -202,7 +239,9 @@ public class ShowFlightsView extends VerticalLayout{
         						.setSortable(true)
         						.setResizable(true)        						
         						.setKey("typeColumn")
-        						.setVisible(false);               
+        						.setVisible(false);  	
+    	
+    	
 //        //Aircraft
 //    	grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
 //        						.setSortable(true)
@@ -223,7 +262,19 @@ public class ShowFlightsView extends VerticalLayout{
     	grid.getColumns().forEach(column -> column.setAutoWidth(true));
     	grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES); 
     	
-        add(grid);
+        //add(grid);
+		
+	}
+	
+	private Div optionsBarDiv() {
+		
+		Div optionsBarDiv = new Div(getMenuBar());		
+		
+		
+		optionsBarDiv.addClassName("toolbar-div");
+		
+		
+		return optionsBarDiv;
 		
 	}
 
@@ -266,9 +317,7 @@ public class ShowFlightsView extends VerticalLayout{
 			form.aerolinea.setReadOnly(false);
 			form.avion.setReadOnly(false);
 			form.destino.setReadOnly(false);
-			form.precioNeto.setReadOnly(false);
-			//form.save.setEnabled(true);
-			//form.save.setVisible(true);
+			form.precioNeto.setReadOnly(false);			
 			form.setVisible(true);
 			addClassName("editing");
 			
@@ -297,39 +346,73 @@ public class ShowFlightsView extends VerticalLayout{
 		content.setSizeFull();
 		
 		return content;
-	}	
+	}
+	
+	
+	 private MenuBar getMenuBar() { 
+		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
+		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		
+		MenuBar optionsBar = new MenuBar();		
+		
+		optionsBar.addItem(newFlightLabel, e -> newFlight());
+		optionsBar.addItem(rescheduleFlightLabel, e -> rescheduleFlight());
+		optionsBar.addThemeVariants(MenuBarVariant.LUMO_END_ALIGNED);
+		optionsBar.addClassName("options-bar"); 
+		 
+		return optionsBar; 
+		 
+	 }	
 	
 	private HorizontalLayout getToolbar() {
 		//Filter
 		addCustomFilters();		
+		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
+		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
+		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
+		//MenuBar optionsBar = getMenuBar();		
+		
+//		optionsBar.addItem(newFlightLabel, e -> newFlight());
+//		optionsBar.addItem(rescheduleFlightLabel, e -> rescheduleFlight());
 		
 		//Create buttons
-		//Add Contact Button
-		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
+		//Add Contact Button		
 		Button newFlightButton = new Button(newFlightLabel);
 		newFlightButton.addClickListener(e -> newFlight());
+		newFlightButton.setIcon(new Icon(VaadinIcon.FLIGHT_TAKEOFF));
 		
-		//Reschedule flight button
-		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		//Reschedule flight button		
 		Button rescheduleFlightButton = new Button(rescheduleFlightLabel);
+		
 		rescheduleFlightButton.addClickListener(e -> rescheduleFlight());
+		rescheduleFlightButton.setIcon(new Icon(VaadinIcon.CALENDAR_CLOCK));
 		
+		Button cancelFlightButton = new Button(cancelFlightLabel);
+		cancelFlightButton.addClickListener(e -> cancelFlight());
+		cancelFlightButton.setIcon(new Icon("lumo","cross"));
 		//Add Show Hide Toggle Menu
-		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
-		Button menuButton = new Button (showHideMenuLabel);		
-		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);	
 		
+		Button menuButton = new Button (showHideMenuLabel);		
+		menuButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);		
+				
 		//Create show/hide menu
 		setColumnToggleMenu(menuButton);
-		Div spacer = new Div();
 		
-		//Layout
-		HorizontalLayout toolbar = new HorizontalLayout(searchField, newFlightButton,rescheduleFlightButton, menuButton);
+		
+		//optionsBar.addItem(menuButton);
+		HorizontalLayout optionsNav =  new HorizontalLayout(newFlightButton,
+				rescheduleFlightButton,
+				cancelFlightButton
+				/*menuButton*/);
+		optionsNav.addClassName("options-nav");
+		//Layout		
+		HorizontalLayout toolbar = new HorizontalLayout(searchField, optionsNav);//, newFlightButton,rescheduleFlightButton, menuButton);
 		
 		toolbar.addClassName("toolbar");
+		toolbar.setAlignItems(FlexComponent.Alignment.BASELINE);		
 		
-		return toolbar;
-		
+		return toolbar;	
 		
 	}
 	private void initializeDragAndDropOnRows(Grid<Vuelo> grid) {
@@ -374,6 +457,9 @@ public class ShowFlightsView extends VerticalLayout{
 		dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
 		hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
+		newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
+		rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
+		deleteFlightLabel = i18NProvider.getTranslation("delete", getLocale());
 		//seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
 		//showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
 		

@@ -8,6 +8,8 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -40,8 +42,10 @@ public class MainLayout extends AppLayout{
 	
 	private void createNavBar() {
 		String title = i18NProvider.getTranslation("title", getLocale());
+			
+		H2 logo = new H2(title);
 		
-		H1 logo = new H1(title);
+		Image logoImage = new Image("images/logo-2.png", title);
 		logo.addClassNames(LumoUtility.FontSize.LARGE,
 				   LumoUtility.Margin.MEDIUM);
 		
@@ -49,10 +53,10 @@ public class MainLayout extends AppLayout{
 
 		Button darkLightToggleButton = createDarkLightToggleButton();
 		
-		HorizontalLayout header = new HorizontalLayout(logo, darkLightToggleButton/*tabs*/);
+		HorizontalLayout header = new HorizontalLayout(logoImage, darkLightToggleButton/*tabs*/);
 		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 		//header.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-		header.expand(logo);
+		header.expand(logoImage);
 		header.setWidthFull();
 		header.addClassNames(LumoUtility.Padding.Vertical.NONE,
 				 LumoUtility.Padding.Horizontal.MEDIUM);

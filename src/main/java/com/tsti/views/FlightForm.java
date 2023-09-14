@@ -64,6 +64,7 @@ public class FlightForm extends FormLayout{
 	String saveButtonLabel;
 	String deleteButtonLabel;
 	String cancelButtonLabel;
+	String closeButtonLabel;
 	
 	Button save;
 	Button delete;
@@ -89,7 +90,7 @@ public class FlightForm extends FormLayout{
 		//Buttons
 		save = new Button(saveButtonLabel);
 		delete = new Button(deleteButtonLabel);
-		close = new Button(cancelButtonLabel);		
+		close = new Button(closeButtonLabel );		
 		
 		add(nroVuelo,						
 			destino,			
@@ -140,7 +141,7 @@ public class FlightForm extends FormLayout{
 		saveButtonLabel = i18NProvider.getTranslation("save", getLocale());
 		deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
 		cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
-		
+		closeButtonLabel = i18NProvider.getTranslation("close", getLocale());
 		//setear labels
 		nroVuelo.setLabel(flightIdLabel);
 		nroVuelo.setReadOnly(true);
