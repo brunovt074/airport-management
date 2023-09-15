@@ -8,9 +8,11 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -39,6 +41,7 @@ public class MainLayout extends AppLayout{
 		 
 		createNavBar();		
 		
+		
 	}
 	
 	private void createNavBar() {
@@ -63,9 +66,9 @@ public class MainLayout extends AppLayout{
 		
 		backgroundDiv.getStyle().set("min-width", "0");
 		backgroundDiv.getStyle().set("flex-grow", "1");
-		Tabs tabs = createTabs();		
+		Tabs tabs = getTabs();		
 
-		Button darkLightToggleButton = createDarkLightToggleButton();
+		Button darkLightToggleButton = getDarkLightToggleButton();
 		darkLightToggleButton.addClassName("toggle-button");
 		toggleModeDiv.add(darkLightToggleButton);
 		
@@ -79,9 +82,9 @@ public class MainLayout extends AppLayout{
 		
 		addToNavbar(header);
 		
-	}
+	}	
 	
-	private Tabs createTabs() {
+	private Tabs getTabs() {
 		String vuelosLabel = i18NProvider.getTranslation("flights-tab", getLocale());
 		String passengersLabel= i18NProvider.getTranslation("passengers-tab", getLocale());
 		String citiesLabel= i18NProvider.getTranslation("cities-tab", getLocale());
@@ -98,7 +101,7 @@ public class MainLayout extends AppLayout{
 		
 	}
 	
-	private Button createDarkLightToggleButton() {
+	private Button getDarkLightToggleButton() {
 		String tooltipText = i18NProvider.getTranslation("dark-light-button", getLocale());
 		
 		Button toggleButton = new Button(new Icon(VaadinIcon.ADJUST), click -> {

@@ -105,14 +105,14 @@ public class FlightForm extends FormLayout{
 		this.fechaPartida.setMin(now);
 		this.fechaPartida.setMax(now.plusDays(330));
 		this.fechaPartida.setInitialPosition(now);
-		this.horaPartida.setStep(Duration.ofMinutes(15));
+		this.horaPartida.setStep(Duration.ofMinutes(1));
 	}
 	
 	private Component createButtonsLayout() {
 		
 		save.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
 		delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-		close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+		close.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SUCCESS);
 		
 		save.addClickShortcut(Key.ENTER);
 		close.addClickShortcut(Key.ESCAPE);
@@ -149,12 +149,9 @@ public class FlightForm extends FormLayout{
 		destino.setLabel(arrivalLabel);
 		fechaPartida.setLabel(dateLabel);
 		horaPartida.setLabel(timeLabel);
-		precioNeto.setLabel(priceLabel);	
-		
-		aerolinea.setItems(vueloService.getAerolineas());
-		
-		//destino.setItems(ciudadDAO.findAll());
-		destino.setItems(ciudadService.getAllDistinctCities());		
+		precioNeto.setLabel(priceLabel);		
+		aerolinea.setItems(vueloService.getAerolineas());				
+		destino.setItems(ciudadService.getAllDistinctCities());
 		destino.setItemLabelGenerator(ciudad -> ciudad.getNombreCiudad() 
 										+ ", " + ciudad.getPais());
 		destino.addValueChangeListener(event -> {
@@ -162,13 +159,11 @@ public class FlightForm extends FormLayout{
 		    if(vuelo != null) {
 		    	vuelo.setDestino(event.getValue());// Actualizar la propiedad destino con la ciudad seleccionada 
 		    }
-		
-//		precioNeto.addValueChangeListener(e -> {
-//			binder.validate();
-//		});
-		    
-		    
+		nroVuelo.addClassName("flight-id-textfield");	
+	    
 		});
+		
+		
 	}
 
 	private void validateAndSave() {

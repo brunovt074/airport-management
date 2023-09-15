@@ -62,7 +62,7 @@ public class ShowFlightsView extends VerticalLayout{
 	GridListDataView<Vuelo> dataView;	
 	TextField searchField = new TextField();
 	FlightForm form;
-	LocalDate nowDate = LocalDate.now();
+	LocalDate nowDate = LocalDate.now();	
 	
 	//Labels
 	private String flightIdLabel;
@@ -91,7 +91,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    this.vueloService = vueloService;
 	    this.flights = new ArrayList<>(vueloDao.findAll());
 	    this.dataView = grid.setItems(flights);
-		this.ciudadService = ciudadService;  
+		this.ciudadService = ciudadService;	    
 	    
 	    addClassName("show-flights-view");
 	    setSizeFull();
@@ -187,7 +187,7 @@ public class ShowFlightsView extends VerticalLayout{
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
     	form.addCloseListener(e -> closeEditor());
-    	//form.setVisible(false);		
+    			
 	}
 
 	private void configureGrid() {
@@ -336,8 +336,7 @@ public class ShowFlightsView extends VerticalLayout{
 			form.aerolinea.setReadOnly(true);
 			form.avion.setReadOnly(true);
 			form.destino.setReadOnly(true);
-			form.precioNeto.setReadOnly(true);
-			//form.save.setVisible(false);
+			form.precioNeto.setReadOnly(false);			
 			form.setVisible(true);
 			addClassName("editing");
 			
