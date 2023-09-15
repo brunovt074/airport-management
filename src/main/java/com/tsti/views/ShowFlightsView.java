@@ -19,6 +19,8 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
@@ -98,7 +100,10 @@ public class ShowFlightsView extends VerticalLayout{
 	    configureGrid();
 	    configureForm();
 	    
-	    add(//optionsBarDiv(),
+	    H2 departuresTitle = new H2(i18NProvider.getTranslation("departures", getLocale()));	    
+	    departuresTitle.addClassName("departures-title");
+	    
+	    add(departuresTitle,
 	    	getToolbar(),
 	    	getContent());
 	    
@@ -190,7 +195,7 @@ public class ShowFlightsView extends VerticalLayout{
 		
 		grid.addClassName("flights-grid");		
     	grid.setSizeFull();
-		    	
+    	grid.setMaxHeight("100%");
     	grid.setColumns();
     	grid.setColumnReorderingAllowed(true);
     	
@@ -346,7 +351,7 @@ public class ShowFlightsView extends VerticalLayout{
 		HorizontalLayout content = new HorizontalLayout(grid, form);
 		
 		content.setFlexGrow(2, grid);
-		content.setFlexGrow(1, form);
+		content.setFlexGrow(1, form);		
 		content.addClassName("content");
 		content.setSizeFull();
 		

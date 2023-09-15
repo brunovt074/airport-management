@@ -11,6 +11,29 @@ a[highlight] {
     
 }
 
+.navbar{
+	height:5em;
+	display:flexbox;		
+	background-color:#21130d;	
+}
+
+.logo{	
+	height: 5rem;		
+}
+
+.logo-div{	
+	height: 5rem;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	min-width: 0;
+    flex-grow: 1;	
+}
+.toggle-div{
+	max-height: 5em;	
+}
+	
 @media(max-width: 960px){
 	.options-nav{
 		display:inline;				
@@ -43,6 +66,12 @@ a[highlight] {
 	.toolbar{		
 		align-self: center;	
 	}
+	
+	.departures-title{
+		align-self: center;
+		visibility: collapse;
+	}
+	
 		
 }
 	
