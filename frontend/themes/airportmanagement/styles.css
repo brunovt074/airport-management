@@ -83,6 +83,19 @@ a[highlight] {
 	background-color:#21130d;	
 }
 
+.about-tab{
+	color: #cad787;
+}
+
+vaadin-tab::before{
+	color: #cad787;	
+}
+
+vaadin-tab::before{
+	
+	background-color: #cad787;	
+}
+
 .toggle-div{
 	max-height: 5em;	
 }

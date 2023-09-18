@@ -98,7 +98,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    
 	    initializeLabels();
 	    configureGrid();
-	    configureForm();
+	    configureForm();    
 	    
 	    H2 departuresTitle = new H2(i18NProvider.getTranslation("departures", getLocale()));	    
 	    departuresTitle.addClassName("departures-title");

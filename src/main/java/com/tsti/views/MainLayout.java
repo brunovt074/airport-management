@@ -35,12 +35,11 @@ public class MainLayout extends AppLayout{
 	private static final long serialVersionUID = 2007966093366404191L;
 	
 	private final AppI18NProvider i18NProvider;
-	
+	String aboutLabel;
 	public MainLayout(AppI18NProvider i18NProvider) {
 		this.i18NProvider = i18NProvider;	
-		 
+		this.aboutLabel = i18NProvider.getTranslation("about-tab", getLocale()); 
 		createNavBar();		
-		
 		
 	}
 	
@@ -60,19 +59,23 @@ public class MainLayout extends AppLayout{
 		Div logoDiv = new Div(logo);
 		Div backgroundDiv = new Div();
 		Div toggleModeDiv = new Div();
+		Div tabDiv = new Div();
+		
 		logoDiv.addClassName("logo-div");
 		backgroundDiv.addClassName("background-div");
-		toggleModeDiv.addClassName("toggle-div"); 
+		toggleModeDiv.addClassName("toggle-div");
+		tabDiv.addClassName("tab-div"); 
 		
 		backgroundDiv.getStyle().set("min-width", "0");
 		backgroundDiv.getStyle().set("flex-grow", "1");
 		Tabs tabs = getTabs();		
-
+		tabDiv.add(tabs);
+		
 		Button darkLightToggleButton = getDarkLightToggleButton();
 		darkLightToggleButton.addClassName("toggle-button");
 		toggleModeDiv.add(darkLightToggleButton);
 		
-		HorizontalLayout header = new HorizontalLayout(logoDiv,backgroundDiv, toggleModeDiv/*,tabs*/);
+		HorizontalLayout header = new HorizontalLayout(logoDiv,backgroundDiv,tabDiv, toggleModeDiv);
 		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);		
 		header.setWidthFull();		
 		header.addClassNames(LumoUtility.Padding.Vertical.NONE,
@@ -93,11 +96,14 @@ public class MainLayout extends AppLayout{
 		Tab pasajeros = new Tab(passengersLabel);
 		Tab ciudades = new Tab(citiesLabel);
 		Tab pasajes = new Tab("Pasajes");
+		Tab about = new Tab(aboutLabel);
+		about.addClassName("about-tab");
+		
 		vuelos.setVisible(false);
 		pasajeros.setVisible(false);
 		ciudades.setVisible(false);
 		
-		return new Tabs(vuelos, pasajes, pasajeros, ciudades);
+		return new Tabs(about);
 		
 	}
 	
