@@ -11,6 +11,7 @@ import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -21,6 +22,8 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
@@ -50,7 +53,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 public class ShowFlightsView extends VerticalLayout{
 	
 	private static final long serialVersionUID = -7236223778352535392L;
-	private final AppI18NProvider i18NProvider;
+	private static final AppI18NProvider i18NProvider = new AppI18NProvider();
 	private final VueloServiceImpl vueloService;
 	private final CiudadServiceImpl ciudadService;
 	private VueloDAO vueloDao;
@@ -85,8 +88,7 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, CiudadDAO ciudadDao, VueloServiceImpl vueloService, CiudadServiceImpl ciudadService) {
 	    
-		this.i18NProvider = i18NProvider;
-	    this.vueloDao = vueloDao;
+		this.vueloDao = vueloDao;
 	    this.ciudadDao = ciudadDao;
 	    this.vueloService = vueloService;
 	    this.flights = new ArrayList<>(vueloDao.findAll());
@@ -617,10 +619,107 @@ public class ShowFlightsView extends VerticalLayout{
 			});
 			
 			menuItem.setCheckable(true);
-			menuItem.setChecked(setVisibility);
-			//column.getParent().get().recalculateColumnWidths();
+			menuItem.setChecked(setVisibility);			
 		}		
 		
-	}
+	}	
+	
+	private static class HeadBanner extends HorizontalLayout{
+		String title;
+		H2 sectionTitle;		
+		Div leftDiv;
+		Div centerDiv; 
+		Div rightDiv;
+		Accordion info = new Accordion();
+				
+		
+		public HeadBanner() {
+			super();
+			title = i18NProvider.getTranslation("departures", getLocale());
+			sectionTitle = new H2(title);			
+			
+			leftDiv = new Div(sectionTitle);
+			centerDiv = new Div();
+			rightDiv = new Div();
+			rightDiv.addClassName("accordion-div");
+			
+			configureBanner();
+			
+			add(leftDiv,
+				centerDiv, 
+				rightDiv);
+		}
 
+
+		public HeadBanner(H2 sectionTitle, Div leftDiv, Div rightDiv, Accordion info) {
+			super();
+			this.sectionTitle = sectionTitle;
+			this.leftDiv = leftDiv;
+			this.rightDiv = rightDiv;
+			this.info = info;
+		}
+		
+		public H2 getSectionTitle() {
+			return sectionTitle;
+		}
+
+
+		public void setSectionTitle(H2 sectionTitle) {
+			this.sectionTitle = sectionTitle;
+		}
+
+
+		public Div getLeftDiv() {
+			return leftDiv;
+		}
+
+
+		public void setLeftDiv(Div leftDiv) {
+			this.leftDiv = leftDiv;
+		}
+
+
+		public Div getRightDiv() {
+			return rightDiv;
+		}
+
+
+		public void setRightDiv(Div rightDiv) {
+			this.rightDiv = rightDiv;
+		}
+
+
+		public Accordion getInfo() {
+			return info;
+		}
+
+
+		public void setInfo(Accordion info) {
+			this.info = info;
+		}
+		
+		private void configureBanner(){
+			String departuresTitle = (i18NProvider.getTranslation("departures", getLocale()));
+			
+			centerDiv.getStyle().set("min-width", "0");
+			centerDiv.getStyle().set("flex-grow", "1");
+			centerDiv.setWidthFull();
+			
+			info = new Accordion();
+			Span email = new Span("Email: brunodev.pdl@gmail.com");
+			Span github = new Span("Github: https://github.com/brunovt074/airport-management");
+			Span linkedin = new Span("Linkedin: https://www.linkedin.com/in/bruno-vargas-tettamanti-developer/");
+			
+			VerticalLayout contactLayout = new VerticalLayout(email,
+															github,
+															linkedin);
+			contactLayout.setSpacing(false);
+			contactLayout.setPadding(false);
+			
+			info.add("Contact",contactLayout);
+			
+			rightDiv.add(info);
+		}
+		
+	}
 }

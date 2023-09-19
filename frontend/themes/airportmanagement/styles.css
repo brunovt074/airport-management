@@ -8,11 +8,13 @@
 	.flights-search-field{
 		max-width: 70%;
 	}
-	.toolbar {
-				
-		flex-direction: column-reverse;
-		
-	}	
+	.toolbar {				
+		flex-direction: column-reverse;		
+	}
+	vaadin-tab::before{
+		visibility: collapse;
+	}
+	
 }
 
 @media all and (max-width: 800px) {
@@ -52,6 +54,10 @@ a[highlight] {
     text-decoration: underline;    
 }
 
+vaadin-context-menu-item[selected]{
+	color:#cad787;
+}
+
 .flight-form{
 	margin-top: 0px;
 	padding-top: 0px;	
@@ -83,17 +89,21 @@ a[highlight] {
 	background-color:#21130d;	
 }
 
-.about-tab{
-	color: #cad787;
+.info-tab{
+	color: #cad787;		
+	display:inline;
+}
+
+.about-button{
+	display:inline-block;
 }
 
 vaadin-tab::before{
 	color: #cad787;	
 }
 
-vaadin-tab::before{
-	
-	background-color: #cad787;	
+.toggle-mode-icon{	
+	color: #cad787;	
 }
 
 .toggle-div{
