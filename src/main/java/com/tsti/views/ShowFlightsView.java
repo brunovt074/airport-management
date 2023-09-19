@@ -35,10 +35,13 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import jakarta.annotation.security.PermitAll;
+
 /**
  *Flights Index Layout 
  **/
-@Route(value="/flights", layout = MainLayout.class)
+@PermitAll
+@Route(value="", layout = MainLayout.class)
 @PageTitle("Flights")
 public class ShowFlightsView extends VerticalLayout{
 	

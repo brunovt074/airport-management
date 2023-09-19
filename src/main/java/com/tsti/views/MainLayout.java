@@ -1,7 +1,7 @@
 package com.tsti.views;
 
 import com.tsti.i18n.AppI18NProvider;
-
+import com.tsti.security.SecurityService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
@@ -27,20 +27,24 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import jakarta.annotation.security.PermitAll;
+
 /**
  * Main Layout de la aplicación / Application's Main Layout
  **/
-@Route("")
+//PermitAll()
+//@Route("")
 //@JsModule("prefers-color-scheme.js")
 public class MainLayout extends AppLayout{
 
 	private static final long serialVersionUID = 2007966093366404191L;
-	
+	private final SecurityService securityService;
 	private final AppI18NProvider i18NProvider;	
 	private String contactLabel;
 	private String appInfoLabel;
 	
-	public MainLayout(AppI18NProvider i18NProvider) {
+	public MainLayout(AppI18NProvider i18NProvider, SecurityService securityService) {
+		this.securityService = securityService;
 		this.i18NProvider = i18NProvider;		
 		this.contactLabel = i18NProvider.getTranslation("contact-tab", getLocale());
 		this.appInfoLabel = i18NProvider.getTranslation("app-info-tab", getLocale()); 
@@ -79,16 +83,15 @@ public class MainLayout extends AppLayout{
 	}
 	
 	private void createNavBar() {
+		String u = securityService.getAuthenticatedUser().getUsername();
 		String titleText = i18NProvider.getTranslation("title", getLocale());
-			
 		H2 title = new H2(titleText);		
-		
 		Image logo = new Image("themes/airportmanagement/images/logo-1-t.png", titleText);		
-		
 		logo.addClassName("logo");		
-		
 		title.addClassNames(LumoUtility.FontSize.LARGE,
 				   LumoUtility.Margin.MEDIUM);
+		Button logout = new Button("Log out", e -> securityService.logout());
+		
 		Div logoDiv = new Div();
 		Div backgroundDiv = new Div();
 		Div toggleModeDiv = new Div();
@@ -113,7 +116,7 @@ public class MainLayout extends AppLayout{
 		darkLightToggleButton.addClassName("toggle-button");		
 		toggleModeDiv.add(darkLightToggleButton);		
 		
-		HorizontalLayout header = new HorizontalLayout(logoDiv,backgroundDiv,infoDiv,toggleModeDiv);
+		HorizontalLayout header = new HorizontalLayout(logoDiv,backgroundDiv,infoDiv,toggleModeDiv, logout);
 		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);		
 		header.setWidthFull();		
 		header.addClassNames(LumoUtility.Padding.Vertical.NONE,

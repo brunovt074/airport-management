@@ -83,6 +83,11 @@ vaadin-context-menu-item[selected]{
     flex-grow: 1;	
 }
 
+.logout-button{
+	background-color: #cad787;
+	color:#21130d;
+}
+
 .navbar{
 	height:5em;
 	display:flexbox;		
