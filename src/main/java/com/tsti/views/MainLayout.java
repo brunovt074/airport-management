@@ -16,6 +16,7 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -44,8 +45,7 @@ public class MainLayout extends AppLayout{
 		this.contactLabel = i18NProvider.getTranslation("contact-tab", getLocale());
 		this.appInfoLabel = i18NProvider.getTranslation("app-info-tab", getLocale()); 
 		
-		createNavBar();		
-		//createDrawer();
+		createNavBar();	
 		
 	}
 	
@@ -158,7 +158,7 @@ public class MainLayout extends AppLayout{
 		H5 linkedinTitle = new H5("Linkedin:");
 		H5 githubTitle = new H5("Github:");		
 		H5 emailTitle = new H5("Email:");
-		Anchor email = new Anchor("brunodev.pdl@gmail.com","brunodev.pdl@gmail.com");
+		Span email = new Span("brunodev.pdl@gmail.com");
 		Anchor github = new Anchor("https://github.com/brunovt074","https://github.com/brunovt074");
 		Anchor linkedin = new Anchor("https://www.linkedin.com/in/bruno-vargas-tettamanti-developer/", "https://www.linkedin.com/in/bruno-vargas-tettamanti-developer/");		
 		contactTitle.getStyle().setTextDecoration("underline");
@@ -166,10 +166,9 @@ public class MainLayout extends AppLayout{
 		contactTitle.addClassName("contact-title");
 		linkedinTitle.addClassName("linkedin-title");
 		githubTitle.addClassName("github-title");
-		emailTitle.addClassName("email-title");
-		
+		emailTitle.addClassName("email-title");		
 		menu.addClassName("app-info-menu");
-		
+				
 		menu.setOpenOnClick(true);
 		//about
 		menu.addItem(new Button(appInfoLabel), e -> aboutDialog().open());

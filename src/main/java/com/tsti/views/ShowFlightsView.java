@@ -11,43 +11,33 @@ import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
-import com.vaadin.flow.component.accordion.Accordion;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
-import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoIcon;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ *Flights Index Layout 
+ **/
 @Route(value="/flights", layout = MainLayout.class)
 @PageTitle("Flights")
 public class ShowFlightsView extends VerticalLayout{
@@ -69,22 +59,14 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	//Labels
 	private String flightIdLabel;
-	private String airlineLabel;
-	private String aircraftLabel;
-	//private String departureLabel;
+	private String airlineLabel;	
 	private String arrivalLabel;
 	private String priceLabel;
 	private String typeLabel;	
 	private String dateLabel;
 	private String hourLabel;
 	private String statusLabel;
-	private String newFlightLabel;
-	private String rescheduleFlightLabel;
-	private String deleteFlightLabel;
-	private String nullFlightErrorMessage;
-	//private String seatsLabelocale());		
-	//private String showHideMenuLabelLocale());
-	//private String editLabel;
+	private String nullFlightErrorMessage;	
 	
 	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, CiudadDAO ciudadDao, VueloServiceImpl vueloService, CiudadServiceImpl ciudadService) {
 	    
@@ -193,7 +175,6 @@ public class ShowFlightsView extends VerticalLayout{
 	}
 
 	private void configureGrid() {
-		List<Vuelo> vuelos = vueloDao.findAll();		
 		
 		grid.addClassName("flights-grid");		
     	grid.setSizeFull();
@@ -205,8 +186,7 @@ public class ShowFlightsView extends VerticalLayout{
     	
     	//NroVuelo
     	grid.addColumn(Vuelo::getNroVuelo).setHeader(flightIdLabel)
-    							//.setFrozen(true)
-    							//.setFooter(createFooterText(vuelos))
+    							.setFrozen(true)    							
     							.setSortable(true).setKey("idColumn");
     	//Airline
     	grid.addColumn(Vuelo::getAerolinea).setHeader(airlineLabel)
@@ -222,11 +202,7 @@ public class ShowFlightsView extends VerticalLayout{
     	grid.addColumn(Vuelo::getHoraPartida)
     			.setHeader(hourLabel)
     			.setKey("hourColumn");        
-    	//Departure
-//    	grid.addColumn(vuelo -> vuelo.getOrigen().getNombreCiudad()
-//        	+ ", " + vuelo.getOrigen().getPais()).setHeader(departureLabel)
-//        						.setSortable(true)
-//        						.setResizable(true);        
+    	        
         //Arrival
     	grid.addColumn(vuelo -> vuelo.getDestino().getNombreCiudad()
         	+ ", " + vuelo.getDestino().getPais()).setHeader(arrivalLabel)
@@ -254,49 +230,11 @@ public class ShowFlightsView extends VerticalLayout{
         						.setVisible(false);  	
     	
     	
-//        //Aircraft
-//    	grid.addColumn(Vuelo::getAvion).setHeader(aircraftLabel)
-//        						.setSortable(true)
-//        						.setResizable(true)
-//        						.setKey("aircraftColumn")
-//        						.setVisible(false);
-    	//Abrir editor con un solo click    	
-//    	grid.asSingleSelect().addValueChangeListener(event ->
-//    			editFlight(event.getValue()));
-    	
-    	//Abrir editor con boton reschedule
-//    	grid.addItemDoubleClickListener();
-    	//grid.addSelectionListener(null);
-    	//grid.getTabIndex();    	
-    	//grid.
-    	
-    	
     	grid.getColumns().forEach(column -> column.setAutoWidth(true));
     	grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES); 
-    	
-        //add(grid);
+    		
+	}	
 		
-	}
-	
-	private Div optionsBarDiv() {
-		
-		Div optionsBarDiv = new Div(getMenuBar());		
-		
-		
-		optionsBarDiv.addClassName("toolbar-div");
-		
-		
-		return optionsBarDiv;
-		
-	}
-
-	private String createFooterText(List<Vuelo> vuelos) {
-		String totalFlightsLabel = i18NProvider.getTranslation("total-flights", getLocale());
-		long flightCount = vuelos.stream().count();
-		
-		return String.format(totalFlightsLabel + "%s", flightCount);
-	}
-	
 	private void deleteFlight(FlightForm.DeleteEvent event) {
 		try {
 			
@@ -357,26 +295,7 @@ public class ShowFlightsView extends VerticalLayout{
 		content.setSizeFull();
 		
 		return content;
-	}
-	
-	
-	 private MenuBar getMenuBar() { 
-		String newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
-		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
-		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
-		
-		MenuBar optionsBar = new MenuBar();		
-		
-		optionsBar.addItem(newFlightLabel, e -> newFlight());
-		optionsBar.addItem(rescheduleFlightLabel, e -> rescheduleFlight());
-		optionsBar.addItem(cancelFlightLabel, e -> cancelFlight());
-		
-		optionsBar.addThemeVariants(MenuBarVariant.LUMO_END_ALIGNED);
-		optionsBar.addClassName("options-bar"); 
-		 
-		return optionsBar; 
-		 
-	 }	
+	} 
 	
 	private HorizontalLayout getToolbar() {
 		//Filter
@@ -385,13 +304,7 @@ public class ShowFlightsView extends VerticalLayout{
 		String rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
 		String cancelFlightLabel = i18NProvider.getTranslation("cancel-flight", getLocale());
 		String showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
-		
-		
-		//MenuBar optionsBar = getMenuBar();		
-		
-//		optionsBar.addItem(newFlightLabel, e -> newFlight());
-//		optionsBar.addItem(rescheduleFlightLabel, e -> rescheduleFlight());
-		
+				
 		//Create buttons
 		//Add Contact Button		
 		Button newFlightButton = new Button(newFlightLabel);
@@ -470,23 +383,14 @@ public class ShowFlightsView extends VerticalLayout{
 	private void initializeLabels() {
 		//Labels
 		flightIdLabel = i18NProvider.getTranslation("flight-id", getLocale());
-		airlineLabel = i18NProvider.getTranslation("airline", getLocale());
-		aircraftLabel = i18NProvider.getTranslation("aircraft", getLocale());
-		//departureLabel = i18NProvider.getTranslation("departure", getLocale());
+		airlineLabel = i18NProvider.getTranslation("airline", getLocale());		
 		arrivalLabel = i18NProvider.getTranslation("arrival", getLocale());
 		priceLabel = i18NProvider.getTranslation("price", getLocale());
 		typeLabel = i18NProvider.getTranslation("type", getLocale());
-		//String dateHourLabel = i18NProvider.getTranslation("date-hour", getLocale());
 		dateLabel = i18NProvider.getTranslation("departure-date", getLocale());
 		hourLabel = i18NProvider.getTranslation("departure-hour", getLocale());
 		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
-		newFlightLabel = i18NProvider.getTranslation("new-flight", getLocale());
-		rescheduleFlightLabel = i18NProvider.getTranslation("edit-flight", getLocale());
-		deleteFlightLabel = i18NProvider.getTranslation("delete", getLocale());
-		nullFlightErrorMessage = i18NProvider.getTranslation("null-flight", getLocale());
-		//seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());		
-		//showHideMenuLabel = i18NProvider.getTranslation("sh-menu-title", getLocale());
-		
+		nullFlightErrorMessage = i18NProvider.getTranslation("null-flight", getLocale());		
 		
 	}
 	
@@ -622,104 +526,6 @@ public class ShowFlightsView extends VerticalLayout{
 			menuItem.setChecked(setVisibility);			
 		}		
 		
-	}	
-	
-	private static class HeadBanner extends HorizontalLayout{
-		String title;
-		H2 sectionTitle;		
-		Div leftDiv;
-		Div centerDiv; 
-		Div rightDiv;
-		Accordion info = new Accordion();
-				
-		
-		public HeadBanner() {
-			super();
-			title = i18NProvider.getTranslation("departures", getLocale());
-			sectionTitle = new H2(title);			
-			
-			leftDiv = new Div(sectionTitle);
-			centerDiv = new Div();
-			rightDiv = new Div();
-			rightDiv.addClassName("accordion-div");
-			
-			configureBanner();
-			
-			add(leftDiv,
-				centerDiv, 
-				rightDiv);
-		}
-
-
-		public HeadBanner(H2 sectionTitle, Div leftDiv, Div rightDiv, Accordion info) {
-			super();
-			this.sectionTitle = sectionTitle;
-			this.leftDiv = leftDiv;
-			this.rightDiv = rightDiv;
-			this.info = info;
-		}
-		
-		public H2 getSectionTitle() {
-			return sectionTitle;
-		}
-
-
-		public void setSectionTitle(H2 sectionTitle) {
-			this.sectionTitle = sectionTitle;
-		}
-
-
-		public Div getLeftDiv() {
-			return leftDiv;
-		}
-
-
-		public void setLeftDiv(Div leftDiv) {
-			this.leftDiv = leftDiv;
-		}
-
-
-		public Div getRightDiv() {
-			return rightDiv;
-		}
-
-
-		public void setRightDiv(Div rightDiv) {
-			this.rightDiv = rightDiv;
-		}
-
-
-		public Accordion getInfo() {
-			return info;
-		}
-
-
-		public void setInfo(Accordion info) {
-			this.info = info;
-		}
-		
-		private void configureBanner(){
-			String departuresTitle = (i18NProvider.getTranslation("departures", getLocale()));
-			
-			centerDiv.getStyle().set("min-width", "0");
-			centerDiv.getStyle().set("flex-grow", "1");
-			centerDiv.setWidthFull();
-			
-			info = new Accordion();
-			Span email = new Span("Email: brunodev.pdl@gmail.com");
-			Span github = new Span("Github: https://github.com/brunovt074/airport-management");
-			Span linkedin = new Span("Linkedin: https://www.linkedin.com/in/bruno-vargas-tettamanti-developer/");
-			
-			VerticalLayout contactLayout = new VerticalLayout(email,
-															github,
-															linkedin);
-			contactLayout.setSpacing(false);
-			contactLayout.setPadding(false);
-			
-			info.add("Contact",contactLayout);
-			
-			rightDiv.add(info);
-		}
-		
 	}
+	
 }

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import com.tsti.dao.CiudadDAO;
 import com.tsti.entidades.Ciudad;
@@ -12,6 +11,7 @@ import com.tsti.entidades.Vuelo;
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
+
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -23,7 +23,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -34,8 +33,7 @@ import com.vaadin.flow.shared.Registration;
 public class FlightForm extends FormLayout{
 		
 	private static final long serialVersionUID = 5593602849999149819L;
-	private final AppI18NProvider i18NProvider;
-	private final CiudadDAO ciudadDAO;
+	private final AppI18NProvider i18NProvider;	
 	private final VueloServiceImpl vueloService;
 	private final CiudadServiceImpl ciudadService;
 	
@@ -75,8 +73,7 @@ public class FlightForm extends FormLayout{
 	
 	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO, VueloServiceImpl service, CiudadServiceImpl ciudadService) {
 		super();
-		this.i18NProvider = i18nProvider;		
-		this.ciudadDAO = ciudadDAO;
+		this.i18NProvider = i18nProvider;	
 		this.vueloService = service;
 		this.ciudadService = ciudadService;
 		
@@ -253,10 +250,6 @@ public class FlightForm extends FormLayout{
 
 	public String getAerolineaValue() {
 		return aerolinea.getValue();
-	}
-
-	public void setAerolinea(ComboBox aerolinea) {
-		this.aerolinea = aerolinea;
 	}
 
 	public LocalDate getFechaPartidaValue() {
