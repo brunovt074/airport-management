@@ -23,17 +23,13 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.ThemeList;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-
-import jakarta.annotation.security.PermitAll;
 
 /**
  * Main Layout de la aplicación / Application's Main Layout
  **/
-//PermitAll()
-//@Route("")
+
 //@JsModule("prefers-color-scheme.js")
 public class MainLayout extends AppLayout{
 
