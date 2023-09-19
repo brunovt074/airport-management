@@ -26,12 +26,16 @@
 
 @media(max-width: 537px){
 	.flights-search-field{
-		max-width: 100%;
-	}
+		max-width: 100%;		
+	}	
 		
 }
 
 @media(max-width: 417px){
+	
+	.left-div{
+		margin-bottom: 4%;		
+	}
 			
 	.options-nav-button{
 		display:flex;						
@@ -69,6 +73,13 @@ vaadin-context-menu-item[selected]{
 	padding-top: 0px;
 }
 
+.left-div{
+	display:flex;			
+}
+
+.login-header-div{
+	margin-top:6em;
+}
 .logo{	
 	height: 5rem;		
 }
@@ -84,8 +95,11 @@ vaadin-context-menu-item[selected]{
 }
 
 .logout-button{
-	background-color: #cad787;
-	color:#21130d;
+	background-color:#21130d;
+	color: #cad787;
+	border:2px solid #cad787;
+	border-radius: 4px;
+  	cursor: pointer;	
 }
 
 .navbar{
@@ -95,16 +109,16 @@ vaadin-context-menu-item[selected]{
 }
 
 .info-tab{
-	color: #cad787;		
-	display:inline;
-}
-
-.about-button{
-	display:inline-block;
-}
-
-vaadin-tab::before{
 	color: #cad787;	
+	cursor: pointer;
+}
+
+.toggle-button{
+	cursor: pointer;
+}
+
+.options-nav-button{
+	cursor: pointer;						
 }
 
 .toggle-mode-icon{	
@@ -113,4 +127,20 @@ vaadin-tab::before{
 
 .toggle-div{
 	max-height: 5em;	
+}
+vaadin-button{
+	cursor: pointer;	
+}
+
+vaadin-login-form vaadin-button[theme~="submit"]{
+	
+	background-color: darkolivegreen;
+}
+
+vaadin-login-form [slot="forgot-password"]{
+	color: darkolivegreen;
+}
+
+vaadin-tab::before{
+	color: #cad787;	
 }

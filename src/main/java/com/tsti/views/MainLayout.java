@@ -79,48 +79,46 @@ public class MainLayout extends AppLayout{
 	}
 	
 	private void createNavBar() {
-		String u = securityService.getAuthenticatedUser().getUsername();
 		String titleText = i18NProvider.getTranslation("title", getLocale());
+		String infoTooltipText = i18NProvider.getTranslation("info-tooltip", getLocale());		
 		H2 title = new H2(titleText);		
-		Image logo = new Image("themes/airportmanagement/images/logo-1-t.png", titleText);		
+		Image logo = new Image("themes/airportmanagement/images/logo-1-t.png", titleText);
+		Button info = new Button(new Icon(VaadinIcon.INFO_CIRCLE));
+		info.setTooltipText(infoTooltipText);
+		setInfoMenu(info);
+		Button darkLightToggleButton = getDarkLightToggleButton();
+		Button logout = new Button("Log out", e -> securityService.logout());
+		
 		logo.addClassName("logo");		
 		title.addClassNames(LumoUtility.FontSize.LARGE,
 				   LumoUtility.Margin.MEDIUM);
-		Button logout = new Button("Log out", e -> securityService.logout());
+		info.addClassName("info-tab");
+		darkLightToggleButton.addClassName("toggle-button");
+		logout.addClassName("logout-button");
 		
-		Div logoDiv = new Div();
-		Div backgroundDiv = new Div();
-		Div toggleModeDiv = new Div();
-		Div infoDiv = new Div();
-		
+		Div logoDiv = new Div(logo);
+		Div backgroundDiv = new Div();		
+		Div leftDiv = new Div(info,darkLightToggleButton,logout);
+				
 		logoDiv.addClassName("logo-div");
 		backgroundDiv.addClassName("background-div");
-		toggleModeDiv.addClassName("toggle-div");
-		infoDiv.addClassName("tab-div"); 
-		
 		backgroundDiv.getStyle().set("min-width", "0");
 		backgroundDiv.getStyle().set("flex-grow", "1");
+		leftDiv.addClassName("left-div");
+		
+		HorizontalLayout navbar = new HorizontalLayout(logoDiv,backgroundDiv,leftDiv);		
+		navbar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);		
+		navbar.setWidthFull();
+		navbar.addClassName("navbar");
+		navbar.addClassNames(LumoUtility.Padding.Vertical.NONE,
+				 LumoUtility.Padding.Horizontal.NONE);	
+		
+		addToNavbar(navbar);
 				
-		Button info = new Button(new Icon(VaadinIcon.INFO_CIRCLE));		
-		setInfoMenu(info);
-		
-		info.addClassName("info-tab");		
-		logoDiv.add(logo);		
-		infoDiv.add(info);	
-		
-		Button darkLightToggleButton = getDarkLightToggleButton();
-		darkLightToggleButton.addClassName("toggle-button");		
-		toggleModeDiv.add(darkLightToggleButton);		
-		
-		HorizontalLayout header = new HorizontalLayout(logoDiv,backgroundDiv,infoDiv,toggleModeDiv, logout);
-		header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);		
-		header.setWidthFull();		
-		header.addClassNames(LumoUtility.Padding.Vertical.NONE,
-				 LumoUtility.Padding.Horizontal.NONE);
-		
-		header.addClassName("navbar");		
-		
-		addToNavbar(header);
+		//logoDiv.add(logo);		
+		//infoDiv.add(info);	
+				
+		//toggleModeDiv.add(darkLightToggleButton);	
 		
 	}	
 	

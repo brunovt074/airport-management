@@ -1,6 +1,6 @@
 package com.tsti.views;
 import com.tsti.i18n.AppI18NProvider;
-
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *entire browser window, so don’t use MainLayout as the parent. 
  * 
  **/
-@Route("loginForm")
+@Route(value="loginForm", layout = MainLayout.class)
 @PageTitle("Login | Ibera Airport")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver{
@@ -37,6 +37,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 		addClassName("loginForm-view");
 		
 		H1 h1 = new H1(i18nProvider.getTranslation("login-h1", getLocale()));
+		Div h1Div = new Div(h1);
+		h1Div.addClassName("login-header-div");
 		String loginDescription = i18nProvider.getTranslation("login-description", getLocale());
 		h1.getStyle().setTextAlign(Style.TextAlign.CENTER);
 		
@@ -83,7 +85,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 		//to Spring Security.		
 		loginForm.setAction("loginForm");		
 		
-		add(h1, loginForm);		
+		add(h1Div, loginForm);		
 	}
 	
 	@Override
