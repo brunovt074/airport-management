@@ -11,7 +11,7 @@ import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
 
 /**
- * @author JOA
+ * @author bruno
  *
  */
 public class PasajeDTO extends RepresentationModel<PasajeDTO> {

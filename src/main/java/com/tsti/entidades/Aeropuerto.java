@@ -3,13 +3,17 @@ package com.tsti.entidades;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 /**
  * @author Bruno
  *
  */
+@Entity
+@Table(name = "aeropuertos")
 public class Aeropuerto {
 	@Id
 	private String icao;
