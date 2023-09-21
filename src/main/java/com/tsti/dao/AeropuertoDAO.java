@@ -3,14 +3,14 @@ package com.tsti.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tsti.entidades.Ciudad;
+import com.tsti.entidades.Aeropuerto;
 /**
  * @author Bruno
  *
  */
 
 @Repository
-public interface AeropuertoDAO extends JpaRepository<Ciudad, String>{
+public interface AeropuertoDAO extends JpaRepository<Aeropuerto, String>{
 
 	public boolean existsByIcao(String icao);
 	public boolean existsByName(String name);

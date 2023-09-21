@@ -6,6 +6,7 @@ import java.util.Objects;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -19,10 +20,16 @@ public class Aeropuerto {
 	private String icao;
 	private String iata;
 	@NotNull
+	@NotEmpty
 	private String name;
 	@NotNull
+	@NotEmpty
+	private String city;
+	@NotNull
+	@NotEmpty
 	private String state;
 	@NotNull
+	@NotEmpty
 	private String country;
 	private Integer elevation;
 	private BigDecimal lat;
@@ -70,6 +77,14 @@ public class Aeropuerto {
 
 	public void setName(String name) {
 		this.name = name;
+	}	
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getState() {
