@@ -9,9 +9,7 @@ import com.tsti.entidades.Vuelo.TipoVuelo;
 import org.springframework.stereotype.Service;
 
 import com.tsti.dto.VueloDTO;
-import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.EstadoVuelo;
-import com.tsti.entidades.Vuelo.TipoVuelo;
 import com.tsti.excepcion.VueloException;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;

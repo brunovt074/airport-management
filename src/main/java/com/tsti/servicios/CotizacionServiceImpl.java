@@ -5,10 +5,8 @@ package com.tsti.servicios;
 
 import java.math.BigDecimal;
 
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.tsti.dto.CotizacionDolarDTO;

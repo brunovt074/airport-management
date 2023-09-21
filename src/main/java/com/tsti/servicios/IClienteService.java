@@ -2,15 +2,15 @@ package com.tsti.servicios;
 import java.util.List;
 import java.util.Optional;
 
-import com.tsti.dto.ClienteResponseDTO;
+import org.springframework.stereotype.Service;
 
-import com.tsti.dao.ClienteDAO;
 import com.tsti.entidades.Clientes;
 /**
  * 
- * @author cecilia
+ * @author bruno
  * 
  */
+@Service
 public interface IClienteService {
 	
 
