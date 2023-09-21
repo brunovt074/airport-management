@@ -58,10 +58,6 @@ a[highlight] {
     text-decoration: underline;    
 }
 
-vaadin-context-menu-item[selected]{
-	color:#cad787;
-}
-
 .flight-form{
 	margin-top: 0px;
 	padding-top: 0px;	
@@ -77,9 +73,29 @@ vaadin-context-menu-item[selected]{
 	display:flex;			
 }
 
-.login-header-div{
-	margin-top:6em;
+.login-banner{
+	display:none;
+	align-self:center;	
+	height: 6em;    
 }
+
+.login-header-div{
+	
+	background-color:#21130d;
+	border-radius: 4px;	
+	margin-top:8em;
+	
+	
+}
+
+.login-view{
+  background-image: url("themes/airportmanagement/images/login-bg.webp");
+  background-position:center;
+  background-size:cover;
+  display:auto;
+  height:500px;
+}
+
 .logo{	
 	height: 5rem;		
 }
@@ -128,8 +144,17 @@ vaadin-context-menu-item[selected]{
 .toggle-div{
 	max-height: 5em;	
 }
+
+vaadin-tab::before{
+	color: #cad787;	
+}
+
 vaadin-button{
 	cursor: pointer;	
+}
+
+vaadin-context-menu-item[selected]{
+	color:#cad787;
 }
 
 vaadin-login-form vaadin-button[theme~="submit"]{
@@ -141,6 +166,25 @@ vaadin-login-form [slot="forgot-password"]{
 	color: darkolivegreen;
 }
 
-vaadin-tab::before{
-	color: #cad787;	
+vaadin-login-overlay-wrapper::part(brand){
+	max-height: 4em;
+	align-self: center;
+	border-radius: 4px;
+	max-width: 50%;	
+    background-color: #21130d;
 }
+
+vaadin-login-overlay-wrapper::part(form){
+	align-self: center;
+	max-width: 50%;
+	min-width: 0;
+	flex-grow: 1;
+    display: flex;
+    
+	
+}
+vaadin-login-form-wrapper{
+	border-radius: 4px;
+	box-shadow:1px 1px 1px #cad787;	
+}
+

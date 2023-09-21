@@ -1,5 +1,7 @@
 package com.tsti.views;
 
+import java.util.function.Consumer;
+
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.security.SecurityService;
 import com.vaadin.flow.component.UI;
@@ -23,6 +25,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.ThemeList;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
@@ -31,13 +35,15 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
  **/
 
 //@JsModule("prefers-color-scheme.js")
-public class MainLayout extends AppLayout{
+public class MainLayout extends AppLayout implements RouterLayout{
 
 	private static final long serialVersionUID = 2007966093366404191L;
 	private final SecurityService securityService;
 	private final AppI18NProvider i18NProvider;	
 	private String contactLabel;
 	private String appInfoLabel;
+	private String currentUrl;
+	private final String loginUrl = RouteConfiguration.forSessionScope().getUrl(LoginView.class);
 	
 	public MainLayout(AppI18NProvider i18NProvider, SecurityService securityService) {
 		this.securityService = securityService;
@@ -47,6 +53,7 @@ public class MainLayout extends AppLayout{
 		
 		createNavBar();	
 		
+		addClassName("main-layout");
 	}
 	
 	private Dialog aboutDialog() {
@@ -95,10 +102,18 @@ public class MainLayout extends AppLayout{
 		info.addClassName("info-tab");
 		darkLightToggleButton.addClassName("toggle-button");
 		logout.addClassName("logout-button");
+		logout.setId("logout-button");
 		
 		Div logoDiv = new Div(logo);
-		Div backgroundDiv = new Div();		
-		Div leftDiv = new Div(info,darkLightToggleButton,logout);
+		Div backgroundDiv = new Div();
+		Div leftDiv = new Div(info,darkLightToggleButton);
+		
+		isLoginView(fullUrl -> {
+		    if (!fullUrl.contains(loginUrl)) {
+		        leftDiv.add(logout);
+		    }
+		});
+		
 				
 		logoDiv.addClassName("logo-div");
 		backgroundDiv.addClassName("background-div");
@@ -115,12 +130,7 @@ public class MainLayout extends AppLayout{
 		
 		addToNavbar(navbar);
 				
-		//logoDiv.add(logo);		
-		//infoDiv.add(info);	
-				
-		//toggleModeDiv.add(darkLightToggleButton);	
-		
-	}	
+	}
 	
 	private Button getDarkLightToggleButton() {
 		String tooltipText = i18NProvider.getTranslation("dark-light-button", getLocale());
@@ -144,6 +154,14 @@ public class MainLayout extends AppLayout{
 		return toggleButton;		
 				
 	}
+	
+	private void isLoginView(Consumer<String> currentUrlConsumer) {
+	    	    
+	    this.getElement().executeJs("return window.location.pathname;").then(fullurl -> {
+	        currentUrl = fullurl.asString(); // Asigna el valor a currentUrl	        
+	        currentUrlConsumer.accept(currentUrl); // Pasa el valor a través del Consumer
+	    });
+	}	
 	
 	private void setInfoMenu(Button button) {
 		

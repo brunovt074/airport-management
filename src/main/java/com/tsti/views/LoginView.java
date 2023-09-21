@@ -2,8 +2,10 @@ package com.tsti.views;
 import com.tsti.i18n.AppI18NProvider;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
+import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -20,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *entire browser window, so don’t use MainLayout as the parent. 
  * 
  **/
-@Route(value="loginForm", layout = MainLayout.class)
+@Route(value="loginForm",layout = MainLayout.class)
 @PageTitle("Login | Ibera Airport")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver{
@@ -31,16 +33,18 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 	private final LoginForm loginForm = new LoginForm();
 	private LoginI18n loginI18n = LoginI18n.createDefault();
 	private final AppI18NProvider i18nProvider = new AppI18NProvider();
+	private final String title = i18nProvider.getTranslation("login-h1", getLocale());
 	
 	public LoginView(HttpServletRequest request) {
 				
-		addClassName("loginForm-view");
-		
-		H1 h1 = new H1(i18nProvider.getTranslation("login-h1", getLocale()));
-		Div h1Div = new Div(h1);
-		h1Div.addClassName("login-header-div");
+		addClassName("login-view");		
+		Image banner = new Image("themes/airportmanagement/images/logo-1-t.png", title);
+		Image bgImage = new Image("themes/airportmanagement/images/login-bg.png", "");
+		banner.addClassName("login-banner");
+		Div headerDiv = new Div(banner);
+		headerDiv.addClassName("login-header-div");
 		String loginDescription = i18nProvider.getTranslation("login-description", getLocale());
-		h1.getStyle().setTextAlign(Style.TextAlign.CENTER);
+		//h1.getStyle().setTextAlign(Style.TextAlign.CENTER);
 		
 		if(getLocale().getLanguage().equalsIgnoreCase("es") || getLocale().getLanguage().equalsIgnoreCase("pt")) {	
 			
@@ -85,7 +89,10 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 		//to Spring Security.		
 		loginForm.setAction("loginForm");		
 		
-		add(h1Div, loginForm);		
+		
+		add(headerDiv,
+			loginForm);
+		
 	}
 	
 	@Override

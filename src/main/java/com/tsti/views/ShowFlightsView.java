@@ -94,7 +94,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    	getToolbar(),
 	    	getContent());
 	    
-	    closeEditor();
+	    closeEditor();	    
 	    
 	}
 	
