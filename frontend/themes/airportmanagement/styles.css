@@ -89,10 +89,12 @@ a[highlight] {
 }
 
 .login-view{
-  background-image: url("themes/airportmanagement/images/login-bg.webp");
-  background-position:center;
-  background-size:cover;  
-  
+	
+	background-image: url("themes/airportmanagement/images/login-bg.webp");
+	background-position:center;
+	background-size:cover;
+ 	
+		
 }
 
 .logo{	
@@ -155,6 +157,11 @@ vaadin-button{
 vaadin-context-menu-item[selected]{
 	color:#cad787;
 }
+
+vaadin-login-form {
+	
+				
+	}
 
 vaadin-login-form vaadin-button[theme~="submit"]{
 	
