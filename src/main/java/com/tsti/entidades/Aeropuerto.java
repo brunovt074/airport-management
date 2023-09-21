@@ -3,7 +3,10 @@ package com.tsti.entidades;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,19 +20,18 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "aeropuertos")
 public class Aeropuerto {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column(name = "icao", unique = true)
 	private String icao;
 	private String iata;
-	@NotNull
-	@NotEmpty
+	@NotNull	
 	private String name;
-	@NotNull
-	@NotEmpty
+	@NotNull	
 	private String city;
-	@NotNull
-	@NotEmpty
+	@NotNull	
 	private String state;
-	@NotNull
-	@NotEmpty
+	@NotNull	
 	private String country;
 	private Integer elevation;
 	private BigDecimal lat;
