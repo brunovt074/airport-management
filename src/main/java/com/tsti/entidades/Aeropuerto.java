@@ -3,12 +3,18 @@ package com.tsti.entidades;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Aeropuerto {
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
+public class Aeropuerto {
+	@Id
 	private String icao;
 	private String iata;
+	@NotNull
 	private String name;
+	@NotNull
 	private String state;
+	@NotNull
 	private String country;
 	private Integer elevation;
 	private BigDecimal lat;
