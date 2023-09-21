@@ -91,9 +91,8 @@ a[highlight] {
 .login-view{
   background-image: url("themes/airportmanagement/images/login-bg.webp");
   background-position:center;
-  background-size:cover;
-  display:auto;
-  height:500px;
+  background-size:cover;  
+  
 }
 
 .logo{	
@@ -166,23 +165,6 @@ vaadin-login-form [slot="forgot-password"]{
 	color: darkolivegreen;
 }
 
-vaadin-login-overlay-wrapper::part(brand){
-	max-height: 4em;
-	align-self: center;
-	border-radius: 4px;
-	max-width: 50%;	
-    background-color: #21130d;
-}
-
-vaadin-login-overlay-wrapper::part(form){
-	align-self: center;
-	max-width: 50%;
-	min-width: 0;
-	flex-grow: 1;
-    display: flex;
-    
-	
-}
 vaadin-login-form-wrapper{
 	border-radius: 4px;
 	box-shadow:1px 1px 1px #cad787;	

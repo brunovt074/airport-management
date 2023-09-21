@@ -90,8 +90,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 		loginForm.setAction("loginForm");		
 		
 		
-		add(headerDiv,
-			loginForm);
+		add(loginForm);
 		
 	}
 	
