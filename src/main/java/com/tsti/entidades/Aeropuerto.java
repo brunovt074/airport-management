@@ -6,6 +6,10 @@ import java.util.Objects;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * @author Bruno
+ *
+ */
 public class Aeropuerto {
 	@Id
 	private String icao;
