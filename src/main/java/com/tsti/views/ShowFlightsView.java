@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.tsti.dao.AeropuertoDAO;
 import com.tsti.dao.VueloDAO;
 import com.tsti.entidades.Vuelo;
+import com.tsti.entidades.Vuelo.TipoVuelo;
 import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
@@ -211,7 +212,17 @@ public class ShowFlightsView extends VerticalLayout{
     							.setResizable(true)
     							.setKey("arrivalColumn");
     	//Price
-    	grid.addColumn(Vuelo::getPrecioNeto).setHeader(priceLabel)
+    	grid.addColumn(vuelo -> {
+    		if(vuelo.getTipoVuelo().equals(TipoVuelo.NACIONAL)) {
+    			return "AR$ " + vuelo.getPrecioNeto();
+    		}else {
+    			return "US$ " + vuelo.getPrecioNeto();
+    			
+    		}
+    	})
+//    	grid.addColumn(Vuelo::getPrecioNeto)
+    	
+    	.setHeader(priceLabel)
     										.setSortable(true)
     										.setResizable(true)
     										.setAutoWidth(true)
