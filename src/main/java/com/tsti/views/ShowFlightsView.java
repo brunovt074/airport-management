@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.tsti.dao.CiudadDAO;
+import com.tsti.dao.AeropuertoDAO;
 import com.tsti.dao.VueloDAO;
 import com.tsti.entidades.Vuelo;
+import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 import com.tsti.excepcion.VueloException;
 import com.tsti.i18n.AppI18NProvider;
-import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -48,9 +48,8 @@ public class ShowFlightsView extends VerticalLayout{
 	private static final long serialVersionUID = -7236223778352535392L;
 	private static final AppI18NProvider i18NProvider = new AppI18NProvider();
 	private final VueloServiceImpl vueloService;
-	private final CiudadServiceImpl ciudadService;
-	private VueloDAO vueloDao;
-	private CiudadDAO ciudadDao;	
+	private final VueloDAO vueloDao;
+	private final AeropuertoDAO aeropuertoDao;	
 	private Vuelo draggedItem;
 	
 	Grid<Vuelo> grid = new Grid<>(Vuelo.class,false);
@@ -71,14 +70,13 @@ public class ShowFlightsView extends VerticalLayout{
 	private String statusLabel;
 	private String nullFlightErrorMessage;	
 	
-	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, CiudadDAO ciudadDao, VueloServiceImpl vueloService, CiudadServiceImpl ciudadService) {
+	public ShowFlightsView(AppI18NProvider i18NProvider, VueloDAO vueloDao, VueloServiceImpl vueloService, AeropuertoDAO aeropuertoDao) {
 	    
-		this.vueloDao = vueloDao;
-	    this.ciudadDao = ciudadDao;
+		this.vueloDao = vueloDao;	    
 	    this.vueloService = vueloService;
 	    this.flights = new ArrayList<>(vueloDao.findAll());
 	    this.dataView = grid.setItems(flights);
-		this.ciudadService = ciudadService;	    
+		this.aeropuertoDao = aeropuertoDao;	    
 	    
 	    addClassName("show-flights-view");
 	    setSizeFull();
@@ -116,7 +114,7 @@ public class ShowFlightsView extends VerticalLayout{
         	if(searchTerm.isEmpty())
         		return true;
         	
-        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getNombreCiudad(), searchTerm);
+        	boolean matchesDestino = matchesTerm(vuelo.getDestino().getCity(), searchTerm);
         	boolean matchesAerolinea = matchesTerm(vuelo.getAerolinea(), searchTerm);
         	boolean matchesAeronave = matchesTerm(vuelo.getAvion(), searchTerm);
         	boolean matchesTipo = matchesTerm(vuelo.getTipoVuelo().toString(), searchTerm);
@@ -169,7 +167,7 @@ public class ShowFlightsView extends VerticalLayout{
 	
 	private void configureForm() {
 
-		form = new FlightForm(i18NProvider, ciudadDao, vueloService, ciudadService);
+		form = new FlightForm(i18NProvider, vueloService, aeropuertoDao);
 		form.setWidth("25rem");
 		form.addSaveListener(this::saveFlight);
     	form.addDeleteListener(this::deleteFlight);
@@ -207,8 +205,8 @@ public class ShowFlightsView extends VerticalLayout{
     			.setKey("hourColumn");        
     	        
         //Arrival
-    	grid.addColumn(vuelo -> vuelo.getDestino().getNombreCiudad()
-        	+ ", " + vuelo.getDestino().getPais()).setHeader(arrivalLabel)
+    	grid.addColumn(vuelo -> vuelo.getDestino().getCity()
+        	+ ", " + vuelo.getDestino().getCountry()).setHeader(arrivalLabel)
         						.setSortable(true)
     							.setResizable(true)
     							.setKey("arrivalColumn");
@@ -452,7 +450,11 @@ public class ShowFlightsView extends VerticalLayout{
 			
 			if(vueloForm.getNroVueloValue() == null) {
 				
-				vueloService.crearVuelo(event.getSource());
+				try {
+					vueloService.crearVuelo(event.getSource());
+				} catch (SistemaGestionComercialAeropuertoException e) {
+					e.getMensaje();					
+				}
 				
 				notification = Notification
 						.show(successMessage);

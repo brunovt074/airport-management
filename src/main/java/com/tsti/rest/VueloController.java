@@ -24,21 +24,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.tsti.dto.VueloDisponibleDTO;
-import com.tsti.entidades.Vuelo;
-import com.tsti.entidades.Ciudad;
-import com.tsti.servicios.VueloServiceImpl;
-
-
-import com.tsti.dto.VueloDTO;
-
 import com.tsti.entidades.Vuelo.EstadoVuelo;
+import com.tsti.entidades.Vuelo;
+import com.tsti.servicios.VueloServiceImpl;
+import com.tsti.dto.VueloDTO;
+import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 import com.tsti.excepcion.VueloException;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
-
-import com.tsti.servicios.VueloServiceImpl;
 import com.tsti.rest.error.VueloErrorInfo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -342,9 +335,9 @@ public class VueloController {
 
 	        return ResponseEntity.ok().body(nuevoVueloEntity);
 	    
-	    } catch (VueloException ex) {
+	    } catch (SistemaGestionComercialAeropuertoException ex) {
 	        
-	    	VueloErrorInfo errorInfo = new VueloErrorInfo(ex.getStatusCode(), ex.getMessage(), request.getRequestURI());
+	    	SistemaGestionComercialAeropuertoException errorInfo = new SistemaGestionComercialAeropuertoException(ex.getMessage(), ex.getStatusCode());
 	        
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorInfo);
 	    }

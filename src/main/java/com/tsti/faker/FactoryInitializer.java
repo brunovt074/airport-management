@@ -7,15 +7,14 @@ package com.tsti.faker;
 
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.tsti.dao.CiudadDAO;
-import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Vuelo.EstadoVuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
+import com.tsti.servicios.AeropuertoServiceImpl;
 
 @Component
 public class FactoryInitializer {
@@ -24,65 +23,55 @@ public class FactoryInitializer {
     private final ClienteFactory clienteFactory;
     private final DomicilioFactory domicilioFactory;
     private final VueloFactory vueloFactory;
-    @Autowired
-    private final CiudadDAO ciudadDAO;
-    
+    private final AeropuertoServiceImpl aeropuertoServiceImpl;
+        
     public FactoryInitializer(CiudadFactory ciudadFactory,ClienteFactory clienteFactory,
-    						DomicilioFactory domicilioFactory, VueloFactory vueloFactory, CiudadDAO ciudadDAO) {
+    						DomicilioFactory domicilioFactory, VueloFactory vueloFactory, CiudadDAO ciudadDAO, AeropuertoServiceImpl aeropuertoServiceImpl) {
         
     	this.ciudadFactory = ciudadFactory;
         this.clienteFactory = clienteFactory;
         this.domicilioFactory = domicilioFactory;
         this.vueloFactory = vueloFactory;
-        this.ciudadDAO = ciudadDAO;
+		this.aeropuertoServiceImpl = aeropuertoServiceImpl;        
     }  
     
 
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
-    	
-//    	Ciudad nuevaCiudad = new Ciudad();
-//    	nuevaCiudad.setcodAeropuerto("SAAV");
-//		nuevaCiudad.setNombreCiudad("Sauce Viejo");
-//		nuevaCiudad.setProvincia("Santa Fe");
-//		nuevaCiudad.setCodPostal("S3017");
-//		nuevaCiudad.setPais("Argentina");
-//		ciudadDAO.save(nuevaCiudad);
-//		
-//    	ciudadFactory.getCiudadSauceViejo();
-//    	creadorVuelos();
-//    	crearClientes();
-//    	//crearDomicilios();
+//    	aeropuertoServiceImpl.loadAirportsFromJsonFile("src/main/resources/data/airports.json");
 //    	crearCiudades();
+//    	crearDomicilios();
+//    	crearClientes();    	
+//    	crearVuelos();
     	
     }
     
-    private void creadorVuelos() {
+    private void crearVuelos() {
     	       
         //creando vuelos 
     	//PARAMETROS:(nroVuelos, nroPasajeros, estado, tipo)
     	
     	//VUELO VACIO
-    	crearVuelos(15, 0, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(15, 0, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
+    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
+    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
     	    	    	
 //    	//REGISTRADOS
     	//crearVuelos(3, 0, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
     	//crearVuelos(3, 0, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
     	
     	//CANCELADOS
-    	crearVuelos(5, 0, EstadoVuelo.CANCELADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(5, 0, EstadoVuelo.CANCELADO, TipoVuelo.NACIONAL);
+//    	crearVuelos(5, EstadoVuelo.CANCELADO, TipoVuelo.INTERNACIONAL);
+//    	crearVuelos(5, EstadoVuelo.CANCELADO, TipoVuelo.NACIONAL);
 ////    //REPROGRAMADOS
-    	crearVuelos(5, 0, EstadoVuelo.REPROGRAMADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(5, 0, EstadoVuelo.REPROGRAMADO, TipoVuelo.NACIONAL);
+//    	crearVuelos(5, EstadoVuelo.REPROGRAMADO, TipoVuelo.INTERNACIONAL);
+//    	crearVuelos(5, EstadoVuelo.REPROGRAMADO, TipoVuelo.NACIONAL);
 ////    //DEMORADOS
-    	crearVuelos(5, 0, EstadoVuelo.DEMORADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(5, 0, EstadoVuelo.DEMORADO, TipoVuelo.NACIONAL);
+    	crearVuelos(5, EstadoVuelo.DEMORADO, TipoVuelo.INTERNACIONAL);
+    	crearVuelos(5, EstadoVuelo.DEMORADO, TipoVuelo.NACIONAL);
     	
     	//VUELOS NRO PASAJEROS ALEATORIOS
-    	crearVuelosNroPasajerosAleatorios(2, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelosNroPasajerosAleatorios(2, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
+//    	crearVuelosNroPasajerosAleatorios(2, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
+//    	crearVuelosNroPasajerosAleatorios(2, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
 //    	   	
     	//crearVuelosNroPasajerosAleatorios(1, EstadoVuelo.REPROGRAMADO, TipoVuelo.INTERNACIONAL);
     	//crearVuelosNroPasajerosAleatorios(1, EstadoVuelo.REPROGRAMADO, TipoVuelo.NACIONAL);
@@ -102,6 +91,15 @@ public class FactoryInitializer {
     	
     	System.out.println("--Ejecucion de inserciones terminada.--");
     	
+    }
+    
+    private void crearVuelos(int nroVuelos, EstadoVuelo estado, TipoVuelo tipo) {
+		
+    	for(int i = 0; i < nroVuelos; i++) {
+    	    		
+       			vueloFactory.crearVueloOrigenLocal(estado, tipo);
+        			
+       	}       	
     }
     
     private void crearVuelos(int nroVuelos, int nroPasajeros, EstadoVuelo estado, TipoVuelo tipo) {
@@ -131,9 +129,9 @@ public class FactoryInitializer {
     	
     	//creando ciudades
     	//ciudadFactory.crearCiudadArgentina();
-    	//ciudadFactory.crearCiudadesArgentina();
+    	ciudadFactory.crearCiudadesArgentina();
         //ciudadFactory.crearCiudadAleatoria();
-        //ciudadFactory.crearCiudadesAleatoria();
+        ciudadFactory.crearCiudadesAleatoria();
     }
     
     private void crearClientes() {
@@ -150,8 +148,8 @@ public class FactoryInitializer {
     	//creando domicilios
         //domicilioFactory.crearUnDomicilioArgentino();
         //domicilioFactory.crearUnDomicilioAleatorio();
-        //domicilioFactory.crearDomiciliosArgentinos();
-        //domicilioFactory.crearDomiciliosAleatorios();
+        domicilioFactory.crearDomiciliosArgentinos();
+        domicilioFactory.crearDomiciliosAleatorios();
     	
     }
 }

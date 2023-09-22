@@ -42,11 +42,11 @@ public class Ciudad implements Comparable<Ciudad>{
 	@OneToMany(mappedBy = "ciudad")
     private List<Domicilio> domicilios;	
 	//Una ciudad puede ser el origen de muchos vuelos
-	@OneToMany(mappedBy = "origen")
-    private List<Vuelo> vuelosOrigen;	
-	//Una ciudad puede ser el destino de muchos vuelos
-	@OneToMany(mappedBy = "destino")
-    private List<Vuelo> vuelosDestino;
+//	@OneToMany(mappedBy = "origen")
+//    private List<Vuelo> vuelosOrigen;	
+//	//Una ciudad puede ser el destino de muchos vuelos
+//	@OneToMany(mappedBy = "destino")
+//    private List<Vuelo> vuelosDestino;
 	
 	//CONSTRUCTOR
 	public Ciudad() {
@@ -103,21 +103,21 @@ public class Ciudad implements Comparable<Ciudad>{
 		this.domicilios = domicilios;
 	}
 
-	public List<Vuelo> getVuelosOrigen() {
-		return vuelosOrigen;
-	}
-
-	public void setVuelosOrigen(List<Vuelo> vuelosOrigen) {
-		this.vuelosOrigen = vuelosOrigen;
-	}
-
-	public List<Vuelo> getVuelosDestino() {
-		return vuelosDestino;
-	}
-
-	public void setVuelosDestino(List<Vuelo> vuelosDestino) {
-		this.vuelosDestino = vuelosDestino;
-	}
+//	public List<Vuelo> getVuelosOrigen() {
+//		return vuelosOrigen;
+//	}
+//
+//	public void setVuelosOrigen(List<Vuelo> vuelosOrigen) {
+//		this.vuelosOrigen = vuelosOrigen;
+//	}
+//
+//	public List<Vuelo> getVuelosDestino() {
+//		return vuelosDestino;
+//	}
+//
+//	public void setVuelosDestino(List<Vuelo> vuelosDestino) {
+//		this.vuelosDestino = vuelosDestino;
+//	}
 
 	@Override
 	public String toString() {

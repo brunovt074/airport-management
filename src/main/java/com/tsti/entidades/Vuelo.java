@@ -66,12 +66,12 @@ public class Vuelo {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "origen_id")
-	private Ciudad origen;
+	private Aeropuerto origen;
 	@NotNull
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "destino_id")	
-	private Ciudad destino;//creada la entidad Ciudad		
+	private Aeropuerto destino;		
 	@JsonIgnore
 	@OneToMany(mappedBy = "vuelo")
     private Set<Pasaje> pasajes;
@@ -191,9 +191,9 @@ public class Vuelo {
 	
 	@Autowired //fuerzo a spring que utilice este metodo durante la IOC
 	public void setTipoVuelo() {		
-		String argentina = "Argentina";
+		String argentina = "AR";
 		
-		if(argentina.equalsIgnoreCase(this.destino.getPais())) {
+		if(argentina.equalsIgnoreCase(this.destino.getCountry())) {
 			
 			this.tipoVuelo = TipoVuelo.NACIONAL;
 		}
@@ -202,22 +202,22 @@ public class Vuelo {
 		}		
 	}
 
-	public Ciudad getOrigen() {
+	public Aeropuerto  getOrigen() {
 		return origen;
 	}
 
 
-	public void setOrigen(Ciudad origen) {
+	public void setOrigen(Aeropuerto origen) {
 		this.origen = origen;
 	}
 
 
-	public Ciudad getDestino() {
+	public Aeropuerto getDestino() {
 		return destino;
 	}
 
 
-	public void setDestino(Ciudad destino) {
+	public void setDestino(Aeropuerto destino) {
 		this.destino = destino;
 	}
 

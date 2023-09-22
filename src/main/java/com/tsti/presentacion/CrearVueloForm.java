@@ -11,6 +11,7 @@ import java.util.Objects;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
+import com.tsti.entidades.Aeropuerto;
 import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Vuelo;
 
@@ -80,7 +81,7 @@ public class CrearVueloForm {
 		return vuelo;
 	}
 	
-	public Vuelo toPojoConCiudad(Ciudad origen, Ciudad destino){
+	public Vuelo toPojoConCiudad(Aeropuerto origen, Aeropuerto destino){
 		Vuelo vuelo = new Vuelo();
 		
 		vuelo.setNroVuelo(this.getNroVuelo());

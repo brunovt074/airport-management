@@ -1,5 +1,7 @@
 package com.tsti.excepcion;
 
+import org.springframework.http.HttpStatus;
+
 public class SistemaGestionComercialAeropuertoException extends Exception{
 	
 	private static final long serialVersionUID = 3941221036411842318L;
@@ -47,7 +49,7 @@ public class SistemaGestionComercialAeropuertoException extends Exception{
 		super();
 		this.mensaje = mensaje;
 		this.statusCode = statusCode;
-	}
+	}	
 
 	public String getMensaje() {
 		return mensaje;
@@ -72,5 +74,10 @@ public class SistemaGestionComercialAeropuertoException extends Exception{
 	@Override
 	public String toString() {
 		return "SistemaGestionAeropuertoException [mensaje=" + mensaje + ", statusCode=" + statusCode + "]";
+	}
+
+	public void setStatusCode(HttpStatus internalServerError) {
+		// TODO Auto-generated method stub
+		
 	}
 }

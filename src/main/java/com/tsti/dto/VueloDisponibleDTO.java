@@ -4,7 +4,7 @@ package com.tsti.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.tsti.entidades.Ciudad;
+import com.tsti.entidades.Aeropuerto;
 import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
 
@@ -15,7 +15,7 @@ import com.tsti.entidades.Vuelo.TipoVuelo;
 public class VueloDisponibleDTO {
 	private Long nroVuelo;
 	private String aerolinea;
-	private Ciudad destino;
+	private Aeropuerto destino;
 	private TipoVuelo tipoVuelo;
 	private LocalDate fechaPartida;
 	private LocalTime horaPartida;	
@@ -65,11 +65,11 @@ public class VueloDisponibleDTO {
 		this.horaPartida = horaPartida;
 	}
 
-	public Ciudad getDestino() {
+	public Aeropuerto getDestino() {
 		return destino;
 	}
 
-	public void setDestino(Ciudad destino) {
+	public void setDestino(Aeropuerto destino) {
 		this.destino = destino;
 	}
 

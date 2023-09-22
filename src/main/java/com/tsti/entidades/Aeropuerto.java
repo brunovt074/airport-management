@@ -1,6 +1,6 @@
 package com.tsti.entidades;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,8 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -33,28 +33,41 @@ public class Aeropuerto {
 	private String state;
 	@NotNull	
 	private String country;
-	private Integer elevation;
-	private BigDecimal lat;
-	private BigDecimal lon;
+	private long elevation;
+	private double lat;
+	private double lon;
 	private String tz;
+	@OneToMany(mappedBy = "origen")
+    private List<Vuelo> vuelosOrigen;	
+	@OneToMany(mappedBy = "destino")
+    private List<Vuelo> vuelosDestino;
+	
 	
 	public Aeropuerto() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
 
-	public Aeropuerto(String icao, String iata, String name, String state, String country, Integer elevation,
-			BigDecimal lat, BigDecimal lon, String tz) {
+	public Aeropuerto(String icao, String iata, String name,String city, String state, String country, long elevation,
+			double lat, double lon, String tz) {
 		super();
 		this.icao = icao;
 		this.iata = iata;
 		this.name = name;
+		this.city = city;
 		this.state = state;
 		this.country = country;
 		this.elevation = elevation;
 		this.lat = lat;
 		this.lon = lon;
 		this.tz = tz;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getIcao() {
@@ -105,27 +118,27 @@ public class Aeropuerto {
 		this.country = country;
 	}
 
-	public Integer getElevation() {
+	public long getElevation() {
 		return elevation;
 	}
-
-	public void setElevation(Integer elevation) {
+	
+	public void setElevation(long elevation) {
 		this.elevation = elevation;
 	}
 
-	public BigDecimal getLat() {
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(BigDecimal lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 
-	public BigDecimal getLon() {
+	public double getLon() {
 		return lon;
 	}
 
-	public void setLon(BigDecimal lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 
@@ -136,6 +149,22 @@ public class Aeropuerto {
 	public void setTz(String tz) {
 		this.tz = tz;
 	}
+	
+	public List<Vuelo> getVuelosOrigen() {
+		return vuelosOrigen;
+	}
+
+	public void setVuelosOrigen(List<Vuelo> vuelosOrigen) {
+		this.vuelosOrigen = vuelosOrigen;
+	}
+
+	public List<Vuelo> getVuelosDestino() {
+		return vuelosDestino;
+	}
+
+	public void setVuelosDestino(List<Vuelo> vuelosDestino) {
+		this.vuelosDestino = vuelosDestino;
+	}	
 
 	@Override
 	public int hashCode() {

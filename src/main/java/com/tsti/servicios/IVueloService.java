@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tsti.dto.VueloDTO;
 import com.tsti.entidades.Vuelo.EstadoVuelo;
+import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 import com.tsti.excepcion.VueloException;
 import com.tsti.presentacion.CrearVueloForm;
 import com.tsti.presentacion.EditarVueloForm;
@@ -26,10 +27,11 @@ import com.tsti.views.FlightForm;
 public interface IVueloService{
 	/**
 	 *Metodo creado para la utilizacion con Vaadin 
+	 * @throws SistemaGestionComercialAeropuertoException 
 	 * 
 	 * 
 	 **/
-	public void crearVuelo(FlightForm flightForm) throws VueloException;
+	public void crearVuelo(FlightForm flightForm) throws VueloException, SistemaGestionComercialAeropuertoException;
 	
 	/**
 	 *Recibe un formulario con todos los datos necesarios del vuelo.
@@ -37,8 +39,9 @@ public interface IVueloService{
 	 *@param vueloForm
 	 *@return VueloDTO con informacion sobre el nuevo vuelo 
 	 * @throws VueloException 
+	 * @throws SistemaGestionComercialAeropuertoException 
 	 **/
-	public VueloDTO crearVuelo(CrearVueloForm vueloForm) throws VueloException;
+	public VueloDTO crearVuelo(CrearVueloForm vueloForm) throws VueloException, SistemaGestionComercialAeropuertoException;
 	
 	/**
 	 * Selecciona un vuelo por su nroVuelo y realiza un soft delete 

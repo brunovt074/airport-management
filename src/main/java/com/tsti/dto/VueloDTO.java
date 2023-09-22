@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-
+import com.tsti.entidades.Aeropuerto;
 import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
@@ -24,7 +24,7 @@ public class VueloDTO {
 
 	private Long nroVuelo;
 	private String aerolinea;	
-	private Ciudad destino;
+	private Aeropuerto destino;
 	private LocalDate fechaPartida;
 	private LocalTime horaPartida;
 	private int nroFilasAsientos;
@@ -68,11 +68,11 @@ public class VueloDTO {
 		this.aerolinea = aerolinea;
 	}
 
-	public Ciudad getDestino() {
+	public Aeropuerto getDestino() {
 		return destino;
 	}
 
-	public void setDestino(Ciudad destino) {
+	public void setDestino(Aeropuerto destino) {
 		this.destino = destino;
 	}
 

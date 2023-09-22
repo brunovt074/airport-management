@@ -16,13 +16,12 @@ import org.springframework.stereotype.Service;
 import com.tsti.dao.VueloDAO;
 import com.tsti.entidades.Vuelo;
 import com.tsti.entidades.Vuelo.TipoVuelo;
-
-import com.tsti.dao.CiudadDAO;
+import com.tsti.dao.AeropuertoDAO;
 import com.tsti.dto.VueloDTO;
 import com.tsti.entidades.Vuelo.EstadoVuelo;
+import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 import com.tsti.excepcion.VueloException;
-import com.tsti.entidades.Ciudad;
-import com.tsti.faker.CiudadFactory;
+import com.tsti.entidades.Aeropuerto;
 import com.tsti.faker.GenerarPrecioNeto;
 import com.tsti.i18n.AppI18NProvider;
 import com.tsti.presentacion.CrearVueloForm;
@@ -36,8 +35,8 @@ import com.tsti.views.FlightForm;
 public class VueloServiceImpl implements IVueloService{
 	
 	private VueloDAO vueloDAO;	
-	private CiudadDAO ciudadDAO;
-	private CiudadFactory ciudadFactory;
+	private final AeropuertoDAO aeropuertoDAO;
+	private final AeropuertoServiceImpl aeropuertoService;
 	private final AppI18NProvider i18NProvider;
 	private final Locale locale = Locale.getDefault();
 	private final String databaseCreateError;
@@ -45,10 +44,10 @@ public class VueloServiceImpl implements IVueloService{
 	private final String databaseDeleteError;
 	
 	@Autowired
-	public VueloServiceImpl(VueloDAO vueloDAO, CiudadDAO ciudadDAO, CiudadFactory ciudadFactory, AppI18NProvider i18NProvider) {
-		this.vueloDAO = vueloDAO;	
-		this.ciudadDAO = ciudadDAO;
-		this.ciudadFactory = ciudadFactory;		
+	public VueloServiceImpl(VueloDAO vueloDAO, AppI18NProvider i18NProvider, AeropuertoDAO aeropuertoDAO, AeropuertoServiceImpl aeropuertoService) {
+		this.vueloDAO = vueloDAO;		
+		this.aeropuertoDAO = aeropuertoDAO;
+		this.aeropuertoService = aeropuertoService;		
 		this.i18NProvider = i18NProvider;
 		this.databaseCreateError = i18NProvider.getTranslation("database-create-error", locale);
 		this.databaseUpdateError = i18NProvider.getTranslation("database-update-error", locale);
@@ -56,12 +55,12 @@ public class VueloServiceImpl implements IVueloService{
 	}
 	
 	@Override
-	public void crearVuelo(FlightForm vueloForm) throws VueloException{
+	public void crearVuelo(FlightForm vueloForm) throws SistemaGestionComercialAeropuertoException{
 		Vuelo vuelo = new Vuelo();
-		Ciudad origen = new Ciudad();
-		Ciudad destino = new Ciudad();
+		Aeropuerto origen = new Aeropuerto();
+		Aeropuerto destino = new Aeropuerto();
 				
-		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getDestinoValue().getNombreCiudad(), vueloForm.getFechaPartidaValue(), vueloForm.getHoraPartidaValue());
+		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getDestinoValue().getCity(), vueloForm.getFechaPartidaValue(), vueloForm.getHoraPartidaValue());
 		
 		String datePattern = i18NProvider.getTranslation("date-pattern", locale);
 		String timePattern = i18NProvider.getTranslation("time-pattern", locale);
@@ -79,9 +78,7 @@ public class VueloServiceImpl implements IVueloService{
 			String mensaje = String.format(vueloExiste, vueloForm.getNombreCiudadValue(),formatedDate,formatedHour);
 			
 			throw new VueloException(mensaje, HttpStatus.BAD_REQUEST.value());
-//			throw new VueloException("El vuelo con destino: "+ vueloForm.getNombreCiudadValue() 
-//			+" ya existe para la fecha: "+vueloForm.getFechaPartidaValue()
-//			+"- hora: "+vueloForm.getHoraPartidaValue(), HttpStatus.BAD_REQUEST.value());			
+			
 		}
 		
 		if(vueloForm.getNroVueloValue() != null && vueloDAO.existsById(vueloForm.getNroVueloValue())) {	
@@ -89,52 +86,45 @@ public class VueloServiceImpl implements IVueloService{
 			String idExiste= i18NProvider.getTranslation("flight-id-exists", locale);
 			String mensaje = String.format(idExiste, vueloForm.getNroVueloValue());
 			
-			throw new VueloException (mensaje , HttpStatus.BAD_REQUEST.value());
-			//throw new VueloException ("Vuelo con numero de vuelo: "+ vueloForm.getNroVueloValue() + " ya existe.", HttpStatus.BAD_REQUEST.value());
+			throw new VueloException (mensaje , HttpStatus.BAD_REQUEST.value());			
 			
 		}
 		
-		if(ciudadDAO.existsByCodAeropuerto("SAAV")){
-				
-				origen = ciudadDAO.findFirstByCodAeropuertoAndNombreCiudad
-														("SAAV", "Sauce Viejo");				
+		try {
+			origen = aeropuertoService.getAeropuertoLocal();
+		
+		}catch(Exception e) {
 			
-		} else{
-				
-				origen = ciudadFactory.getCiudadSauceViejo();
-				
-				throw new VueloException ("No se pudo obtener ciudad de origen ", HttpStatus.BAD_REQUEST.value());
-				
-		}
+			throw new SistemaGestionComercialAeropuertoException ("No se pudo obtener ciudad de origen ", HttpStatus.BAD_REQUEST.value());
+		}		
 		
 		if(vueloForm.getDestinoValue().getId() != null){
 			
-			Optional<Ciudad>ciudadOptional = ciudadDAO.findById(vueloForm.getDestinoValue().getId());
+			Optional<Aeropuerto>aeropuertoOptional = aeropuertoDAO.findById(vueloForm.getDestinoValue().getId());
 			
-			if(ciudadOptional.isPresent()) {
+			if(aeropuertoOptional.isPresent()) {
 				
-				destino = ciudadOptional.get();
+				destino = aeropuertoOptional.get();
 			}				
 		
 			}else{
 							
-				destino.setcodAeropuerto(vueloForm.getDestinoValue().getcodAeropuerto());
-				destino.setNombreCiudad(vueloForm.getNombreCiudadValue());
-				destino.setProvincia(vueloForm.getDestinoValue().getProvincia());
-				destino.setPais(vueloForm.getDestinoValue().getPais());
-				destino.setCodPostal(vueloForm.getDestinoValue().getCodPostal());			
+				destino.setIcao(vueloForm.getDestinoValue().getIcao());
+				destino.setCity(vueloForm.getNombreCiudadValue());
+				destino.setState(vueloForm.getDestinoValue().getState());
+				destino.setCountry(vueloForm.getDestinoValue().getCountry());							
 				
 			}
 			
 			try {
-			    ciudadDAO.save(origen);
-			    ciudadDAO.save(destino);
+				aeropuertoDAO.save(origen);
+			    aeropuertoDAO.save(destino);
 			
 			} catch (Exception e) {
 			    
 				throw new VueloException(databaseUpdateError 
-						+ ": " + origen.getNombreCiudad() 
-						+ "or :" + destino.getNombreCiudad(),
+						+ ": " + origen.getCity() 
+						+ "or :" + destino.getCity(),
 						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
@@ -159,12 +149,12 @@ public class VueloServiceImpl implements IVueloService{
 	
 	//API REST
 	@Override
-	public VueloDTO crearVuelo(CrearVueloForm vueloForm) throws VueloException {
+	public VueloDTO crearVuelo(CrearVueloForm vueloForm) throws SistemaGestionComercialAeropuertoException {
 		
 		Vuelo vuelo = new Vuelo();
 		VueloDTO vueloDTO; 
-		Ciudad origen = new Ciudad();
-		Ciudad destino = new Ciudad();
+		Aeropuerto origen = new Aeropuerto();
+		Aeropuerto destino = new Aeropuerto();
 		
 		//Verificar si no existe vuelo con mismo destino y fecha-hora
 		List<Vuelo> vuelos = vueloDAO.findByDestinoAndFechaPartidaAndHoraPartida(vueloForm.getNombreCiudad(), vueloForm.getFechaPartida(), vueloForm.getHoraPartida());
@@ -177,26 +167,22 @@ public class VueloServiceImpl implements IVueloService{
 		
 		if(vueloForm.getNroVuelo() != null && vueloDAO.existsById(vueloForm.getNroVuelo())) {	
 			
+			
 			throw new VueloException ("Vuelo con numero de vuelo: "+ vueloForm.getNroVuelo() + " ya existe.", HttpStatus.BAD_REQUEST.value());
 			
 		}
 		
-		if(ciudadDAO.existsByCodAeropuerto("SAAV")){
-				
-				origen = ciudadDAO.findFirstByCodAeropuertoAndNombreCiudad
-														("SAAV", "Sauce Viejo");				
+		try {
+			origen = aeropuertoService.getAeropuertoLocal();
+		
+		}catch(Exception e) {
 			
-		} else{
-				
-				origen = ciudadFactory.getCiudadSauceViejo();
-				
-				throw new VueloException ("No se pudo obtener ciudad de origen "+ vueloForm.getNroVuelo() + " ya existe.", HttpStatus.BAD_REQUEST.value());
-				
+			throw new SistemaGestionComercialAeropuertoException ("No se pudo obtener ciudad de origen ", HttpStatus.BAD_REQUEST.value());
 		}			
 					
 		if(vueloForm.getIdDestino() != null){
 						
-				Optional<Ciudad>ciudadOptional = ciudadDAO.findById(vueloForm.getIdDestino());
+				Optional<Aeropuerto>ciudadOptional = aeropuertoDAO.findById(vueloForm.getIdDestino());
 				
 				if(ciudadOptional.isPresent()) {
 					
@@ -205,17 +191,16 @@ public class VueloServiceImpl implements IVueloService{
 			
 		}else{
 						
-			destino.setcodAeropuerto(vueloForm.getCodAeropuerto());
-			destino.setNombreCiudad(vueloForm.getNombreCiudad());
-			destino.setProvincia(vueloForm.getProvincia());
-			destino.setPais(vueloForm.getPais());
-			destino.setCodPostal(vueloForm.getCodPostal());			
+			destino.setIcao(vueloForm.getCodAeropuerto());
+			destino.setCity(vueloForm.getNombreCiudad());
+			destino.setState(vueloForm.getProvincia());
+			destino.setCountry(vueloForm.getPais());						
 			
 		}
 		
 		try {
-		    ciudadDAO.save(origen);
-		    ciudadDAO.save(destino);
+			aeropuertoDAO.save(origen);
+			aeropuertoDAO.save(destino);
 		
 		} catch (Exception e) {
 		    

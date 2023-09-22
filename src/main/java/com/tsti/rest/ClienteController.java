@@ -35,12 +35,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 
 import com.tsti.dto.ClienteResponseDTO;
-import com.tsti.entidades.Ciudad;
 import com.tsti.entidades.Clientes;
 import com.tsti.excepcion.PasajeroException;
 import com.tsti.excepcion.MensajeError;
 import com.tsti.presentacion.ClienteForm;
-import com.tsti.servicios.ICiudadService;
 import com.tsti.servicios.IClienteService;
 
 @RestController

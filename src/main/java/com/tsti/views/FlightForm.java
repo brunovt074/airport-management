@@ -5,11 +5,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.tsti.dao.CiudadDAO;
-import com.tsti.entidades.Ciudad;
+import com.tsti.dao.AeropuertoDAO;
+import com.tsti.entidades.Aeropuerto;
 import com.tsti.entidades.Vuelo;
 import com.tsti.i18n.AppI18NProvider;
-import com.tsti.servicios.CiudadServiceImpl;
 import com.tsti.servicios.VueloServiceImpl;
 
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -35,14 +34,14 @@ public class FlightForm extends FormLayout{
 	private static final long serialVersionUID = 5593602849999149819L;
 	private final AppI18NProvider i18NProvider;	
 	private final VueloServiceImpl vueloService;
-	private final CiudadServiceImpl ciudadService;
+	private final AeropuertoDAO aeropuertoDao;
 	
 	TextField nroVuelo = new TextField("Flight Number");
-	//TextField aerolinea = new TextField("Airline");	
-	DatePicker fechaPartida = new DatePicker("Date");
+		DatePicker fechaPartida = new DatePicker("Date");
 	LocalDate now = LocalDate.now();
 	TimePicker horaPartida = new TimePicker("Hour");	
-	ComboBox<Ciudad> destino = new ComboBox<>("Arrival");
+	ComboBox<Aeropuerto> destino = new ComboBox<>("Arrival");
+	
 	ComboBox<String> aerolinea = new ComboBox<>("aerolinea"); 
 	//ComboBox<Ciudad> estadoVuelo = new ComboBox<>("Status");
 	BigDecimalField precioNeto = new BigDecimalField();  
@@ -68,14 +67,13 @@ public class FlightForm extends FormLayout{
 	Button delete;
 	Button close;
 
-	Binder<Vuelo> binder = new BeanValidationBinder<>(Vuelo.class);
-	//Binder<Vuelo> binder = new Binder<>(Vuelo.class);
+	Binder<Vuelo> binder = new BeanValidationBinder<>(Vuelo.class);	
 	
-	public FlightForm(AppI18NProvider i18nProvider, CiudadDAO ciudadDAO, VueloServiceImpl service, CiudadServiceImpl ciudadService) {
+	public FlightForm(AppI18NProvider i18nProvider, VueloServiceImpl service, AeropuertoDAO aeropuertoDao) {
 		super();
 		this.i18NProvider = i18nProvider;	
 		this.vueloService = service;
-		this.ciudadService = ciudadService;
+		this.aeropuertoDao = aeropuertoDao;
 		
 		addClassName("flight-form");
 		binder.bindInstanceFields(this);
@@ -148,9 +146,9 @@ public class FlightForm extends FormLayout{
 		horaPartida.setLabel(timeLabel);
 		precioNeto.setLabel(priceLabel);		
 		aerolinea.setItems(vueloService.getAerolineas());				
-		destino.setItems(ciudadService.getAllDistinctCities());
-		destino.setItemLabelGenerator(ciudad -> ciudad.getNombreCiudad() 
-										+ ", " + ciudad.getPais());
+		destino.setItems(aeropuertoDao.findAll());
+		destino.setItemLabelGenerator(ciudad -> ciudad.getCity() 
+										+ ", " + ciudad.getCountry());
 		destino.addValueChangeListener(event -> {
 		    Vuelo vuelo = binder.getBean(); // Obtener el objeto Vuelo vinculado al formulario
 		    if(vuelo != null) {
@@ -268,16 +266,16 @@ public class FlightForm extends FormLayout{
 		this.horaPartida = horaPartida;
 	}
 
-	public Ciudad getDestinoValue() {
+	public Aeropuerto getDestinoValue() {
 		return destino.getValue();
 	}
 	
 	public String getNombreCiudadValue() {
 		
-		return destino.getValue().getNombreCiudad();
+		return destino.getValue().getCity();
 	}
 
-	public void setDestino(ComboBox<Ciudad> destino) {
+	public void setDestino(ComboBox<Aeropuerto> destino) {
 		this.destino = destino;
 	}
 
