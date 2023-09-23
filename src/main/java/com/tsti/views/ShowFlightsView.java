@@ -81,7 +81,7 @@ public class ShowFlightsView extends VerticalLayout{
 	    this.dataView = grid.setItems(flights);
 		this.aeropuertoDao = aeropuertoDao;	    
 	    
-	    addClassName("show-flights-view");
+		addClassName("show-flights-view");
 	    setSizeFull();
 	    
 	    initializeLabels();
@@ -134,32 +134,89 @@ public class ShowFlightsView extends VerticalLayout{
 		
 	}
 	
-//	private void cancelFlight() {
-//		
-//		Vuelo selectedVuelo = grid.asSingleSelect().getValue();
-//		
-//		if(selectedVuelo == null) {
-//			Notification notification = Notification.show(nullFlightErrorMessage);
-//			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-//			notification.setPosition(Notification.Position.TOP_END);
-//			notification.setDuration(5000);
-//			
-//			closeEditor();
-//			
-//		} else {
-//			form.setFlight(selectedVuelo);
-//			form.destino.setReadOnly(true);
-//			form.fechaPartida.setReadOnly(true);
-//			form.horaPartida.setReadOnly(true);
-//			form.precioNeto.setReadOnly(true);
-//			form.aerolinea.setReadOnly(true);			
-//			form.save.setVisible(false);
-//			form.setVisible(true);
-//			addClassName("editing");
-//			
-//		}
-//		
-//	}
+	private void cancelFlight() {
+		Vuelo selectedFlight = grid.asSingleSelect().getValue();
+				
+		if(selectedFlight  != null) {
+			
+			if(selectedFlight.getEstadoVuelo().equals(EstadoVuelo.CANCELADO)  ) {
+				String alreadyCanceled =  i18NProvider.getTranslation("already-canceled", getLocale());
+				String alreadyCanceledMessage = String.format(alreadyCanceled, selectedFlight.getNroVuelo()); 
+				
+				Notification notification = Notification.show(alreadyCanceledMessage);
+				notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+				notification.setPosition(Notification.Position.TOP_END);
+				notification.setDuration(5000);
+				
+			} else {
+				
+				cancelFlightDialog(selectedFlight);
+			}		
+			
+		} else {
+			
+			Notification notification = Notification.show(nullFlightErrorMessage);
+			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);			
+		}		
+		
+	}
+	
+	private void cancelFlightDialog(Vuelo vuelo) {
+		String title = i18NProvider.getTranslation("cancel-dialog-title", getLocale());
+		String confirmation = i18NProvider.getTranslation("cancel-dialog-confirmation", getLocale());
+		String confirmationMessage = String.format(confirmation, vuelo.getNroVuelo()) ;//
+		String cancel = i18NProvider.getTranslation("cancel-flight", getLocale());
+		String close = i18NProvider.getTranslation("close", getLocale());
+		String successfulCancelationMessage = i18NProvider.getTranslation("canceled-success", getLocale());
+		String canceledMessageFormatted = String.format(successfulCancelationMessage, vuelo.getNroVuelo());
+		
+		Dialog dialog = new Dialog();		
+				
+        dialog.setHeaderTitle(title);
+        dialog.add(confirmationMessage);
+
+        Button cancelFlightButton = new Button(cancel, (e) -> 
+	        	{
+	        		try{
+	        			vueloService.cancelarVuelo(vuelo.getNroVuelo());
+	        			Notification notification = Notification
+	        					.show(canceledMessageFormatted);
+	        			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+	        			notification.setPosition(Notification.Position.TOP_END);
+	        			notification.setDuration(5000);
+	        		
+	        		}catch(VueloException ex) {
+	        			
+	        			ex.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
+	        			
+	        			Notification notification = Notification.show(ex.getMessage());
+	        			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+	        			notification.setPosition(Notification.Position.TOP_END);
+	        			notification.setDuration(5000);
+	        		}
+	        		finally {
+	        			closeEditor();
+	        			updateList();
+	        			addCustomFilters();
+	        			dialog.close();
+	        		}
+	        	}
+        	);
+        
+        cancelFlightButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                ButtonVariant.LUMO_ERROR);
+        cancelFlightButton.getStyle().set("margin-right", "auto");
+        dialog.getFooter().add(cancelFlightButton);
+
+        Button closeButton = new Button(close, (e) -> dialog.close());
+        
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        dialog.getFooter().add(closeButton);
+        
+        dialog.open();        
+	}
 	
 	private void closeEditor() {
 		
@@ -172,8 +229,7 @@ public class ShowFlightsView extends VerticalLayout{
 
 		form = new FlightForm(i18NProvider, vueloService, aeropuertoDao);
 		form.setWidth("25rem");
-		form.addSaveListener(this::saveFlight);
-    	form.addDeleteListener(this::deleteFlight);
+		form.addSaveListener(this::saveFlight);    	
     	form.addCloseListener(e -> closeEditor());
     			
 	}
@@ -248,39 +304,6 @@ public class ShowFlightsView extends VerticalLayout{
     	grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES); 
     		
 	}	
-		
-	private void deleteFlight(FlightForm.DeleteEvent event) {
-		String successfulCancelationMessage = i18NProvider.getTranslation("canceled-success", getLocale());
-		
-		Notification notification = new Notification();
-		
-		try {
-			
-			vueloService.cancelarVuelo(event.getVuelo().getNroVuelo());			
-			notification = Notification
-					.show(successfulCancelationMessage );
-			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-			notification.setPosition(Notification.Position.TOP_END);
-			notification.setDuration(5000);
-		} catch (VueloException e) {
-			e.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
-			
-			notification = Notification
-					.show(e.getMessage());
-			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-			notification.setPosition(Notification.Position.TOP_END);
-			notification.setDuration(5000);
-			
-		} finally {
-			
-			closeEditor();
-			updateList();
-			addCustomFilters();
-			
-			
-		}	
-		
-	}
 	
 	private void editFlight(Vuelo vuelo) {
 		
@@ -299,13 +322,25 @@ public class ShowFlightsView extends VerticalLayout{
 			addClassName("editing");
 			
 		} else {
-			form.setFlight(vuelo);
-			form.aerolinea.setReadOnly(true);
-			form.avion.setReadOnly(true);
-			form.destino.setReadOnly(true);
-			form.precioNeto.setReadOnly(false);			
-			form.setVisible(true);
-			addClassName("editing");
+			if(!vuelo.getEstadoVuelo().equals(EstadoVuelo.CANCELADO)) {
+				form.setFlight(vuelo);
+				form.aerolinea.setReadOnly(true);
+				form.avion.setReadOnly(true);
+				form.destino.setReadOnly(true);
+				form.precioNeto.setReadOnly(false);			
+				form.setVisible(true);
+				addClassName("editing");
+			
+			} else {
+				String alreadyCanceled =  i18NProvider.getTranslation("already-canceled", getLocale());
+				String alreadyCanceledMessage = String.format(alreadyCanceled, vuelo.getNroVuelo()); 
+				
+				Notification notification = Notification.show(alreadyCanceledMessage);
+				notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+				notification.setPosition(Notification.Position.TOP_END);
+				notification.setDuration(5000);
+			}
+			
 			
 		}
 		
@@ -447,83 +482,12 @@ public class ShowFlightsView extends VerticalLayout{
 		grid.asSingleSelect().clear();
 		editFlight(new Vuelo());
 		
-	}
-	
-	private void cancelFlight() {
-		Vuelo selectedFlight = grid.asSingleSelect().getValue();
-				
-		if(selectedFlight  != null) {			
-			cancelFlightDialog(selectedFlight);
-		} else {
-			
-			Notification notification = Notification.show(nullFlightErrorMessage);
-			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-			notification.setPosition(Notification.Position.TOP_END);
-			notification.setDuration(5000);			
-		}		
-		
-	}
-	
-	private void cancelFlightDialog(Vuelo vuelo) {
-		String title = i18NProvider.getTranslation("cancel-dialog-title", getLocale());
-		String confirmation = i18NProvider.getTranslation("cancel-dialog-confirmation", getLocale());
-		String confirmationMessage = String.format(confirmation, vuelo.getNroVuelo()) ;//
-		String cancel = i18NProvider.getTranslation("cancel-flight", getLocale());
-		String close = i18NProvider.getTranslation("close", getLocale());
-		String successfulCancelationMessage = i18NProvider.getTranslation("canceled-success", getLocale());
-		
-		Dialog dialog = new Dialog();		
-				
-        dialog.setHeaderTitle(title);
-        dialog.add(confirmationMessage);
-
-        Button cancelFlightButton = new Button(cancel, (e) -> 
-	        	{
-	        		try{
-	        			vueloService.cancelarVuelo(vuelo.getNroVuelo());
-	        			Notification notification = Notification
-	        					.show(successfulCancelationMessage );
-	        			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-	        			notification.setPosition(Notification.Position.TOP_END);
-	        			notification.setDuration(5000);
-	        		
-	        		}catch(VueloException ex) {
-	        			
-	        			ex.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
-	        			
-	        			Notification notification = Notification.show(ex.getMessage());
-	        			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-	        			notification.setPosition(Notification.Position.TOP_END);
-	        			notification.setDuration(5000);
-	        		}
-	        		finally {
-	        			closeEditor();
-	        			updateList();
-	        			addCustomFilters();
-	        			dialog.close();
-	        		}
-	        	}
-        	);
-        
-        cancelFlightButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                ButtonVariant.LUMO_ERROR);
-        cancelFlightButton.getStyle().set("margin-right", "auto");
-        dialog.getFooter().add(cancelFlightButton);
-
-        Button closeButton = new Button(close, (e) -> dialog.close());
-        
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        dialog.getFooter().add(closeButton);
-        
-        dialog.open();
-        //add(dialog);
-	}	
+	}		
 	
 	private void rescheduleFlight() {
 		Vuelo selectedVuelo = grid.asSingleSelect().getValue();
 		
 		if(selectedVuelo  != null) {
-			
 			editFlight(selectedVuelo);
 		} else {
 			Notification notification = Notification.show(nullFlightErrorMessage);
@@ -537,9 +501,9 @@ public class ShowFlightsView extends VerticalLayout{
 	private void saveFlight(FlightForm.SaveEvent event) {
 		
 		FlightForm vueloForm = event.getSource();
-		
 		String successMessage = i18NProvider.getTranslation("save-success", getLocale());
-		String updateMessage = i18NProvider.getTranslation("update-success", getLocale());
+		String update = i18NProvider.getTranslation("update-success", getLocale());
+		String formattedMessage = String.format(update, event.getVuelo().getNroVuelo());
 		Notification notification;
 		
 		try {
@@ -565,7 +529,7 @@ public class ShowFlightsView extends VerticalLayout{
 				vueloService.reprogramarVuelo(vueloForm);
 				
 				notification = Notification
-						.show(updateMessage);
+						.show(formattedMessage);
 				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 				notification.setPosition(Notification.Position.TOP_END);
 				notification.setDuration(5000);

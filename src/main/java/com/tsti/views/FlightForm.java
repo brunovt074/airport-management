@@ -37,13 +37,12 @@ public class FlightForm extends FormLayout{
 	private final AeropuertoDAO aeropuertoDao;
 	
 	TextField nroVuelo = new TextField("Flight Number");
-		DatePicker fechaPartida = new DatePicker("Date");
+	DatePicker fechaPartida = new DatePicker("Date");
 	LocalDate now = LocalDate.now();
 	TimePicker horaPartida = new TimePicker("Hour");	
 	ComboBox<Aeropuerto> destino = new ComboBox<>("Arrival");
 	
 	ComboBox<String> aerolinea = new ComboBox<>("aerolinea"); 
-	//ComboBox<Ciudad> estadoVuelo = new ComboBox<>("Status");
 	BigDecimalField precioNeto = new BigDecimalField();  
 	TextField avion = new TextField("Aircraft");
 	
@@ -59,12 +58,10 @@ public class FlightForm extends FormLayout{
 	String statusLabel;
 	String seatsLabel;
 	String saveButtonLabel;
-	String deleteButtonLabel;
 	String cancelButtonLabel;
 	String closeButtonLabel;
 	
 	Button save;
-	Button delete;
 	Button close;
 
 	Binder<Vuelo> binder = new BeanValidationBinder<>(Vuelo.class);	
@@ -84,7 +81,6 @@ public class FlightForm extends FormLayout{
 		configureDateTimePickers(); 
 		//Buttons
 		save = new Button(saveButtonLabel);
-		delete = new Button(deleteButtonLabel);
 		close = new Button(closeButtonLabel );		
 		
 		add(nroVuelo,						
@@ -106,20 +102,18 @@ public class FlightForm extends FormLayout{
 	private Component createButtonsLayout() {
 		
 		save.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
-		delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
 		close.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SUCCESS);
 		
 		save.addClickShortcut(Key.ENTER);
 		close.addClickShortcut(Key.ESCAPE);
 		
 		save.addClickListener(event -> validateAndSave());
-		delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
 		close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 		
 		binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
 		//binder.addValueChangeListener(e -> save.setEnabled(binder.isValid()));
 		
-		return new HorizontalLayout(save, delete, close);
+		return new HorizontalLayout(save, close);
 	}
 	
 	private void initializeFields(){
@@ -134,7 +128,6 @@ public class FlightForm extends FormLayout{
 		statusLabel = i18NProvider.getTranslation("flight-status", getLocale());
 		seatsLabel = i18NProvider.getTranslation("seats-number", getLocale());
 		saveButtonLabel = i18NProvider.getTranslation("save", getLocale());
-		deleteButtonLabel = i18NProvider.getTranslation("delete", getLocale());
 		cancelButtonLabel = i18NProvider.getTranslation("cancel", getLocale());
 		closeButtonLabel = i18NProvider.getTranslation("close", getLocale());
 		//setear labels
