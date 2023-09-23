@@ -248,13 +248,26 @@ public class ShowFlightsView extends VerticalLayout{
 	}	
 		
 	private void deleteFlight(FlightForm.DeleteEvent event) {
+		String successfulCancelationMessage = i18NProvider.getTranslation("canceled-success", getLocale());
+		
+		Notification notification = new Notification();
+		
 		try {
 			
 			vueloService.cancelarVuelo(event.getVuelo().getNroVuelo());			
-		
+			notification = Notification
+					.show(successfulCancelationMessage );
+			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
 		} catch (VueloException e) {
 			e.setMensaje(i18NProvider.getTranslation("delete-error", getLocale()));
-			System.out.println(e.getMessage());
+			
+			notification = Notification
+					.show(e.getMessage());
+			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+			notification.setPosition(Notification.Position.TOP_END);
+			notification.setDuration(5000);
 			
 		} finally {
 			
@@ -463,15 +476,17 @@ public class ShowFlightsView extends VerticalLayout{
 				
 				try {
 					vueloService.crearVuelo(event.getSource());
+					notification = Notification
+							.show(successMessage);
+					notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+					notification.setPosition(Notification.Position.TOP_END);
+					notification.setDuration(5000);
+				
 				} catch (SistemaGestionComercialAeropuertoException e) {
 					e.getMensaje();					
 				}
 				
-				notification = Notification
-						.show(successMessage);
-				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-				notification.setPosition(Notification.Position.TOP_END);
-				notification.setDuration(5000);
+				
 				
 			} else {
 				
