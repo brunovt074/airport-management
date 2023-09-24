@@ -1,20 +1,16 @@
 package com.tsti;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
 //import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-import com.tsti.servicios.AeropuertoServiceImpl;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
-import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 @ComponentScan("com.tsti")
@@ -25,7 +21,12 @@ import jakarta.annotation.PostConstruct;
 public class Daos2023Application implements WebMvcConfigurer, AppShellConfigurator{
 	
 	private static final long serialVersionUID = -3121037374624477448L;
-
+		
+	public static void main(String[] args) {
+		SpringApplication.run(Daos2023Application.class, args);	
+		
+	}
+	
 	/*
 	 * private final LocaleChangeInterceptor localeChangeInterceptor;
 	 * 
@@ -36,11 +37,7 @@ public class Daos2023Application implements WebMvcConfigurer, AppShellConfigurat
 	 * @Override public void addInterceptors(InterceptorRegistry
 	 * interceptorRegistry) {
 	 * interceptorRegistry.addInterceptor(localeChangeInterceptor); }
-	 */	
+	 */
 	
-	public static void main(String[] args) {
-		SpringApplication.run(Daos2023Application.class, args);	
-		
-	}
 	
 }

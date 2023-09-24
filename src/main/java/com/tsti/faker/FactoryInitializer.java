@@ -1,7 +1,6 @@
 
 /*
- * ESTA CLASE ESTA CREADA PARA INICIALIZAR EL CIUDAD FACTORY AL PRINCIPIO DE
- * LA APP Y ASI PODER POBLAR LA BD PARA ENTORNO DE DESARROLLO.
+ * Clase creada para inicializar registros en la BD
  * */
 package com.tsti.faker;
 
@@ -42,7 +41,7 @@ public class FactoryInitializer {
 //    	crearCiudades();
 //    	crearDomicilios();
 //    	crearClientes();    	
-//    	crearVuelos();
+    	//crearVuelos();
     	
     }
     
