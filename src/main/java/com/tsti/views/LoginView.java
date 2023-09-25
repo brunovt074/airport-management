@@ -1,5 +1,6 @@
 package com.tsti.views;
 import com.tsti.i18n.AppI18NProvider;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -32,9 +33,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 	public LoginView(HttpServletRequest request) {
 				
 		addClassName("login-view");		
-			
+		getElement().getStyle().set("background-image", "url('themes/airportmanagement/images/login-bg.webp')");
+		
 		String loginDescription = i18nProvider.getTranslation("login-description", getLocale());
-				
+		//Image bgImage = new Image("themes/airportmanagement/images/login-bg.webp", "bg");
+		
 		if(getLocale().getLanguage().equalsIgnoreCase("es") || getLocale().getLanguage().equalsIgnoreCase("pt")) {	
 			
 			String loginTitleLabel = i18nProvider.getTranslation("login-title", getLocale());
@@ -78,7 +81,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver{
 		//to Spring Security.		
 		loginForm.setAction("loginForm");		
 				
-		add(loginForm);
+		add(//bgImage,
+				loginForm);
 		
 	}
 	
