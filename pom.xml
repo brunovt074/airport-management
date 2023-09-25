@@ -15,7 +15,7 @@
 	<name>DAOS2023</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>20</java.version>
+		<java.version>17</java.version>
 		<vaadin.version>24.1.4</vaadin.version>
 	</properties>
 	
