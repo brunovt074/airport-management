@@ -14,8 +14,6 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
-import jakarta.annotation.PostConstruct;
-
 @SpringBootApplication
 @ComponentScan("com.tsti")
 @ComponentScan(basePackages = {"com.tsti.faker"})
