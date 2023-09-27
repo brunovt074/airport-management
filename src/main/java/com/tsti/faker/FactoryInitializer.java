@@ -38,7 +38,7 @@ public class FactoryInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
-    	aeropuertoServiceImpl.loadAirportsFromJsonFile("src/main/resources/data/airports.json");
+    	aeropuertoServiceImpl.loadAirportsFromJsonFile();
 //    	crearCiudades();
 //    	crearDomicilios();
 //    	crearClientes();    	

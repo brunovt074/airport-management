@@ -14,6 +14,9 @@ import com.tsti.dao.AeropuertoDAO;
 import com.tsti.entidades.Aeropuerto;
 import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
+
 @Service
 public class AeropuertoServiceImpl implements IAeropuertoService{
 	private final AeropuertoDAO dao;
@@ -100,14 +103,25 @@ public class AeropuertoServiceImpl implements IAeropuertoService{
 	}
 
 	public void loadAirportsFromJsonFile() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		
 		try {
+			Resource resource = new ClassPathResource("data/airports.json");
+			File jsonFile = resource.getFile();
 			
-	        //loadAirportsFromJsonFile(classLoader.getResource("data/airports.json").getPath());
+			Map<String, Aeropuerto> airportsMap = objectMapper.readValue(
+                    jsonFile,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Aeropuerto.class)
+                    
+            );
+			
+			dao.saveAll(airportsMap.values());
 		}
 		catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
+	
 	public void loadAirportsFromJsonFile(String jsonFilePath) {
         ObjectMapper objectMapper = new ObjectMapper();
         
