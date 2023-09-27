@@ -1,17 +1,17 @@
 {
-  "frontendFolder": "C:/Users/Bruno/Documents/Git/daos2023/./frontend",
+  "frontendFolder": "C:/Users/Bruno/Documents/Git/daos2023/frontend",
   "themeFolder": "themes",
-  "themeResourceFolder": "C:/Users/Bruno/Documents/Git/daos2023/./frontend/generated/jar-resources",
-  "staticOutput": "C:/Users/Bruno/Documents/Git/daos2023/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "themeResourceFolder": "C:/Users/Bruno/Documents/Git/daos2023/frontend/generated/jar-resources",
+  "staticOutput": "target/classes/META-INF/VAADIN/webapp/VAADIN/static",
   "generatedFolder": "generated",
-  "statsOutput": "C:\\Users\\Bruno\\Documents\\Git\\daos2023\\target\\classes\\META-INF\\VAADIN\\config",
-  "frontendBundleOutput": "C:\\Users\\Bruno\\Documents\\Git\\daos2023\\target\\classes\\META-INF\\VAADIN\\webapp",
+  "statsOutput": "target/classes/META-INF/VAADIN/webapp/../config/",
+  "frontendBundleOutput": "target/classes/META-INF/VAADIN/webapp/",
   "devBundleOutput": "C:/Users/Bruno/Documents/Git/daos2023/src/main/dev-bundle/webapp",
   "devBundleStatsOutput": "C:/Users/Bruno/Documents/Git/daos2023/src/main/dev-bundle/config",
-  "jarResourcesFolder": "C:/Users/Bruno/Documents/Git/daos2023/./frontend/generated/jar-resources",
-  "themeName": "airportmanagement",
+  "jarResourcesFolder": "C:/Users/Bruno/Documents/Git/daos2023/frontend/generated/jar-resources",
+  "themeName": "",
   "clientServiceWorkerSource": "C:\\Users\\Bruno\\Documents\\Git\\daos2023\\target\\sw.ts",
-  "pwaEnabled": true,
-  "offlineEnabled": true,
-  "offlinePath": "'.'"
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
 }
