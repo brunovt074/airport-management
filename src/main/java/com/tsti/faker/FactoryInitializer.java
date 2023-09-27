@@ -38,11 +38,11 @@ public class FactoryInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
-//    	aeropuertoServiceImpl.loadAirportsFromJsonFile("src/main/resources/data/airports.json");
+    	aeropuertoServiceImpl.loadAirportsFromJsonFile("src/main/resources/data/airports.json");
 //    	crearCiudades();
 //    	crearDomicilios();
 //    	crearClientes();    	
-//    	crearVuelos();
+    	crearVuelos();
     	
     }
     
@@ -52,8 +52,8 @@ public class FactoryInitializer {
     	//PARAMETROS:(nroVuelos, nroPasajeros, estado, tipo)
     	
     	//VUELO VACIO
-    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
+    	crearVuelos(50, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
+    	crearVuelos(50, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
     	    	    	
 //    	//REGISTRADOS
     	//crearVuelos(3, 0, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
