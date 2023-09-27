@@ -11,7 +11,7 @@ import com.tsti.entidades.Clientes;
 import com.tsti.entidades.Pasaje;
 
 /**
- * @author JOA
+ * @author Bruno
  *
  */
 public interface PasajeDAO extends JpaRepository<Pasaje, Long> {

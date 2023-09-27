@@ -47,11 +47,11 @@ public interface VueloDAO extends JpaRepository<Vuelo, Long> {
 
 
 	//OPCIONALES
-	//@Query("SELECT v FROM Vuelo v JOIN v.destino c WHERE c.city = :destino")
-	public List<Vuelo> findByDestino(/*@Param("destino") */String destino);
+	@Query("SELECT v FROM Vuelo v JOIN v.destino c WHERE c.city = :destino")
+	public List<Vuelo> findByDestino(@Param("destino") String destino);
 	
-	//@Query("SELECT v FROM Vuelo v WHERE v.fechaPartida = :fechaPartida")
-	public List<Vuelo> findByFechaPartida(/*@Param("fechaPartida") */LocalDate fechaPartida);
+	@Query("SELECT v FROM Vuelo v WHERE v.fechaPartida = :fechaPartida")
+	public List<Vuelo> findByFechaPartida(@Param("fechaPartida")LocalDate fechaPartida);
 		    
     public List<Vuelo> findByAerolinea(String aerolinea);
     
