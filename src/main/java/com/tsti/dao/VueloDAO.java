@@ -26,36 +26,47 @@ public interface VueloDAO extends JpaRepository<Vuelo, Long> {
     
 	public Optional<Vuelo> findById(Long id);
 	
-	//ESTE ES EL METODO UTILIZADO EN LA APP
-	@Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
-    		+ "ON V.destino_id = c.id WHERE c.nombre_ciudad =:destino AND v.fecha_partida=:fecha_partida", nativeQuery = true )
-	public List<Vuelo> findByDestinoAndFechaPartida(@Param("destino") String destino, @Param("fecha_partida") LocalDate fechaPartida);
-	//public List<Vuelo> findByNroVueloOrAerolineaOrDestino(String busqueda);
-	//ESTE ES EL METODO UTILIZADO EN LA APP
-		@Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
-	    		+ "ON V.destino_id = c.id WHERE c.nombre_ciudad =:destino AND v.fecha_partida=:fecha_partida AND v.hora_partida=:hora_partida", nativeQuery = true )
-		public List<Vuelo> findByDestinoAndFechaPartidaAndHoraPartida(@Param("destino") String destino, @Param("fecha_partida") LocalDate fechaPartida, @Param("hora_partida") LocalTime horaPartida);
-	//OPCIONALES
-	@Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
-    		+ "ON V.destino_id = c.id WHERE c.nombre_ciudad =:destino", nativeQuery = true )
-	public List<Vuelo> findByDestino(@Param("destino") String destino);
+	//ESTE ES EL METODO UTILIZADO EN LA API REST
+	@Query("SELECT v FROM Vuelo v JOIN v.destino c "
+			+ "WHERE c.city = :destino "
+			+ "AND v.fechaPartida = :fechaPartida")
+	public List<Vuelo> findByDestinoAndFechaPartida(
+			@Param("destino") String destino, 
+			@Param("fechaPartida") LocalDate fechaPartida);
 	
-    @Query(value = "SELECT v.* FROM vuelos v JOIN ciudades c "
-    		+ "ON V.destino_id = c.id WHERE v.fecha_partida=:fecha_partida", nativeQuery = true )
-    public List<Vuelo> findByFechaPartida(@Param("fecha_partida") LocalDate fechaPartida);
-	    
+	//ESTE ES EL METODO UTILIZADO EN LA API REST
+	@Query("SELECT v FROM Vuelo v "
+			+ "JOIN v.destino c "
+			+ "WHERE c.city = :destino "
+			+ "AND v.fechaPartida = :fechaPartida "
+			+ "AND v.horaPartida = :horaPartida")
+	public List<Vuelo> findByDestinoAndFechaPartidaAndHoraPartida(
+			@Param("destino") String destino, 
+			@Param("fechaPartida") LocalDate fechaPartida, 
+			@Param("horaPartida") LocalTime horaPartida);
+
+
+	//OPCIONALES
+	//@Query("SELECT v FROM Vuelo v JOIN v.destino c WHERE c.city = :destino")
+	public List<Vuelo> findByDestino(/*@Param("destino") */String destino);
+	
+	//@Query("SELECT v FROM Vuelo v WHERE v.fechaPartida = :fechaPartida")
+	public List<Vuelo> findByFechaPartida(/*@Param("fechaPartida") */LocalDate fechaPartida);
+		    
     public List<Vuelo> findByAerolinea(String aerolinea);
     
 	public List<Vuelo>findByTipoVuelo(TipoVuelo tipoVuelo);
 	
 	public List<Vuelo> findAllByEstadoVuelo(EstadoVuelo estadoVuelo);
 	
-	@Query(value="SELECT v.* "
-			+ "FROM vuelos v JOIN ciudades c ON v.destino_id = c.id " +
-		   "WHERE LOWER(v.aerolinea) LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
-		   + "OR LOWER(c.nombre_ciudad) LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
-		   + "OR LOWER(c.pais) LIKE LOWER(CONCAT('%', :searchTerm, '%'))", nativeQuery=true)
-	
+	@Query("SELECT v "
+			+ "FROM Vuelo v "
+			+ "JOIN v.destino c "
+			+ "WHERE LOWER(v.aerolinea) "
+			+ "LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
+			+ "OR LOWER(c.city) "
+			+ "LIKE LOWER(CONCAT('%', :searchTerm, '%')) "
+			+ "OR LOWER(c.country) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
 	public List<Vuelo> searchFlights(@Param("searchTerm") String searchTerm);	
 	
 	public boolean existsById(Long id);
