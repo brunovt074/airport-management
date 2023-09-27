@@ -2,6 +2,7 @@ package com.tsti.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import jakarta.transaction.Transactional;
@@ -13,8 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface ClienteDAO extends JpaRepository<Clientes, Long> {
-    @Query("SELECT c FROM Clientes c WHERE c.nombre like '%?1%'")
-    Collection<Clientes> findClientesLike(String parte);
+    @Query("SELECT c FROM Clientes c WHERE c.nombre LIKE CONCAT( '%',:parte,'%')")
+    Collection<Clientes> findClientesLike(@Param("parte") String parte);
 
     public List<Clientes> findByApellidoOrNombre(String apellido, String nombre);
 
