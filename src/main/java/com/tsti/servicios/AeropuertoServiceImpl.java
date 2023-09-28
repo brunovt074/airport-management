@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -110,10 +111,11 @@ public class AeropuertoServiceImpl implements IAeropuertoService{
 		 
 		try {
 			Resource resource = resourceLoader.getResource("classpath:data/airports.json");
-			File jsonFile = resource.getFile();
+			InputStream inputStream = resource.getInputStream();
+			
 			
 			Map<String, Aeropuerto> airportsMap = objectMapper.readValue(
-                    jsonFile,
+					inputStream,
                     objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Aeropuerto.class)
                     
             );
