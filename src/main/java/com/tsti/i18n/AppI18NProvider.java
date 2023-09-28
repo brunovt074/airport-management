@@ -16,7 +16,9 @@ public class AppI18NProvider implements I18NProvider{
 	@Override
 	public List<Locale> getProvidedLocales() {
 		
-		return List.of(new Locale("en"), new Locale("es"),new Locale("pt") );
+		return List.of(new Locale("en"),
+				new Locale("es"),
+				new Locale("pt") );
 	}
 
 	@Override

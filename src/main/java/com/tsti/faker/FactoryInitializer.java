@@ -52,8 +52,8 @@ public class FactoryInitializer {
     	//PARAMETROS:(nroVuelos, nroPasajeros, estado, tipo)
     	
     	//VUELO VACIO
-    	crearVuelos(50, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
-    	crearVuelos(50, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
+    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);
+    	crearVuelos(25, EstadoVuelo.REGISTRADO, TipoVuelo.NACIONAL);
     	    	    	
 //    	//REGISTRADOS
     	//crearVuelos(3, 0, EstadoVuelo.REGISTRADO, TipoVuelo.INTERNACIONAL);

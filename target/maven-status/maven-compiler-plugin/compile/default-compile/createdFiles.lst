@@ -59,6 +59,7 @@ com\tsti\views\LoginView.class
 com\tsti\dto\VueloDTO.class
 com\tsti\entidades\Aeropuerto.class
 com\tsti\excepcion\ValidacionFallidaEnPasajeException.class
+com\tsti\i18n\AppLocaleResolver.class
 com\tsti\servicios\IAeropuertoService.class
 com\tsti\dto\VueloDisponibleDTO.class
 com\tsti\presentacion\EditarVueloForm.class

@@ -47,6 +47,7 @@ C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\excepcion\MensajeEr
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\security\SecurityConfig.java
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\servicios\IClienteService.java
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\servicios\IPasajeService.java
+C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\i18n\AppLocaleResolver.java
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\dao\CiudadDAO.java
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\excepcion\CostoPasajeException.java
 C:\Users\Bruno\Documents\Git\daos2023\src\main\java\com\tsti\servicios\AeropuertoServiceImpl.java
