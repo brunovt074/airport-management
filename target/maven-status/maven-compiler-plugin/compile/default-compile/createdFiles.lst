@@ -67,6 +67,7 @@ com\tsti\dto\CotizacionDolarDTO$CasaDTO.class
 com\tsti\excepcion\VueloException.class
 com\tsti\excepcion\PasajeroException.class
 com\tsti\servicios\IVueloService.class
+com\tsti\i18n\MessageConfiguration.class
 com\tsti\faker\GenerarPrecioNeto.class
 com\tsti\entidades\Clientes.class
 com\tsti\dto\ClienteResponseDTO.class

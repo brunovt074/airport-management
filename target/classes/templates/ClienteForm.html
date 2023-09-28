@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Formulario de Creación de Clientes</title>
+</head>
+<body>
+	<h1>Formulario de Creación de Clientes</h1>
+	<form th:action="@/clientes/guardarCliente" th:object="${clienteForm}" method="post">
+		<label for="dni">DNI:</label>
+		<input type="text" id="dni" name="dni" th:field="*{dni}" required>
+		<label for="nombre">Nombre:</label>
+		<input type="text" id="nombre" name="nombre" th:field="*{nombre}" required>
+		<label for="apellido">Apellido</label>
+		<input type="text" id="apellido" name="apellido" th:field="*{apellido}" required>
+		<label for="fechaNacimiento">Fecha de nacimiento</label>
+		<input type="text" id="fechaNacimiento" name="fechaNacimiento" th:field="*{fechaNacimiento}">
+		<label for="domicilio">Domicilio</label>
+		<input type="text" id="domicilio" name="domicilio" th:field="*{domicilio}">
+		<label for="email">Email</label>
+		<input type="text" id="email" name="email" th:field="*{email}">
+		<label for="tel">Teléfono</label>
+		<input type="text" id="tel" name="tel" th:field="*{tel}">		
+		<label for="nroPasaporte">Número de Pasaporte</label>
+		<input type="text" id="nroPasaporte" name="nroPasaporte" th:field="*{nroPasaporte}">
+		<label for="vencimientoPasaporte">Vencimiento Pasaporte</label>
+		<input type="text" id="vencimientoPasaporte" name="vencimientoPasaporte" th:field="*{vencimientoPasaporte}">
+		<label for="idCiudad">ID Ciudad</label>
+		<input type="text" id="idCiudad" name="idCiudad" th:field="*{idCiudad}">
+		<button type="submit">Guardar</button>		
+	</form>
+</body>
+</html> 		

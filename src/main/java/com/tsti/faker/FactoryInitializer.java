@@ -38,11 +38,11 @@ public class FactoryInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
-//    	aeropuertoServiceImpl.loadAirportsFromJsonFile();
+    	aeropuertoServiceImpl.loadAirportsFromJsonFile();
 //    	crearCiudades();
 //    	crearDomicilios();
 //    	crearClientes();    	
-//    	crearVuelos();
+    	crearVuelos();
     	
     }
     
