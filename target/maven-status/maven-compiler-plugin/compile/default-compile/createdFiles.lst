@@ -27,6 +27,7 @@ com\tsti\rest\VueloController.class
 com\tsti\servicios\CotizacionServiceImpl.class
 com\tsti\security\SecurityConfig.class
 com\tsti\servicios\PasajeServiceImpl.class
+com\tsti\i18n\I18NConfig.class
 com\tsti\dto\PasajeResDTO.class
 com\tsti\dto\TasaAeroportuariaDTO.class
 com\tsti\entidades\Ciudad.class

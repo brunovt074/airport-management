@@ -10,7 +10,7 @@ public class MessageConfiguration {
 
 	@Bean MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages");
+		messageSource.setBasename("classpath:messages");
 		messageSource.setDefaultEncoding("UTF-8");
 		
 		return messageSource;
