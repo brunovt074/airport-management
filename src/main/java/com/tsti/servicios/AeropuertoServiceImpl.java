@@ -15,16 +15,19 @@ import com.tsti.entidades.Aeropuerto;
 import com.tsti.excepcion.SistemaGestionComercialAeropuertoException;
 
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.ClassPathResource;
 
 @Service
 public class AeropuertoServiceImpl implements IAeropuertoService{
 	private final AeropuertoDAO dao;
+	private final ResourceLoader resourceLoader;
 	private Aeropuerto aeropuerto;
 	
 	@Autowired 
-    public AeropuertoServiceImpl(AeropuertoDAO aeropuertoDao) {
+    public AeropuertoServiceImpl(AeropuertoDAO aeropuertoDao, ResourceLoader resourceLoader) {
         this.dao = aeropuertoDao;
+		this.resourceLoader = resourceLoader;
     }
 	
 	public Aeropuerto getAeropuertoLocal() throws SistemaGestionComercialAeropuertoException{
@@ -103,10 +106,10 @@ public class AeropuertoServiceImpl implements IAeropuertoService{
 	}
 
 	public void loadAirportsFromJsonFile() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		
+		ObjectMapper objectMapper = new ObjectMapper();		
+		 
 		try {
-			Resource resource = new ClassPathResource("data/airports.json");
+			Resource resource = resourceLoader.getResource("classpath:data/airports.json");
 			File jsonFile = resource.getFile();
 			
 			Map<String, Aeropuerto> airportsMap = objectMapper.readValue(
