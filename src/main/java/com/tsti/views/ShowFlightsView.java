@@ -501,9 +501,10 @@ public class ShowFlightsView extends VerticalLayout{
 	private void saveFlight(FlightForm.SaveEvent event) {
 		
 		FlightForm vueloForm = event.getSource();
-		String successMessage = i18NProvider.getTranslation("save-success", getLocale());
+		String success = i18NProvider.getTranslation("save-success", getLocale());
+		String successFormattedMessage = String.format(success, event.getVuelo().getNroVuelo());
 		String update = i18NProvider.getTranslation("update-success", getLocale());
-		String formattedMessage = String.format(update, event.getVuelo().getNroVuelo());
+		String updateFormattedMessage = String.format(update, event.getVuelo().getNroVuelo());
 		Notification notification;
 		
 		try {
@@ -513,7 +514,7 @@ public class ShowFlightsView extends VerticalLayout{
 				try {
 					vueloService.crearVuelo(event.getSource());
 					notification = Notification
-							.show(successMessage);
+							.show(successFormattedMessage);
 					notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 					notification.setPosition(Notification.Position.TOP_END);
 					notification.setDuration(5000);
@@ -529,7 +530,7 @@ public class ShowFlightsView extends VerticalLayout{
 				vueloService.reprogramarVuelo(vueloForm);
 				
 				notification = Notification
-						.show(formattedMessage);
+						.show(updateFormattedMessage);
 				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 				notification.setPosition(Notification.Position.TOP_END);
 				notification.setDuration(5000);
