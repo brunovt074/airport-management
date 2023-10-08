@@ -14,7 +14,7 @@ import com.vaadin.flow.theme.Theme;
 @ComponentScan(basePackages = {"com.tsti.faker"})
 @Theme(value="airportmanagement")
 @PWA(name = "Ibera Airport Management App", 
-	 shortName = "Ibera Airport")
+	 shortName = "IberaAirport")
 public class Daos2023Application implements WebMvcConfigurer, AppShellConfigurator{
 	
 	private static final long serialVersionUID = -3121037374624477448L;
